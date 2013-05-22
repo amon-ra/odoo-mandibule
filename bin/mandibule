@@ -1,0 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+import sys
+import mandibule
+
+if __name__ == '__main__':
+    sys.exit(mandibule.app.exec_())
+
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
