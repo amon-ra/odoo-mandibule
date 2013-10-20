@@ -18,13 +18,44 @@
 #
 ##############################################################################
 
-import sys
 
-from PySide.QtGui import QApplication, QLabel
+from PySide import QtGui
+from mandibule.serverlist import ServerList
+from mandibule import config
+from mandibule.modules import MODULES
 
-app = QApplication(sys.argv)
+class MainApp(object):
+    def __init__(self, app):
+        """ Initialize UI """
 
-label = QLabel("Mandibule!")
-label.show()
+        # init settings
+        self.data = config.get_config()
+
+        # initialize widgets
+        self.main_window = QtGui.QMainWindow()
+        self.serverlist = ServerList(self)
+        self.workarea = QtGui.QMdiArea()
+
+        # main window settings
+        self.main_window.setWindowTitle('Mandibule !')
+        self.main_window.setContentsMargins(0, 0, 0, 0)
+
+        # splitter containing list of servers and working zone
+        splitter = QtGui.QSplitter()
+        splitter.addWidget(self.serverlist)
+        splitter.addWidget(self.workarea)
+        self.main_window.setCentralWidget(splitter)
+        self.main_window.closeEvent = self.close
+        self.main_window.show()
+
+    def close(self, event):
+        """ Called on main window closing """
+        #TODO close all servers connections if needed
+        print "DEBUG -> closing"
+        event.accept()
+
+
+
+
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
