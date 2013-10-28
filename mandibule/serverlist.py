@@ -153,7 +153,7 @@ class ServerListControler(object):
     def _edit_func(self):
         config = self._current_sel
         mod_name = self._current_sel.func_module.name
-        result, ok = modules.MODULES[mod_name].get_form(config)
+        result, ok = modules.get_module(mod_name).get_form(config).exec_()
         if ok:
             self._current_sel.update(result)
             self._save_config()

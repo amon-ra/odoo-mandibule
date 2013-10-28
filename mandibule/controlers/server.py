@@ -1,5 +1,6 @@
 from PySide import QtGui, QtCore
 from mandibule.controlers.funcmodule import FuncModule
+from mandibule.controlers.funcconfig import FuncConfig
 
 
 class Server(object):
@@ -30,6 +31,11 @@ class Server(object):
                 self,
                 func_config.pop('func_module'),
                 [func_config]))
+        else:
+            funcmod = self.funcs[func_config['func_module']]
+            funcmod.add_config(
+                    FuncConfig(self.group, self, funcmod, func_config)
+                    )
 
     def update(self, data):
         self.name = data['name']

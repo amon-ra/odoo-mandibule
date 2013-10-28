@@ -2,26 +2,27 @@ from mandibule.utils.form import FormDialog, TextField, IntField
 from mandibule.utils.i18n import _
 
 def get_form(config=None):
+    defaults = getattr(config, 'data', {})
     return FormDialog((
             (
                 'name',
                 TextField(
                     _("Name"),
-                    getattr(config, 'name', '')
+                    defaults.get('name', '')
                     )
                 ),
             (
                 'object',
                 TextField(
                     _("Object"),
-                    getattr(config, 'object', '')
+                    defaults.get('object', '')
                     )
                 ),
             (
                 'maxdepth',
                 IntField(
                     _("Max depth"),
-                    getattr(config, 'maxdepth', 1),
+                    defaults.get('maxdepth', 1),
                     range_=(1, 10)
                     )
                 ),
@@ -29,7 +30,7 @@ def get_form(config=None):
                 'whitelist',
                 TextField(
                     _("White list"),
-                    getattr(config, 'whitelist', ''),
+                    defaults.get('whitelist', ''),
                     multi=True
                     )
                 ),
@@ -37,7 +38,7 @@ def get_form(config=None):
                 'blacklist',
                 TextField(
                     _("Black list"),
-                    getattr(config, 'blacklist', ''),
+                    defaults.get('blacklist', ''),
                     multi=True
                     )
                 ),
@@ -45,7 +46,7 @@ def get_form(config=None):
                 'attrs_whitelist',
                 TextField(
                     _("Attrs white list"),
-                    getattr(config, 'attrs_whitelist', ''),
+                    defaults.get('attrs_whitelist', ''),
                     multi=True
                     )
                 ),
@@ -53,7 +54,7 @@ def get_form(config=None):
                 'attrs_blacklist',
                 TextField(
                     _("Attrs black list"),
-                    getattr(config, 'attrs_blacklist', ''),
+                    defaults.get('attrs_blacklist', ''),
                     multi=True
                     )
             ),
