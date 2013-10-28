@@ -1,31 +1,32 @@
-from mandibule.controlers.server import ServerControler
-from mandibule.serverlistitem import ServerListItem
+from PySide import QtGui, QtCore
+from mandibule.controlers.server import Server
 
+class Group(object):
+    def __init__(self, data):
+        self.name = data['name']
+        self._servers = []
+        self.item = QtGui.QTreeWidgetItem()
+        self.item.setText(0, self.name)
+        self.item.setData(0, QtCore.Qt.UserRole, self)
+        for elt in data.get('servers', []):
+            self.add_server(Server(self, elt))
 
-class GroupControler(object):
-    """Controler for group items"""
-    def __init__(self, serverlist, data):
-        self.data = data
-        self.serverlist_controler = serverlist
-        self.servers = {}
-        self.widget = ServerListItem(self, self.data['name'])
-        for item in self.data.get('childs', []):
-            self.add_server(item)
-
-    def add_server(self, item):
-        controler = ServerControler(self.serverlist_controler, self, item)
-        self.widget.addChild(controler.widget)
-        self.servers[item['name']] = controler
+    def add_server(self, server):
+        self.item.addChild(server.item)
+        self._servers.append(server)
 
     def remove_server(self, server):
-        self.widget.removeChild(server.widget)
-        del self.servers[server.data['name']]
+        self.item.removeChild(server.item)
+        self._servers.remove(server)
 
-    def menu(self):
-        return (
-                ('New server', None),
-                (None, None),
-                ('Edit group', None),
-                ('Remove group', None)
-                )
+    def update(self, data):
+        self.name = data['name']
+        self.item.setText(0, self.name)
 
+    def serialize(self):
+        out = {'name': self.name}
+        if self._servers:
+            out['servers'] = []
+            for serv in self._servers:
+                out['servers'].append(serv.serialize())
+        return out

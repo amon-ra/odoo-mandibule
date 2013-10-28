@@ -1,5 +1,6 @@
-from mandibule.modules import graph
+from mandibule.modules import dependencies_graph, relations_graph
 
-MODULES = {
-        'graph': graph,
-        }
+MODULES = (
+        ('Dependencies', dependencies_graph),
+        ('Relations', relations_graph),
+        )
