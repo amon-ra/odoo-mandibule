@@ -25,13 +25,19 @@ class SelectField(object):
 
 
 class TextField(object):
-    def __init__(self, label, default="", **kwargs):
+    def __init__(self, label, default="", multi=False, **kwargs):
         self.label = label
-        self.widget = QtGui.QLineEdit()
+        self._multi = multi
+        if self._multi:
+            self.widget = QtGui.QTextEdit()
+        else:
+            self.widget = QtGui.QLineEdit()
         self.widget.setText(default)
 
     @property
     def result(self):
+        if self._multi:
+            return self.widget.toPlainText()
         return self.widget.text()
 
 

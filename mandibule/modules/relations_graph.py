@@ -33,28 +33,32 @@ def get_form(config=None):
                 'whitelist',
                 TextField(
                     _("White list"),
-                    getattr(config, 'whitelist', '')
+                    getattr(config, 'whitelist', ''),
+                    multi=True
                     )
                 ),
             (
                 'blacklist',
                 TextField(
                     _("Black list"),
-                    getattr(config, 'blacklist', '')
+                    getattr(config, 'blacklist', ''),
+                    multi=True
                     )
                 ),
             (
                 'attrs_whitelist',
                 TextField(
                     _("Attrs white list"),
-                    getattr(config, 'attrs_whitelist', '')
+                    getattr(config, 'attrs_whitelist', ''),
+                    multi=True
                     )
                 ),
             (
                 'attrs_blacklist',
                 TextField(
                     _("Attrs black list"),
-                    getattr(config, 'attrs_blacklist', '')
+                    getattr(config, 'attrs_blacklist', ''),
+                    multi=True
                     )
             ),
             ))
