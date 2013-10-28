@@ -12,5 +12,11 @@ class FuncConfig(object):
         self.item.setText(0, self.name)
         self.item.setData(0, QtCore.Qt.UserRole, self)
 
+
+    def update(self, data):
+        self.data = data
+        self.name = data['name']
+        self.item.setText(0, self.name)
+
     def serialize(self):
         return self.data

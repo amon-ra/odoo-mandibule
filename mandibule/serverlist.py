@@ -55,12 +55,14 @@ class ServerListControler(object):
                 self.menu.addMenu(func_menu)
                 new_func_menu = QtGui.QMenu(_("New function"))
                 func_menu.addMenu(new_func_menu)
-                for modname, mod in modules.MODULES:
-                    new_func_menu.addAction(modname, mod.new)
+                for mod_name, mod in modules.MODULES:
+                    new_func_menu.addAction(mod_name,
+                            self._new_func(mod_name, mod))
 
                 if isinstance(self._current_sel, FuncConfig):
                     func_menu.addAction(_("Edit function"), self._edit_func)
-                    func_menu.addAction(_("Remove function"), self._remove_func)
+                    func_menu.addAction(_("Remove function"),
+                            self._remove_func)
                     func_menu.addSeparator()
                     func_menu.addAction(_("Execute function"), self._exec_func)
         self.menu.popup(event.globalPos())
@@ -134,14 +136,32 @@ class ServerListControler(object):
         oerplib.tools.session.remove(server.name)
         self._save_config()
 
-    def _new_func(self):
-        pass
+    def _new_func(self, mod_name, mod):
+        def __wrapped():
+            if isinstance(self._current_sel, Server):
+                server = self._current_sel
+            else:
+                server = self._current_sel.server
+            result, ok = mod.get_form().exec_()
+            if ok:
+                result['func_module'] = mod_name
+                server.add_func_config(result)
+                self._save_config()
+        return __wrapped
+
 
     def _edit_func(self):
-        pass
+        config = self._current_sel
+        mod_name = self._current_sel.func_module.name
+        result, ok = modules.MODULES[mod_name].get_form(config)
+        if ok:
+            self._current_sel.update(result)
+            self._save_config()
 
     def _remove_func(self):
-        pass
+        self._current_sel.func_module.remove_config(self._current_sel)
+        self._save_config()
 
     def _exec_func(self):
-        pass
+        func_mod = modules.get_module(self._current_sel.func_module.name)
+        func_mod.execute(self._current_sel)

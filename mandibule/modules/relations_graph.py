@@ -1,10 +1,6 @@
 from mandibule.utils.form import FormDialog, TextField, IntField
 from mandibule.utils.i18n import _
 
-def new():
-    print "relations new"
-    return get_form().exec_()
-
 def get_form(config=None):
     return FormDialog((
             (
@@ -65,6 +61,6 @@ def get_form(config=None):
 
 
 
-def execute():
-    pass
+def execute(config):
+    print 'Execute %s->%s' % (config.server.name, config.name)
 
