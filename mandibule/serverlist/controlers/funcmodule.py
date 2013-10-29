@@ -1,5 +1,5 @@
 from PySide import QtGui, QtCore
-from mandibule.controlers.funcconfig import FuncConfig
+from mandibule.serverlist.controlers.funcconfig import FuncConfig
 
 class FuncModule(object):
     def __init__(self, group, server, name, configs):

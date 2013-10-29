@@ -1,6 +1,6 @@
 from PySide import QtGui, QtCore
-from mandibule.controlers.funcmodule import FuncModule
-from mandibule.controlers.funcconfig import FuncConfig
+from mandibule.serverlist.controlers.funcmodule import FuncModule
+from mandibule.serverlist.controlers.funcconfig import FuncConfig
 
 
 class Server(object):

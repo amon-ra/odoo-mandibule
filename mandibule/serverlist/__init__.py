@@ -1,7 +1,7 @@
 from PySide import QtGui, QtCore
-from mandibule.controlers.group import Group
-from mandibule.controlers.server import Server
-from mandibule.controlers.funcconfig import FuncConfig
+from mandibule.serverlist.controlers.group import Group
+from mandibule.serverlist.controlers.server import Server
+from mandibule.serverlist.controlers.funcconfig import FuncConfig
 from mandibule import config, modules
 from mandibule.utils.i18n import _
 from mandibule.utils import dialogs

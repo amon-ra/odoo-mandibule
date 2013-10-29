@@ -21,8 +21,11 @@
 
 from PySide import QtGui
 from mandibule.serverlist import ServerListControler
+from mandibule.workarea import WorkAreaController
 from mandibule import config
 from mandibule.modules import MODULES
+
+ROOT_APP = None
 
 class MainApp(object):
     def __init__(self, app):
@@ -31,7 +34,7 @@ class MainApp(object):
         # initialize widgets
         self.main_window = QtGui.QMainWindow()
         self.serverlist = ServerListControler(self)
-        self.workarea = QtGui.QMdiArea()
+        self.workarea = WorkAreaController(self)
 
         # main window settings
         self.main_window.setWindowTitle('Mandibule !')
@@ -40,7 +43,7 @@ class MainApp(object):
         # splitter containing list of servers and working zone
         splitter = QtGui.QSplitter()
         splitter.addWidget(self.serverlist.widget)
-        splitter.addWidget(self.workarea)
+        splitter.addWidget(self.workarea.widget)
         self.main_window.setCentralWidget(splitter)
         self.main_window.closeEvent = self.close
         self.main_window.show()
@@ -50,6 +53,10 @@ class MainApp(object):
         #TODO close all servers connections if needed
         print "DEBUG -> closing"
         event.accept()
+
+
+def start_app(app):
+    ROOT_APP = MainApp(app)
 
 
 

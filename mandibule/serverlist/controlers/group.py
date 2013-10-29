@@ -1,5 +1,5 @@
 from PySide import QtGui, QtCore
-from mandibule.controlers.server import Server
+from mandibule.serverlist.controlers.server import Server
 
 class Group(object):
     def __init__(self, data):
