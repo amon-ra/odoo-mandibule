@@ -85,6 +85,6 @@ def execute(config):
             blacklist,
             attrs_whitelist,
             attrs_blacklist)
-    graph = relations._draw_relations().create_png()
+    graph = relations.make_dot().create_png()
     out = zoomableimage.ZoomableImage(graph)
     return WorkAreaResultItem(config.server.name, config.name, out)
