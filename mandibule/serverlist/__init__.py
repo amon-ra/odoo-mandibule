@@ -15,6 +15,7 @@ class ServerListControler(object):
         self.widget = QtGui.QTreeWidget()
         self.widget.setHeaderHidden(True)
         self.widget.currentItemChanged.connect(self._cur_item)
+        self.widget.itemDoubleClicked.connect(self._item_dblclick)
         self.widget.contextMenuEvent = self._context_menu
         for elt in config.CONFIG:
             self.add_group(Group(elt))
@@ -36,6 +37,11 @@ class ServerListControler(object):
             self._current_sel = cur.data(0, QtCore.Qt.UserRole)
         else:
             self._current_sel = None
+
+    def _item_dblclick(self, item, col):
+        if isinstance(self._current_sel, FuncConfig):
+            self._exec_func()
+
 
     def _context_menu(self, event):
         self.menu = QtGui.QMenu()
