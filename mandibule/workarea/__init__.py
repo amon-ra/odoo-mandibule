@@ -10,6 +10,8 @@ class WorkAreaController(object):
     def __init__(self, app):
         self.app = app
         self.widget = QtGui.QTabWidget()
+        self.widget.setTabsClosable(True)
+        self.widget.tabCloseRequested.connect(self.close_tab)
         self._server_windows = []
 
     def add_result(self, result_item):
@@ -23,3 +25,7 @@ class WorkAreaController(object):
             self.widget.removeTab(index)
             self.widget.insertTab(index, result_item.widget, title)
         self.widget.setCurrentIndex(self._server_windows.index(title))
+
+    def close_tab(self, index):
+        self.widget.removeTab(index)
+        del self._server_windows[index]
