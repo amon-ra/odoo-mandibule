@@ -19,7 +19,7 @@
 ##############################################################################
 
 
-from PySide import QtGui
+from PySide import QtGui, QtCore
 from mandibule.serverlist import ServerListControler
 from mandibule.workarea import WorkAreaController
 from mandibule import config
@@ -33,6 +33,7 @@ class MainApp(object):
 
         # initialize widgets
         self.main_window = QtGui.QMainWindow()
+        self.main_window.setWindowState(QtCore.Qt.WindowMaximized)
         self.serverlist = ServerListControler(self)
         self.workarea = WorkAreaController(self)
 
@@ -44,6 +45,7 @@ class MainApp(object):
         splitter = QtGui.QSplitter()
         splitter.addWidget(self.serverlist.widget)
         splitter.addWidget(self.workarea.widget)
+        splitter.setSizes((100,900))
         self.main_window.setCentralWidget(splitter)
         self.main_window.closeEvent = self.close
         self.main_window.show()

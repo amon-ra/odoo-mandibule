@@ -59,6 +59,17 @@ class IntField(object):
         return self.widget.value()
 
 
+class BoolField(object):
+    def __init__(self, label, default=False, **kwargs):
+        self.label = label
+        self.widget = QtGui.QCheckBox()
+        self.widget.setTristate(False)
+        self.widget.setChecked(default)
+
+    @property
+    def result(self):
+        return self.widget.isChecked()
+
 
 class FormDialog(object):
     def __init__(self, schema):

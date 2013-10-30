@@ -4,7 +4,7 @@ from mandibule.serverlist.controlers.server import Server
 from mandibule.serverlist.controlers.funcconfig import FuncConfig
 from mandibule import config, modules
 from mandibule.utils.i18n import _
-from mandibule.utils import dialogs
+from mandibule.serverlist import dialogs
 import oerplib
 
 class ServerListControler(object):
@@ -164,4 +164,5 @@ class ServerListControler(object):
 
     def _exec_func(self):
         func_mod = modules.get_module(self._current_sel.func_module.name)
-        func_mod.execute(self._current_sel)
+        result = func_mod.execute(self._current_sel)
+        self.main_app.workarea.add_result(result)
