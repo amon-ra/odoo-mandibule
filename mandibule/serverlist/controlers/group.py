@@ -1,5 +1,6 @@
 from PySide import QtGui, QtCore
 from mandibule.serverlist.controlers.server import Server
+from mandibule.utils.i18n import _
 
 class Group(object):
     def __init__(self, data):
@@ -30,3 +31,13 @@ class Group(object):
             for serv in self._servers:
                 out['servers'].append(serv.serialize())
         return out
+
+    def get_menu(self, ref):
+        menu = QtGui.QMenu(ref.widget)
+        menu.addAction(_("New group"), ref._new_group)
+        menu.addAction(_("Edit group"), ref._edit_group)
+        menu.addAction(_("Remove group"), ref._remove_group)
+        menu.addSeparator()
+        menu.addAction(_("New server"), ref._new_server)
+        return menu
+

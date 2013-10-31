@@ -21,3 +21,7 @@ class FuncModule(object):
     def remove_config(self, config):
         self.item.removeChild(config.item)
         del self.configs[config.name]
+
+    def get_menu(self, ref):
+        #TODO
+        return None

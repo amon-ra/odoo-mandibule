@@ -44,34 +44,13 @@ class ServerListControler(object):
 
 
     def _context_menu(self, event):
-        self.menu = QtGui.QMenu()
-        group_menu = QtGui.QMenu(_("Groups"))
-        self.menu.addMenu(group_menu)
-        group_menu.addAction(_("New group"), self._new_group)
-        if self._current_sel:
-            group_menu.addAction(_("Edit group"), self._edit_group)
-            group_menu.addAction(_("Remove group"), self._remove_group)
-            serv_menu = QtGui.QMenu(_("Server"))
-            self.menu.addMenu(serv_menu)
-            serv_menu.addAction(_("New server"), self._new_server)
-            if not isinstance(self._current_sel, Group):
-                serv_menu.addAction(_("Edit server"), self._edit_server)
-                serv_menu.addAction(_("Remove server"), self._remove_server)
-                func_menu = QtGui.QMenu(_("Functions"))
-                self.menu.addMenu(func_menu)
-                new_func_menu = QtGui.QMenu(_("New function"))
-                func_menu.addMenu(new_func_menu)
-                for mod_name, mod in modules.MODULES:
-                    new_func_menu.addAction(mod_name,
-                            self._new_func(mod_name, mod))
-
-                if isinstance(self._current_sel, FuncConfig):
-                    func_menu.addAction(_("Edit function"), self._edit_func)
-                    func_menu.addAction(_("Remove function"),
-                            self._remove_func)
-                    func_menu.addSeparator()
-                    func_menu.addAction(_("Execute function"), self._exec_func)
-        self.menu.popup(event.globalPos())
+        if not self._current_sel:
+            self.menu = QtGui.QMenu()
+            self.menu.addAction(_("New group"), self._new_group)
+        else:
+            self.menu = self._current_sel.get_menu(self)
+        if self.menu:
+            self.menu.popup(event.globalPos())
 
 
 

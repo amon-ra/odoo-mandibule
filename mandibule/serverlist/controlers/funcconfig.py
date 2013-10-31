@@ -1,4 +1,5 @@
 from PySide import QtGui, QtCore
+from mandibule.utils.i18n import _
 
 
 class FuncConfig(object):
@@ -20,3 +21,11 @@ class FuncConfig(object):
 
     def serialize(self):
         return self.data
+
+    def get_menu(self, ref):
+        menu = QtGui.QMenu(ref.widget)
+        menu.addAction(_("Edit function"), ref._edit_func)
+        menu.addAction(_("Remove function"), ref._remove_func)
+        menu.addSeparator()
+        menu.addAction(_("Execute function"), ref._exec_func)
+        return menu

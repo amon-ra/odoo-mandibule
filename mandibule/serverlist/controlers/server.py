@@ -1,6 +1,8 @@
 from PySide import QtGui, QtCore
 from mandibule.serverlist.controlers.funcmodule import FuncModule
 from mandibule.serverlist.controlers.funcconfig import FuncConfig
+from mandibule.utils.i18n import _
+from mandibule import modules
 
 
 class Server(object):
@@ -50,4 +52,15 @@ class Server(object):
                 out['funcs'][func] = [conf.serialize() for conf in \
                         ctrl.configs.values()]
         return out
+
+    def get_menu(self, ref):
+        menu = QtGui.QMenu(ref.widget)
+        menu.addAction(_("Edit server"), ref._edit_server)
+        menu.addAction(_("Remove server"), ref._remove_server)
+        menu.addSeparator()
+        for mod_name, mod in modules.MODULES:
+            menu.addAction(
+                    _("New %s") % mod_name,
+                    ref._new_func(mod_name, mod))
+        return menu
 
