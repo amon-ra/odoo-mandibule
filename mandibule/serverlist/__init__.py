@@ -45,6 +45,7 @@ class ServerListControler(object):
 
     def add_group(self, group):
         self.widget.addTopLevelItem(group.item)
+        group.item.setExpanded(True)
         self._groups.append(group)
 
     def remove_group(self, group):
