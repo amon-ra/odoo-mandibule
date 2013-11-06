@@ -172,8 +172,6 @@ class ServerListControler(object):
         self._save_config()
 
     def _exec_func(self):
-        func_mod = modules.get_module(self._current_sel.func_module.name)
-        result = func_mod.execute(self._current_sel)
-        self.main_app.workarea.add_result(result)
+        self.main_app.workarea.add_result(self._current_sel)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

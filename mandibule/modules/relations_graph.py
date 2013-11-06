@@ -22,7 +22,6 @@ import oerplib
 
 from mandibule.utils.form import FormDialog, TextField, IntField
 from mandibule.utils.i18n import _
-from mandibule.workarea import WorkAreaResultItem
 from mandibule.utils import zoomableimage
 
 
@@ -106,7 +105,6 @@ def execute(config):
             attrs_whitelist,
             attrs_blacklist)
     graph = relations.make_dot().create_png()
-    out = zoomableimage.ZoomableImage(graph)
-    return WorkAreaResultItem(config.server.name, config.name, out)
+    return (zoomableimage.ZoomableImage, graph)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

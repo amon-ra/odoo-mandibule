@@ -23,7 +23,6 @@ import oerplib
 from mandibule.utils.form import FormDialog, TextField, BoolField
 from mandibule.utils.i18n import _
 from mandibule.utils import zoomableimage
-from mandibule.workarea import WorkAreaResultItem
 
 
 def _clean(data):
@@ -85,7 +84,7 @@ def execute(config):
             blacklist,
             config.data['restrict'])
     graph = dependencies.make_dot().create_png()
-    out = zoomableimage.ZoomableImage(graph)
-    return WorkAreaResultItem(config.server.name, config.name, out)
+    return (zoomableimage.ZoomableImage, graph)
+    pass
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
