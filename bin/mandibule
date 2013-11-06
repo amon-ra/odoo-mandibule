@@ -21,13 +21,10 @@
 ##############################################################################
 import sys
 
-from PySide import QtGui
-
 import mandibule
 
 if __name__ == '__main__':
-    app = QtGui.QApplication(sys.argv)
-    mandibule.MainApp(app)
+    app = mandibule.MainApp(sys.argv)
     sys.exit(app.exec_())
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -26,11 +26,11 @@ from mandibule import config
 from mandibule.modules import MODULES
 
 
-class MainApp(object):
-    """The Qt application."""
-    def __init__(self, app):
+class MainApp(QtGui.QApplication):
+    """Main Qt application."""
+    def __init__(self, argv):
         """ Initialize UI """
-        self.app = app
+        super(MainApp, self).__init__(argv)
 
         # initialize widgets
         self.main_window = QtGui.QMainWindow()
@@ -48,13 +48,12 @@ class MainApp(object):
         splitter.addWidget(self.workarea.widget)
         splitter.setSizes((100, 900))
         self.main_window.setCentralWidget(splitter)
-        self.main_window.closeEvent = self.close
+        self.main_window.closeEvent = self._close
         self.main_window.show()
 
     @staticmethod
-    def close(event):
-        """ Called on main window closing """
-        #TODO close all servers connections if needed
+    def _close(event):
+        """Called on main window closing."""
         print "DEBUG -> closing"
         event.accept()
 
