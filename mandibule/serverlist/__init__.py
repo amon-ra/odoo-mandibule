@@ -1,14 +1,37 @@
+# -*- coding: UTF-8 -*-
+##############################################################################
+#
+#    Mandibule, an explorer for OpenERP servers
+#    Copyright (C) 2013 Sébastien Alix
+#                       Frédéric Fidon
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, version 3 of the License.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+##############################################################################
 from PySide import QtGui, QtCore
+import oerplib
+
 from mandibule.serverlist.controlers.group import Group
 from mandibule.serverlist.controlers.server import Server
 from mandibule.serverlist.controlers.funcconfig import FuncConfig
 from mandibule import config, modules
 from mandibule.utils.i18n import _
 from mandibule.serverlist import dialogs
-import oerplib
+
 
 class ServerListControler(object):
     def __init__(self, main_app):
+        self.menu = None
         self._current_sel = None
         self._groups = []
         self.main_app = main_app
@@ -64,9 +87,9 @@ class ServerListControler(object):
 
     def _edit_group(self):
         if isinstance(self._current_sel, Group):
-            group= self._current_sel
+            group = self._current_sel
         else:
-            group= self._current_sel.group
+            group = self._current_sel.group
         result, ok = dialogs.group_dialog(group)
         if ok:
             group.update(result)
@@ -136,9 +159,9 @@ class ServerListControler(object):
 
 
     def _edit_func(self):
-        config = self._current_sel
         mod_name = self._current_sel.func_module.name
-        result, ok = modules.get_module(mod_name).get_form(config).exec_()
+        result, ok = modules.get_module(mod_name).get_form(
+            self._current_sel).exec_()
         if ok:
             self._current_sel.update(result)
             self._save_config()
@@ -151,3 +174,5 @@ class ServerListControler(object):
         func_mod = modules.get_module(self._current_sel.func_module.name)
         result = func_mod.execute(self._current_sel)
         self.main_app.workarea.add_result(result)
+
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

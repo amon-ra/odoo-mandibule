@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #    Mandibule, an explorer for OpenERP servers
-#    Copyright (C) 2013  Sébastien Alix
+#    Copyright (C) 2013 Sébastien Alix
+#                       Frédéric Fidon
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,19 +18,19 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-
 from PySide import QtGui, QtCore
+
 from mandibule.serverlist import ServerListControler
 from mandibule.workarea import WorkAreaController
 from mandibule import config
 from mandibule.modules import MODULES
 
-ROOT_APP = None
 
 class MainApp(object):
+    """The Qt application."""
     def __init__(self, app):
         """ Initialize UI """
+        self.app = app
 
         # initialize widgets
         self.main_window = QtGui.QMainWindow()
@@ -45,23 +46,16 @@ class MainApp(object):
         splitter = QtGui.QSplitter()
         splitter.addWidget(self.serverlist.widget)
         splitter.addWidget(self.workarea.widget)
-        splitter.setSizes((100,900))
+        splitter.setSizes((100, 900))
         self.main_window.setCentralWidget(splitter)
         self.main_window.closeEvent = self.close
         self.main_window.show()
 
-    def close(self, event):
+    @staticmethod
+    def close(event):
         """ Called on main window closing """
         #TODO close all servers connections if needed
         print "DEBUG -> closing"
         event.accept()
-
-
-def start_app(app):
-    ROOT_APP = MainApp(app)
-
-
-
-
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

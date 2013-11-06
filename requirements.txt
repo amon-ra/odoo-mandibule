@@ -1,2 +1,2 @@
 OERPLib>=0.8
-PySide>=1.1.2
+PySide>=1.1.1

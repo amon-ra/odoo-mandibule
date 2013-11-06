@@ -1,7 +1,28 @@
+# -*- coding: UTF-8 -*-
+##############################################################################
+#
+#    Mandibule, an explorer for OpenERP servers
+#    Copyright (C) 2013 Sébastien Alix
+#                       Frédéric Fidon
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, version 3 of the License.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+##############################################################################
+import oerplib
+
 from mandibule.utils.i18n import _
 from mandibule.utils.form import FormDialog, TextField, IntField, SelectField
-from mandibule.config import CONFIG
-import oerplib
+
 
 def group_dialog(group=None):
     name = getattr(group, 'name', '')
@@ -9,6 +30,7 @@ def group_dialog(group=None):
             ('name', TextField(_("Name"), name)),
             )
     return FormDialog(fields).exec_()
+
 
 def server_dialog(groups, server=None, group=None):
     name = getattr(server, 'name', '')
@@ -34,3 +56,4 @@ def server_dialog(groups, server=None, group=None):
         res.update({'protocol': 'xmlrpc', 'timeout': 120, 'type': 'OERP'})
     return res, ok
 
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
