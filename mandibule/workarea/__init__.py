@@ -40,16 +40,21 @@ class FuncWidgetControler(object):
         self.data = data
         self.running = False
         self.pending_data = None
+        self.thread = None
         self.widgetCtrl = None
         self.title = '%s - %s' % (data.server.name, data.name)
         self.index = self.workarea.get_index()
+        self._widget = QtGui.QWidget()
+        self._layout = QtGui.QVBoxLayout()
+        self._widget.setLayout(self._layout)
+        self._inner_widget = QtGui.QLabel('Running...')
 
     def render(self, data=None):
         if not self.initialized:
             self.initialized = True
-            self.workarea.widget.addTab(
-                    QtGui.QLabel('Running...'),
-                    self.title)
+            self._layout.addWidget(self._inner_widget)
+            self.workarea.widget.addTab(self._widget, self.title)
+            self.workarea.widget.setCurrentIndex(self.index)
         if data:
             if not self.running:
                 self.data = data
@@ -67,11 +72,16 @@ class FuncWidgetControler(object):
         if not self.pending_data:
             widget_ctrl, wdata = result
             self.widgetCtrl = widget_ctrl(wdata)
+            self._layout.removeWidget(self._inner_widget)
+            self._layout.addWidget(self.widgetCtrl.widget)
+            self._inner_widget = self.widgetCtrl.widget
+            '''
             self.workarea.widget.removeTab(self.index)
             self.workarea.widget.insertTab(
                     self.index,
                     self.widgetCtrl.widget,
                     self.title)
+            '''
 
     def _finished(self):
         self.running = False
@@ -90,6 +100,7 @@ class WorkAreaController(object):
         self.widget.tabBar().tabMoved.connect(self.move_tab)
         self._server_windows = []
         self._controlers = {}
+        self._trash = []
 
     def get_index(self):
         return len(self._server_windows)
@@ -106,6 +117,9 @@ class WorkAreaController(object):
     def close_tab(self, index):
         self.widget.removeTab(index)
         title = self._server_windows[index]
+        controler = self._controlers[title]
+        if controler.running:
+            self._trash.append(controler)
         del self._server_windows[index]
         del self._controlers[title]
 
