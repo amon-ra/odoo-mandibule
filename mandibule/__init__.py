@@ -32,6 +32,7 @@ class MainApp(QtGui.QApplication):
         """ Initialize UI """
         super(MainApp, self).__init__(argv)
         self.setAttribute(QtCore.Qt.AA_DontShowIconsInMenus, False)
+        QtGui.QIcon.setThemeName('oxygen')
 
         # initialize widgets
         self.main_window = QtGui.QMainWindow()
