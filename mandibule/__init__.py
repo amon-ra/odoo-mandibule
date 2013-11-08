@@ -31,6 +31,7 @@ class MainApp(QtGui.QApplication):
     def __init__(self, argv):
         """ Initialize UI """
         super(MainApp, self).__init__(argv)
+        self.setAttribute(QtCore.Qt.AA_DontShowIconsInMenus, False)
 
         # initialize widgets
         self.main_window = QtGui.QMainWindow()
