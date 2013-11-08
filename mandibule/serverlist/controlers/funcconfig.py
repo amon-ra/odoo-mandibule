@@ -45,10 +45,16 @@ class FuncConfig(object):
 
     def get_menu(self, ref):
         menu = QtGui.QMenu(ref.widget)
-        menu.addAction(_("Edit function"), ref._edit_func)
-        menu.addAction(_("Remove function"), ref._remove_func)
+        # Execute
+        icon_run = QtGui.QIcon.fromTheme('system-run')
+        menu.addAction(icon_run, _("Execute"), ref._exec_func)
+        # Remove
+        icon_remove = QtGui.QIcon.fromTheme('list-remove')
+        menu.addAction(icon_remove, _("Remove"), ref._remove_func)
+        # Properties
         menu.addSeparator()
-        menu.addAction(_("Execute function"), ref._exec_func)
+        icon_properties = QtGui.QIcon.fromTheme('document-properties')
+        menu.addAction(icon_properties, _("Properties"), ref._edit_func)
         return menu
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

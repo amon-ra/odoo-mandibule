@@ -56,11 +56,18 @@ class Group(object):
 
     def get_menu(self, ref):
         menu = QtGui.QMenu(ref.widget)
-        menu.addAction(_("New group"), ref._new_group)
-        menu.addAction(_("Edit group"), ref._edit_group)
-        menu.addAction(_("Remove group"), ref._remove_group)
+        # Add group
+        icon_add = QtGui.QIcon.fromTheme('list-add')
+        menu.addAction(icon_add, _("Add group"), ref._new_group)
+        # Add server
+        menu.addAction(icon_add, _("Add server"), ref._new_server)
+        # Remove current group
+        icon_remove = QtGui.QIcon.fromTheme('list-remove')
+        menu.addAction(icon_remove, _("Remove"), ref._remove_group)
+        # Properties
         menu.addSeparator()
-        menu.addAction(_("New server"), ref._new_server)
+        icon_properties = QtGui.QIcon.fromTheme('document-properties')
+        menu.addAction(icon_properties, _("Properties"), ref._edit_group)
         return menu
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

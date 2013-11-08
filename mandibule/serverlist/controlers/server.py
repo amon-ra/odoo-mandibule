@@ -76,13 +76,20 @@ class Server(object):
 
     def get_menu(self, ref):
         menu = QtGui.QMenu(ref.widget)
-        menu.addAction(_("Edit server"), ref._edit_server)
-        menu.addAction(_("Remove server"), ref._remove_server)
-        menu.addSeparator()
+        # Add graphs
         for mod_name, mod in modules.MODULES:
+            icon_add = QtGui.QIcon.fromTheme('list-add')
             menu.addAction(
-                    _("New %s") % mod_name,
-                    ref._new_func(mod_name, mod))
+                icon_add,
+                _("Add %s graph" % mod_name.lower()),
+                ref._new_func(mod_name, mod))
+        # Remove
+        icon_remove = QtGui.QIcon.fromTheme('list-remove')
+        menu.addAction(icon_remove, _("Remove"), ref._remove_server)
+        # Properties
+        menu.addSeparator()
+        icon_properties = QtGui.QIcon.fromTheme('document-properties')
+        menu.addAction(icon_properties, _("Properties"), ref._edit_server)
         return menu
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
