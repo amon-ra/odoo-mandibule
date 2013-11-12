@@ -47,7 +47,7 @@ class MainApp(QtGui.QApplication):
         splitter = QtGui.QSplitter()
         splitter.addWidget(self.serverlist.widget)
         splitter.addWidget(self.workarea.widget)
-        splitter.setSizes((100, 900))
+        splitter.setSizes((150, 850))
         self.main_window.setCentralWidget(splitter)
         self.main_window.closeEvent = self._close
         self.main_window.show()
