@@ -30,13 +30,14 @@ from mandibule.serverlist import dialogs
 
 
 class ServerListControler(object):
-    def __init__(self, main_app):
+    def __init__(self, app):
         self.menu = None
         self._current_sel = None
         self._groups = []
-        self.main_app = main_app
+        self.app = app
         self.widget = QtGui.QTreeWidget()
-        self.widget.setHeaderHidden(True)
+        self.widget.setHeaderLabel(_("OpenERP servers"))
+        self.widget.headerItem().setTextAlignment(0, QtCore.Qt.AlignHCenter)
         self.widget.currentItemChanged.connect(self._cur_item)
         self.widget.itemDoubleClicked.connect(self._item_dblclick)
         self.widget.contextMenuEvent = self._context_menu
@@ -172,6 +173,6 @@ class ServerListControler(object):
         self._save_config()
 
     def _exec_func(self):
-        self.main_app.workarea.add_result(self._current_sel)
+        self.app.workarea.add_result(self._current_sel)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
