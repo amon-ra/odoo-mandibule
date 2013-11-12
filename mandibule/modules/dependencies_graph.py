@@ -85,6 +85,5 @@ def execute(config):
             config.data['restrict'])
     graph = dependencies.make_dot().create_png()
     return (zoomableimage.ZoomableImage, graph)
-    pass
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -77,7 +77,7 @@ class Server(object):
     def get_menu(self, ref):
         menu = QtGui.QMenu(ref.widget)
         # Add graphs
-        for mod_name, mod in modules.MODULES:
+        for mod_name, mod in modules.MODULES.iteritems():
             icon_add = QtGui.QIcon.fromTheme('list-add')
             menu.addAction(
                 icon_add,

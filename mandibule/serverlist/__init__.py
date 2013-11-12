@@ -161,7 +161,7 @@ class ServerListControler(object):
 
     def _edit_func(self):
         mod_name = self._current_sel.func_module.name
-        result, ok = modules.get_module(mod_name).get_form(
+        result, ok = modules.MODULES[mod_name].get_form(
             self._current_sel).exec_()
         if ok:
             self._current_sel.update(result)

@@ -19,7 +19,9 @@
 #
 ##############################################################################
 from PySide import QtGui, QtCore
+
 from mandibule import modules
+
 
 class ThreadFunc(QtCore.QThread):
     result_ready = QtCore.Signal(tuple)
@@ -32,6 +34,7 @@ class ThreadFunc(QtCore.QThread):
     def run(self):
         result = self.func(*self.args, **self.kwargs)
         self.result_ready.emit(result)
+
 
 class FuncWidgetControler(object):
     def __init__(self, workarea, data):
@@ -61,7 +64,7 @@ class FuncWidgetControler(object):
             else:
                 self.pending_data = data
                 return
-        mod = modules.get_module(self.data.func_module.name)
+        mod = modules.MODULES[self.data.func_module.name]
         self.running = True
         self.thread = ThreadFunc(mod.execute, self.data)
         self.thread.result_ready.connect(self.finalize)
@@ -75,13 +78,11 @@ class FuncWidgetControler(object):
             self._layout.removeWidget(self._inner_widget)
             self._layout.addWidget(self.widgetCtrl.widget)
             self._inner_widget = self.widgetCtrl.widget
-            '''
-            self.workarea.widget.removeTab(self.index)
-            self.workarea.widget.insertTab(
-                    self.index,
-                    self.widgetCtrl.widget,
-                    self.title)
-            '''
+            #self.workarea.widget.removeTab(self.index)
+            #self.workarea.widget.insertTab(
+            #        self.index,
+            #        self.widgetCtrl.widget,
+            #        self.title)
 
     def _finished(self):
         self.running = False
@@ -89,6 +90,7 @@ class FuncWidgetControler(object):
             data = self.pending_data
             self.pending_data = None
             self.render(data)
+
 
 class WorkAreaController(object):
     def __init__(self, app):

@@ -23,7 +23,6 @@ from PySide import QtGui, QtCore
 from mandibule.serverlist import ServerListControler
 from mandibule.workarea import WorkAreaController
 from mandibule import config
-from mandibule.modules import MODULES
 
 
 class MainApp(QtGui.QApplication):
