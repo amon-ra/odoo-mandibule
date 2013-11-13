@@ -20,7 +20,7 @@
 ##############################################################################
 from PySide import QtGui, QtCore
 
-from mandibule.serverlist.controlers.server import Server
+from mandibule.maintree.controlers.server import Server
 from mandibule.utils.i18n import _
 
 

@@ -21,15 +21,15 @@
 from PySide import QtGui, QtCore
 import oerplib
 
-from mandibule.serverlist.controlers.group import Group
-from mandibule.serverlist.controlers.server import Server
-from mandibule.serverlist.controlers.funcconfig import FuncConfig
+from mandibule.maintree.controlers.group import Group
+from mandibule.maintree.controlers.server import Server
+from mandibule.maintree.controlers.funcconfig import FuncConfig
 from mandibule import config, modules
 from mandibule.utils.i18n import _
-from mandibule.serverlist import dialogs
+from mandibule.maintree import dialogs
 
 
-class ServerListControler(object):
+class MainTree(object):
     def __init__(self, app):
         self.menu = None
         self._current_sel = None

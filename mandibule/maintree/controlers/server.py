@@ -20,8 +20,8 @@
 ##############################################################################
 from PySide import QtGui, QtCore
 
-from mandibule.serverlist.controlers.funcmodule import FuncModule
-from mandibule.serverlist.controlers.funcconfig import FuncConfig
+from mandibule.maintree.controlers.funcmodule import FuncModule
+from mandibule.maintree.controlers.funcconfig import FuncConfig
 from mandibule.utils.i18n import _
 from mandibule import modules
 

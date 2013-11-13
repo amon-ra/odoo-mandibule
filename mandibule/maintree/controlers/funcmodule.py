@@ -20,7 +20,7 @@
 ##############################################################################
 from PySide import QtGui, QtCore
 
-from mandibule.serverlist.controlers.funcconfig import FuncConfig
+from mandibule.maintree.controlers.funcconfig import FuncConfig
 
 
 class FuncModule(object):

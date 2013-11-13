@@ -20,7 +20,7 @@
 ##############################################################################
 from PySide import QtGui, QtCore
 
-from mandibule.serverlist import ServerListControler
+from mandibule.maintree import MainTree
 from mandibule.workarea import WorkAreaController
 from mandibule import config
 
@@ -36,7 +36,7 @@ class MainApp(QtGui.QApplication):
         # initialize widgets
         self.main_window = QtGui.QMainWindow()
         self.main_window.setWindowState(QtCore.Qt.WindowMaximized)
-        self.serverlist = ServerListControler(self)
+        self.main_tree = MainTree(self)
         self.workarea = WorkAreaController(self)
 
         # main window settings
@@ -45,7 +45,7 @@ class MainApp(QtGui.QApplication):
 
         # splitter containing list of servers and working zone
         splitter = QtGui.QSplitter()
-        splitter.addWidget(self.serverlist.widget)
+        splitter.addWidget(self.main_tree.widget)
         splitter.addWidget(self.workarea.widget)
         splitter.setSizes((150, 850))
         self.main_window.setCentralWidget(splitter)
