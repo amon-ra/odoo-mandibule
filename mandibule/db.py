@@ -23,7 +23,6 @@ import json
 
 from mandibule.utils import env
 
-
 CONFIG_PATH = env.save_user_config_path('mandibule')
 DATA_FILE = os.path.join(CONFIG_PATH, 'data.json')
 OERPLIB_FILE = os.path.join(CONFIG_PATH, 'oerplib.cfg')
@@ -39,5 +38,10 @@ def write(data):
     """Write data in DATA_FILE."""
     with open(DATA_FILE, 'w') as fp:
         json.dump(data, fp, indent=4)
+
+
+# Ensure that the DATA_FILE exists
+if not os.path.exists(DATA_FILE):
+    write({})
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
