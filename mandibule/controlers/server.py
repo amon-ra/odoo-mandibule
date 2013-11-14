@@ -94,6 +94,7 @@ class ServerControler(QObject):
         for id_ in db_data:
             oe_data = oerplib.tools.session.get(id_, rc_file=db.OERPLIB_FILE)
             db_data[id_]['oerplib'] = oe_data
+        return db_data
 
     def update(self, id_, data):
         """Update a server."""
