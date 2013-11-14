@@ -26,6 +26,7 @@ from mandibule.utils import env
 
 CONFIG_PATH = env.save_user_config_path('mandibule')
 DATA_FILE = os.path.join(CONFIG_PATH, 'data.json')
+OERPLIB_FILE = os.path.join(CONFIG_PATH, 'oerplib.cfg')
 
 
 def read():
