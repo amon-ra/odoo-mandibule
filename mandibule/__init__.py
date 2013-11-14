@@ -22,6 +22,7 @@ from PySide import QtGui, QtCore
 
 from mandibule.maintree import MainTree
 from mandibule.workarea import WorkAreaController
+from mandibule.controlers import GroupControler, ServerControler
 from mandibule import config
 
 
@@ -32,6 +33,10 @@ class MainApp(QtGui.QApplication):
         super(MainApp, self).__init__(argv)
         self.setAttribute(QtCore.Qt.AA_DontShowIconsInMenus, False)
         QtGui.QIcon.setThemeName('oxygen')
+
+        # Controlers
+        self.group_ctl = GroupControler(self)
+        self.server_ctl = ServerControler(self)
 
         # initialize widgets
         self.main_window = QtGui.QMainWindow()
