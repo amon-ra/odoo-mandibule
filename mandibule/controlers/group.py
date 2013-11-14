@@ -33,6 +33,10 @@ class GroupControler(QObject):
     updated = Signal(str)
     deleted = Signal(str)
 
+    def __init__(self, app):
+        QObject.__init__(self)
+        self.app = app
+
     def display_form(self, id_=None):
         """Display the form to create/update a group."""
         data = self.read(id_) or {}
@@ -66,6 +70,12 @@ class GroupControler(QObject):
             return db_data[id_]
         return None
 
+    def read_all(self):
+        db_data = db.read()
+        for id_ in db_data:
+            del db_data[id_]['servers']
+        return db_data
+
     def update(self, id_, data):
         """Update a group."""
         db_data = db.read()
@@ -76,8 +86,12 @@ class GroupControler(QObject):
 
     def delete(self, id_):
         """Delete a group."""
+        # TODO confirmation via popup
         db_data = db.read()
         if id_ in db_data:
+            if 'servers' in db_data[id_]:
+                raise ValueError(
+                    _("Unable to delete this group while it contains servers."))
             del db_data[id_]
             db.write(db_data)
             self.deleted.emit(id_)
