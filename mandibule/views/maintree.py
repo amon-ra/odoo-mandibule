@@ -28,9 +28,16 @@ class ServerItem(QtGui.QTreeWidgetItem):
     def __init__(self, app, id_):
         QtGui.QTreeWidgetItem.__init__(self)
         self.app = app
+        self.app.server_ctl.updated.connect(self.update_server)
         self.id = id_
         data = self.app.server_ctl.read(id_)
-        self.setText(0, data.get('name', ''))
+        self.setText(0, data['name'])
+
+    def update_server(self, id_):
+        """Update the server identified by `ìd_`."""
+        if self.id == id_:
+            data = self.app.server_ctl.read(id_)
+            self.setText(0, data['name'])
 
 
 class GroupItem(QtGui.QTreeWidgetItem):
@@ -38,12 +45,20 @@ class GroupItem(QtGui.QTreeWidgetItem):
     def __init__(self, app, id_):
         QtGui.QTreeWidgetItem.__init__(self)
         self.app = app
+        self.app.server_ctl.created.connect(self.add_server)
+        self.app.server_ctl.deleted.connect(self.remove_server)
+        self.app.group_ctl.updated.connect(self.update_group)
         self.id = id_
         data = self.app.group_ctl.read(id_)
-        self.setText(0, data.get('name', ''))
-        #self.setData(0, QtCore.Qt.UserRole, self)
+        self.setText(0, data['name'])
         for sid in data.get('servers', {}):
             self.add_server(sid)
+
+    def update_group(self, id_):
+        """Update the group identified by `ìd_`."""
+        if self.id == id_:
+            data = self.app.server_ctl.read(id_)
+            self.setText(0, data['name'])
 
     def add_server(self, id_):
         """Add the server identified by `id_`."""
@@ -55,8 +70,11 @@ class GroupItem(QtGui.QTreeWidgetItem):
 
     def remove_server(self, id_):
         """Remove the server identified by `id_`."""
-        # TODO
-        pass
+        for index in range(self.childCount()):
+            server = self.child(index)
+            if server.id == id_:
+                server = self.takeChild(index)
+                server.deleteLater()
 
 
 class MainTree(QtGui.QTreeWidget):
@@ -64,6 +82,8 @@ class MainTree(QtGui.QTreeWidget):
     def __init__(self, app):
         QtGui.QTreeWidget.__init__(self)
         self.app = app
+        self.app.group_ctl.created.connect(self.add_group)
+        self.app.group_ctl.deleted.connect(self.remove_group)
         # Header
         self.setHeaderLabel(_("OpenERP servers"))
         self.headerItem().setTextAlignment(0, QtCore.Qt.AlignHCenter)
@@ -75,13 +95,14 @@ class MainTree(QtGui.QTreeWidget):
         group = GroupItem(self.app, id_)
         self.addTopLevelItem(group)
         group.setExpanded(True)
-        self.app.server_ctl.created.connect(group.add_server)
-        self.app.server_ctl.deleted.connect(group.remove_server)
 
     def remove_group(self, id_):
         """Remove the group identified by `id_`."""
-        # TODO
-        pass
+        for index in range(self.topLevelItemCount()):
+            group = self.topLevelItem(index)
+            if group.id == id_:
+                group =self.takeTopLevelItem(index)
+                group.deleteLater()
 
     #def contextMenuEvent(self, event):
     #    menu = QtGui.QMenu()

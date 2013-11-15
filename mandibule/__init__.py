@@ -39,9 +39,6 @@ class MainApp(QtGui.QApplication):
         self.server_ctl = ServerControler(self)
         # Views
         self.main_tree = MainTree(self)
-        # Some connection between views and controlers
-        self.group_ctl.created.connect(self.main_tree.add_group)
-        self.group_ctl.deleted.connect(self.main_tree.remove_group)
 
         # == TODO code below need review ==
 
