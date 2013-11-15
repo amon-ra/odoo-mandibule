@@ -1,0 +1,11 @@
+.*\.pyc
+.*\.swp
+.*\.db
+.*\.vim
+\.ropeproject
+doc/build
+build
+\.directory
+.*\.mo
+MANIFEST
+dist
