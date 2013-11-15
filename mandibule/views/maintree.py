@@ -47,9 +47,11 @@ class GroupItem(QtGui.QTreeWidgetItem):
 
     def add_server(self, id_):
         """Add the server identified by `id_`."""
-        server = ServerItem(self.app, id_)
-        self.addChild(server)
-        server.setExpanded(True)
+        data = self.app.server_ctl.read(id_)
+        if self.id == data['group_id']:
+            server = ServerItem(self.app, id_)
+            self.addChild(server)
+            server.setExpanded(True)
 
     def remove_server(self, id_):
         """Remove the server identified by `id_`."""
