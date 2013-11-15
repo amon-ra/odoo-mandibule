@@ -20,9 +20,10 @@
 ##############################################################################
 from PySide import QtGui, QtCore
 
-from mandibule.maintree import MainTree
-from mandibule.workarea import WorkAreaController
 from mandibule.controlers import GroupControler, ServerControler
+from mandibule.views import MainTree
+from mandibule.maintree import MainTree as MainTree2  # FIXME temporary renamed
+from mandibule.workarea import WorkAreaController
 from mandibule import config
 
 
@@ -33,15 +34,21 @@ class MainApp(QtGui.QApplication):
         super(MainApp, self).__init__(argv)
         self.setAttribute(QtCore.Qt.AA_DontShowIconsInMenus, False)
         QtGui.QIcon.setThemeName('oxygen')
-
         # Controlers
         self.group_ctl = GroupControler(self)
         self.server_ctl = ServerControler(self)
+        # Views
+        self.main_tree = MainTree(self)
+        # Some connection between views and controlers
+        self.group_ctl.created.connect(self.main_tree.add_group)
+        self.group_ctl.deleted.connect(self.main_tree.remove_group)
+
+        # == TODO code below need review ==
 
         # initialize widgets
         self.main_window = QtGui.QMainWindow()
         self.main_window.setWindowState(QtCore.Qt.WindowMaximized)
-        self.main_tree = MainTree(self)
+        self.main_tree_old = MainTree2(self)
         self.workarea = WorkAreaController(self)
 
         # main window settings
@@ -50,9 +57,10 @@ class MainApp(QtGui.QApplication):
 
         # splitter containing list of servers and working zone
         splitter = QtGui.QSplitter()
-        splitter.addWidget(self.main_tree.widget)
+        splitter.addWidget(self.main_tree_old.widget)
+        splitter.addWidget(self.main_tree)
         splitter.addWidget(self.workarea.widget)
-        splitter.setSizes((150, 850))
+        splitter.setSizes([150, 150, 700])
         self.main_window.setCentralWidget(splitter)
         self.main_window.closeEvent = self._close
         self.main_window.show()
