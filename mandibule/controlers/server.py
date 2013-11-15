@@ -72,9 +72,14 @@ class ServerControler(QObject):
     def create(self, data):
         """Create a new server and return its ID."""
         id_ = uuid.uuid4().hex
-        data['servers'] = []
+        # OERPLib credentials
+        oerplib.tools.session.save(
+            id_, data['oerplib'], rc_file=db.OERPLIB_FILE)
+        del data['oerplib']
+        # Application specific data
         db_data = db.read()
-        db_data[id_] = data
+        gid = data['group_id']
+        db_data[gid]['servers'][id_] = data
         db.write(db_data)
         self.created.emit(id_)
         return id_
@@ -83,35 +88,54 @@ class ServerControler(QObject):
         """Return data related to a server."""
         db_data = db.read()
         oe_data = oerplib.tools.session.get(id_, rc_file=db.OERPLIB_FILE)
-        if id_ in db_data:
-            db_data[id_]['oerplib'] = oe_data
-            return db_data[id_]
+        for gid, gdata in db_data.iteritems():
+            if id_ in gdata['servers']:
+                sdata = gdata['servers'][id_]
+                sdata['oerplib'] = oe_data
+                sdata['group_id'] = gid
+                return sdata
         return None
 
     def read_all(self):
         """Return all servers data."""
         db_data = db.read()
-        for id_ in db_data:
-            oe_data = oerplib.tools.session.get(id_, rc_file=db.OERPLIB_FILE)
-            db_data[id_]['oerplib'] = oe_data
-        return db_data
+        data = {}
+        for gid, gdata in db_data.iteritems():
+            for sid, sdata in gdata['servers'].iteritems():
+                oe_data = oerplib.tools.session.get(
+                    sid, rc_file=db.OERPLIB_FILE)
+                data[sid] = sdata
+                data[sid]['oerplib'] = oe_data
+                data[sid]['group_id'] = gid
+        return data
 
     def update(self, id_, data):
         """Update a server."""
-        # TODO: update OERPLib credentials
+        # OERPLib credentials
+        oerplib.tools.session.save(
+            id_, data['oerplib'], rc_file=db.OERPLIB_FILE)
+        del data['oerplib']
+        # Application specific data
+        del data['group_id']
         db_data = db.read()
-        if id_ in db_data:
-            db_data[id_].update(data)
-            db.write(db_data)
-            self.updated.emit(id_)
+        for gdata in db_data.itervalues():
+            if id_ in gdata['servers']:
+                gdata['servers'][id_].update(data)
+                db.write(db_data)
+                self.updated.emit(id_)
+                break
 
     def delete(self, id_):
-        # TODO: delete OERPLib credentials + confirmation via popup
         """Delete a server."""
+        # OERPLib credentials
+        oerplib.tools.session.remove(id_, rc_file=db.OERPLIB_FILE)
+        # Application specific data
         db_data = db.read()
-        if id_ in db_data:
-            del db_data[id_]
-            db.write(db_data)
-            self.deleted.emit(id_)
+        for gdata in db_data.itervalues():
+            if id_ in gdata['servers']:
+                del gdata['servers'][id_]
+                db.write(db_data)
+                self.deleted.emit(id_)
+                break
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

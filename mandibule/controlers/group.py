@@ -54,7 +54,7 @@ class GroupControler(QObject):
     def create(self, data):
         """Create a new group and return its ID."""
         id_ = uuid.uuid4().hex
-        data['servers'] = []
+        data['servers'] = {}
         db_data = db.read()
         db_data[id_] = data
         db.write(db_data)
@@ -66,14 +66,14 @@ class GroupControler(QObject):
         db_data = db.read()
         if id_ in db_data:
             # We remove servers from data returned
-            del db_data[id_]['servers']
+            #del db_data[id_]['servers']
             return db_data[id_]
         return None
 
     def read_all(self):
         db_data = db.read()
-        for id_ in db_data:
-            del db_data[id_]['servers']
+        #for id_ in db_data:
+        #    del db_data[id_]['servers']
         return db_data
 
     def update(self, id_, data):
