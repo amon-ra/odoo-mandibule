@@ -1,4 +1,3 @@
-
 # -*- coding: UTF-8 -*-
 ##############################################################################
 #
@@ -21,7 +20,9 @@
 ##############################################################################
 from PySide import QtGui, QtCore
 
-from mandibule.maintree import MainTree
+from mandibule.controlers import GroupControler, ServerControler
+from mandibule.views import MainTree
+from mandibule.maintree import MainTree as MainTree2  # FIXME temporary renamed
 from mandibule.workarea import WorkAreaController
 from mandibule import config
 
@@ -33,24 +34,39 @@ class MainApp(QtGui.QApplication):
         super(MainApp, self).__init__(argv)
         self.setAttribute(QtCore.Qt.AA_DontShowIconsInMenus, False)
         QtGui.QIcon.setThemeName('oxygen')
-
-        # initialize widgets
+        # Controlers
+        self.group_ctl = GroupControler(self)
+        self.server_ctl = ServerControler(self)
+        # Views
         self.main_window = QtGui.QMainWindow()
         self.main_window.setWindowState(QtCore.Qt.WindowMaximized)
-        self.main_tree = MainTree(self)
-        self.workarea = WorkAreaController(self)
-
-        # main window settings
         self.main_window.setWindowTitle('Mandibule !')
         self.main_window.setContentsMargins(0, 0, 0, 0)
+        self.main_tree = MainTree(self)
 
-        dock = QtGui.QDockWidget('OpenERP Servers')
-        dock.setMinimumSize(250, 500)
-        dock.setWidget(self.main_tree.widget)
+        # == TODO code below need review ==
+
+        # initialize widgets
+        self.main_tree_old = MainTree2(self)
+        self.workarea = WorkAreaController(self)
+
+        # Dockable maintree
+        dock = QtGui.QDockWidget('OpenERP servers')
+        dock.setMinimumSize(250, 250)
+        dock.setWidget(self.main_tree)
         dock.setFeatures(dock.features() & ~dock.DockWidgetClosable)
         dock.setAllowedAreas(
-                QtCore.Qt.RightDockWidgetArea|QtCore.Qt.LeftDockWidgetArea)
+            QtCore.Qt.RightDockWidgetArea|QtCore.Qt.LeftDockWidgetArea)
         self.main_window.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
+        # FIXME Legacy dockable maintree (remove later)
+        dock_old = QtGui.QDockWidget('OpenERP servers')
+        dock_old.setMinimumSize(250, 250)
+        dock_old.setWidget(self.main_tree_old.widget)
+        dock_old.setFeatures(dock_old.features() & ~dock_old.DockWidgetClosable)
+        dock_old.setAllowedAreas(
+            QtCore.Qt.RightDockWidgetArea|QtCore.Qt.LeftDockWidgetArea)
+        self.main_window.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock_old)
+
         self.main_window.setCentralWidget(self.workarea.widget)
         self.main_window.closeEvent = self._close
         self.main_window.show()
