@@ -32,12 +32,32 @@ class ServerItem(QtGui.QTreeWidgetItem):
         self.id = id_
         data = self.app.server_ctl.read(id_)
         self.setText(0, data['name'])
+        icon = QtGui.QIcon.fromTheme('network-server')
+        self.setIcon(0, icon)
 
     def update_server(self, id_):
         """Update the server identified by `ìd_`."""
         if self.id == id_:
             data = self.app.server_ctl.read(id_)
             self.setText(0, data['name'])
+
+    def get_menu(self):
+        """Return a QMenu corresponding to the current ServerItem."""
+        menu = QtGui.QMenu(self.treeWidget())
+        # Remove current server
+        icon_remove = QtGui.QIcon.fromTheme('list-remove')
+        menu.addAction(
+            icon_remove,
+            _("Remove"),
+            lambda: self.app.server_ctl.delete(self.id))
+        # Properties
+        menu.addSeparator()
+        icon_properties = QtGui.QIcon.fromTheme('document-properties')
+        menu.addAction(
+            icon_properties,
+            _("Properties"),
+            lambda: self.app.server_ctl.display_form(self.id))
+        return menu
 
 
 class GroupItem(QtGui.QTreeWidgetItem):
@@ -53,11 +73,13 @@ class GroupItem(QtGui.QTreeWidgetItem):
         self.setText(0, data['name'])
         for sid in data.get('servers', {}):
             self.add_server(sid)
+        icon = QtGui.QIcon.fromTheme('folder')
+        self.setIcon(0, icon)
 
     def update_group(self, id_):
         """Update the group identified by `ìd_`."""
         if self.id == id_:
-            data = self.app.server_ctl.read(id_)
+            data = self.app.group_ctl.read(id_)
             self.setText(0, data['name'])
 
     def add_server(self, id_):
@@ -75,6 +97,30 @@ class GroupItem(QtGui.QTreeWidgetItem):
             if server.id == id_:
                 server = self.takeChild(index)
                 server.deleteLater()
+
+    def get_menu(self):
+        """Return a QMenu corresponding to the current GroupItem."""
+        menu = QtGui.QMenu(self.treeWidget())
+        # Add server
+        icon_add = QtGui.QIcon.fromTheme('list-add')
+        menu.addAction(
+            icon_add,
+            _("Add server"),
+            self.app.server_ctl.display_form)
+        # Remove current group
+        icon_remove = QtGui.QIcon.fromTheme('list-remove')
+        menu.addAction(
+            icon_remove,
+            _("Remove"),
+            lambda: self.app.group_ctl.delete(self.id))
+        # Properties
+        menu.addSeparator()
+        icon_properties = QtGui.QIcon.fromTheme('document-properties')
+        menu.addAction(
+            icon_properties,
+            _("Properties"),
+            lambda: self.app.group_ctl.display_form(self.id))
+        return menu
 
 
 class MainTree(QtGui.QTreeWidget):
@@ -101,12 +147,41 @@ class MainTree(QtGui.QTreeWidget):
         for index in range(self.topLevelItemCount()):
             group = self.topLevelItem(index)
             if group.id == id_:
-                group =self.takeTopLevelItem(index)
+                group = self.takeTopLevelItem(index)
                 group.deleteLater()
 
-    #def contextMenuEvent(self, event):
-    #    menu = QtGui.QMenu()
-    #    menu.addAction(_("New group"), lambda x: x)
-    #    menu.popup(event.globalPos())
+    def contextMenuEvent(self, event):
+        """Overridden to show a contextual menu according to the
+        selected item.
+        """
+        if self.currentItem():
+            menu = self.currentItem().get_menu()
+            menu.popup(event.globalPos())
+        else:
+            menu = QtGui.QMenu(self)
+            icon_add = QtGui.QIcon.fromTheme('list-add')
+            menu.addAction(
+                icon_add,
+                _("New group"),
+                self.app.group_ctl.display_form)
+            menu.popup(event.globalPos())
+
+    def mousePressEvent(self, event):
+        """Overloaded to unset the current selection when clicking
+        in the blanc area.
+        """
+        if self.itemAt(event.pos()) is None:
+            self.setCurrentItem(None)
+        QtGui.QTreeWidget.mousePressEvent(self, event)
+
+    def keyPressEvent(self, event):
+        """Overloaded to unset the current selection when pressing the
+        Escape key.
+        """
+        if (event.key() == QtCore.Qt.Key_Escape and
+            event.modifiers() == QtCore.Qt.NoModifier):
+            self.setCurrentItem(None)
+        else:
+            QtGui.QTreeWidget.keyPressEvent(self, event)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

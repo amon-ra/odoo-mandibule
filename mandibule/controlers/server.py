@@ -19,6 +19,7 @@
 #
 ##############################################################################
 import uuid
+import copy
 
 import oerplib
 from PySide.QtCore import QObject, Signal
@@ -26,6 +27,20 @@ from PySide.QtCore import QObject, Signal
 from mandibule import db
 from mandibule.utils.i18n import _
 from mandibule.utils.form import FormDialog, TextField, IntField, SelectField
+
+DEFAULT = {
+    'name': '',
+    'oerplib': {
+        'type': 'OERP',
+        'server': 'localhost',
+        'protocol': 'xmlrpc',
+        'port': 8069,
+        'database': '',
+        'user': 'admin',
+        'passwd': '',
+        'timeout': 120,
+    },
+}
 
 
 class ServerControler(QObject):
@@ -38,9 +53,26 @@ class ServerControler(QObject):
         QObject.__init__(self)
         self.app = app
 
+    def _clean_form_data(self, data):
+        data['group_id'] = data['group'][1]
+        data['oerplib'] = {
+            'server': data['server'],
+            'port': data['port'],
+            'database': data['database'],
+            'user': data['user'],
+            'passwd': data['passwd'],
+        }
+        del data['group']
+        del data['server']
+        del data['port']
+        del data['database']
+        del data['user']
+        del data['passwd']
+        return data
+
     def display_form(self, id_=None):
         """Display the form to create/update a server."""
-        db_data = self.read(id_) or {}
+        db_data = id_ and self.read(id_) or copy.deepcopy(DEFAULT)
         groups = self.app.group_ctl.read_all()
         fields = [
             ('name', TextField(_("Name"), db_data.get('name', ''))),
@@ -63,6 +95,7 @@ class ServerControler(QObject):
         ]
         new_data, ok = FormDialog(fields).exec_()
         if ok:
+            new_data = self._clean_form_data(new_data)
             if id_:
                 self.update(id_, new_data)
             else:
