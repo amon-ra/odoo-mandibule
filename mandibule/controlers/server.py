@@ -54,20 +54,15 @@ class ServerControler(QObject):
         self.app = app
 
     def _clean_form_data(self, data):
-        data['group_id'] = data['group'][1]
-        data['oerplib'] = {
-            'server': data['server'],
-            'port': data['port'],
-            'database': data['database'],
-            'user': data['user'],
-            'passwd': data['passwd'],
-        }
-        del data['group']
-        del data['server']
-        del data['port']
-        del data['database']
-        del data['user']
-        del data['passwd']
+        data['group_id'] = data.pop('group')[1]
+        data['oerplib'] = DEFAULT['oerplib'].copy()
+        data['oerplib'].update({
+            'server': data.pop('server'),
+            'port': data.pop('port'),
+            'database': data.pop('database'),
+            'user': data.pop('user'),
+            'passwd': data.pop('passwd')
+            })
         return data
 
     def display_form(self, id_=None):
