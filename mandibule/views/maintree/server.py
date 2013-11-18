@@ -37,9 +37,7 @@ class ServerItem(QtGui.QTreeWidgetItem):
         icon = QtGui.QIcon.fromTheme('network-server')
         self.setIcon(0, icon)
         # Add the relation drawer
-        self.relation_drawer = RelationDrawer(self.app, self.id)
-        self.addChild(self.relation_drawer)
-        self.relation_drawer.setExpanded(True)
+        self.addChild(RelationDrawer(self.app, self.id))
 
     def update_server(self, id_):
         """Update the server identified by `ìd_`."""

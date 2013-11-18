@@ -74,15 +74,18 @@ class RelationDrawer(QtGui.QTreeWidgetItem):
         self.setIcon(0, icon)
         sdata = self.app.server_ctl.read(self.server_id)
         for rid in sdata.get('relations', {}):
-            self.add_relation(rid)
+            self.add_relation(rid, select=False)
 
-    def add_relation(self, id_):
+    def add_relation(self, id_, select=True):
         """Add the relational graph identified by `id_`."""
         data = self.app.relation_ctl.read(id_)
         if self.server_id == data['server_id']:
             relation = RelationItem(self.app, id_)
             self.addChild(relation)
-            relation.setExpanded(True)
+            self.setExpanded(True)
+            self.setHidden(False)
+            if self.treeWidget() and select:
+                self.treeWidget().setCurrentItem(relation)
 
     def remove_relation(self, id_):
         """Remove the relational graph identified by `id_`."""
@@ -90,7 +93,6 @@ class RelationDrawer(QtGui.QTreeWidgetItem):
             relation = self.child(index)
             if relation.id == id_:
                 relation = self.takeChild(index)
-                #relation.deleteLater()
 
     def get_menu(self):
         """Return a QMenu corresponding to the current RelationItem."""

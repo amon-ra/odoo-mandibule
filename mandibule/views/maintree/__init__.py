@@ -40,14 +40,16 @@ class MainTree(QtGui.QTreeWidget):
         self.itemExpanded.connect(self.slot_item_expanded)
         self.itemCollapsed.connect(self.slot_item_collapsed)
         for id_ in self.app.group_ctl.read_all():
-            self.add_group(id_)
+            self.add_group(id_, select=False)
 
-    def add_group(self, id_):
+    def add_group(self, id_, select=True):
         """Add the group identified by `id_`."""
         group = GroupItem(self.app, id_)
         self.addTopLevelItem(group)
         if group.childCount():
             group.setExpanded(True)
+        if select:
+            self.setCurrentItem(group)
 
     def remove_group(self, id_):
         """Remove the group identified by `id_`."""

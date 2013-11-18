@@ -37,7 +37,7 @@ class GroupItem(QtGui.QTreeWidgetItem):
         data = self.app.group_ctl.read(id_)
         self.setText(0, data['name'])
         for sid in data.get('servers', {}):
-            self.add_server(sid)
+            self.add_server(sid, select=False)
         icon = QtGui.QIcon.fromTheme('folder')
         self.setIcon(0, icon)
 
@@ -47,13 +47,15 @@ class GroupItem(QtGui.QTreeWidgetItem):
             data = self.app.group_ctl.read(id_)
             self.setText(0, data['name'])
 
-    def add_server(self, id_):
+    def add_server(self, id_, select=True):
         """Add the server identified by `id_`."""
         data = self.app.server_ctl.read(id_)
         if self.id == data['group_id']:
             server = ServerItem(self.app, id_)
             self.addChild(server)
             server.setExpanded(True)
+            if self.treeWidget() and select:
+                self.treeWidget().setCurrentItem(server)
 
     def remove_server(self, id_):
         """Remove the server identified by `id_`."""
@@ -61,7 +63,6 @@ class GroupItem(QtGui.QTreeWidgetItem):
             server = self.child(index)
             if server.id == id_:
                 server = self.takeChild(index)
-                server.deleteLater()
 
     def get_menu(self):
         """Return a QMenu corresponding to the current GroupItem."""
