@@ -21,8 +21,8 @@
 
 from PySide import QtGui
 
-from mandibule.views.maintree.server import ServerItem
 from mandibule.utils.i18n import _
+from mandibule.views.maintree.server import ServerItem
 
 
 class GroupItem(QtGui.QTreeWidgetItem):

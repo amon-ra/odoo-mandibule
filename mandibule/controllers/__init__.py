@@ -19,9 +19,10 @@
 #
 ##############################################################################
 
-__all__ = ['GroupController', 'ServerController']
+__all__ = ['GroupController', 'ServerController', 'RelationController']
 
 from mandibule.controllers.group import GroupController
 from mandibule.controllers.server import ServerController
+from mandibule.controllers.relation import RelationController
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

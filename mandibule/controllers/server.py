@@ -40,6 +40,7 @@ DEFAULT = {
         'passwd': '',
         'timeout': 120,
     },
+    'relations': {},
 }
 
 

@@ -22,6 +22,7 @@
 from PySide import QtGui
 
 from mandibule.utils.i18n import _
+from mandibule.views.maintree.relation import RelationDrawer
 
 
 class ServerItem(QtGui.QTreeWidgetItem):
@@ -35,6 +36,10 @@ class ServerItem(QtGui.QTreeWidgetItem):
         self.setText(0, data['name'])
         icon = QtGui.QIcon.fromTheme('network-server')
         self.setIcon(0, icon)
+        # Add the relation drawer
+        self.relation_drawer = RelationDrawer(self.app, self.id)
+        self.addChild(self.relation_drawer)
+        self.relation_drawer.setExpanded(True)
 
     def update_server(self, id_):
         """Update the server identified by `ìd_`."""
@@ -45,6 +50,12 @@ class ServerItem(QtGui.QTreeWidgetItem):
     def get_menu(self):
         """Return a QMenu corresponding to the current ServerItem."""
         menu = QtGui.QMenu(self.treeWidget())
+        # Add relational graph
+        icon_add = QtGui.QIcon.fromTheme('list-add')
+        menu.addAction(
+            icon_add,
+            _("Relational graph"),
+            lambda: self.app.relation_ctl.display_form(None, self.id))
         # Remove current server
         icon_remove = QtGui.QIcon.fromTheme('list-remove')
         menu.addAction(
