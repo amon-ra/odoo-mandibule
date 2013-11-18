@@ -27,8 +27,8 @@ from mandibule.utils.i18n import _
 from mandibule.utils.form import FormDialog, TextField
 
 
-class GroupControler(QObject):
-    """Group controler."""
+class GroupController(QObject):
+    """Group controller."""
     created = Signal(str)
     updated = Signal(str)
     deleted = Signal(str)

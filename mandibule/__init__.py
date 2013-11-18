@@ -20,7 +20,7 @@
 ##############################################################################
 from PySide import QtGui, QtCore
 
-from mandibule.controlers import GroupControler, ServerControler
+from mandibule.controllers import GroupController, ServerController
 from mandibule.views import MainTree
 from mandibule.maintree import MainTree as MainTree2  # FIXME temporary renamed
 from mandibule.workarea import WorkAreaController
@@ -34,9 +34,9 @@ class MainApp(QtGui.QApplication):
         super(MainApp, self).__init__(argv)
         self.setAttribute(QtCore.Qt.AA_DontShowIconsInMenus, False)
         QtGui.QIcon.setThemeName('oxygen')
-        # Controlers
-        self.group_ctl = GroupControler(self)
-        self.server_ctl = ServerControler(self)
+        # Controllers
+        self.group_ctl = GroupController(self)
+        self.server_ctl = ServerController(self)
         # Views
         self.main_window = QtGui.QMainWindow()
         self.main_window.setWindowState(QtCore.Qt.WindowMaximized)

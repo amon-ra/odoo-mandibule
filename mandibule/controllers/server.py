@@ -43,8 +43,8 @@ DEFAULT = {
 }
 
 
-class ServerControler(QObject):
-    """Server controler."""
+class ServerController(QObject):
+    """Server controller."""
     created = Signal(str)
     updated = Signal(str)
     deleted = Signal(str)
