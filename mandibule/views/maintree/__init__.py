@@ -25,6 +25,7 @@ from PySide import QtGui, QtCore
 
 from mandibule.views.maintree.group import GroupItem
 from mandibule.views.maintree.server import ServerItem
+from mandibule.views.maintree.relation import RelationDrawer
 from mandibule.utils.i18n import _
 
 
@@ -36,6 +37,8 @@ class MainTree(QtGui.QTreeWidget):
         self.app.group_ctl.created.connect(self.add_group)
         self.app.group_ctl.deleted.connect(self.remove_group)
         self.setHeaderHidden(True)
+        self.itemExpanded.connect(self.slot_item_expanded)
+        self.itemCollapsed.connect(self.slot_item_collapsed)
         for id_ in self.app.group_ctl.read_all():
             self.add_group(id_)
 
@@ -43,7 +46,8 @@ class MainTree(QtGui.QTreeWidget):
         """Add the group identified by `id_`."""
         group = GroupItem(self.app, id_)
         self.addTopLevelItem(group)
-        group.setExpanded(True)
+        if group.childCount():
+            group.setExpanded(True)
 
     def remove_group(self, id_):
         """Remove the group identified by `id_`."""
@@ -86,6 +90,16 @@ class MainTree(QtGui.QTreeWidget):
             self.setCurrentItem(None)
         else:
             QtGui.QTreeWidget.keyPressEvent(self, event)
+
+    def slot_item_expanded(self, item):
+        """Change the icon of some items when they are expanded."""
+        if isinstance(item, GroupItem) or isinstance(item, RelationDrawer):
+            item.setIcon(0, QtGui.QIcon.fromTheme('folder-open'))
+
+    def slot_item_collapsed(self, item):
+        """Change the icon of some items when they are collapsed."""
+        if isinstance(item, GroupItem) or isinstance(item, RelationDrawer):
+            item.setIcon(0, QtGui.QIcon.fromTheme('folder'))
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
