@@ -89,7 +89,7 @@ class GroupController(QObject):
         # TODO confirmation via popup
         db_data = db.read()
         if id_ in db_data:
-            if 'servers' in db_data[id_]:
+            if db_data[id_].get('servers'):
                 raise ValueError(
                     _("Unable to delete this group while it contains servers."))
             del db_data[id_]

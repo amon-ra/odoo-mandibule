@@ -63,6 +63,7 @@ class GroupItem(QtGui.QTreeWidgetItem):
             server = self.child(index)
             if server.id == id_:
                 server = self.takeChild(index)
+                return
 
     def get_menu(self):
         """Return a QMenu corresponding to the current GroupItem."""

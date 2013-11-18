@@ -57,7 +57,7 @@ class MainTree(QtGui.QTreeWidget):
             group = self.topLevelItem(index)
             if group.id == id_:
                 group = self.takeTopLevelItem(index)
-                group.deleteLater()
+                return
 
     def contextMenuEvent(self, event):
         """Overridden to show a contextual menu according to the

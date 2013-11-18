@@ -93,6 +93,7 @@ class RelationDrawer(QtGui.QTreeWidgetItem):
             relation = self.child(index)
             if relation.id == id_:
                 relation = self.takeChild(index)
+                return
 
     def get_menu(self):
         """Return a QMenu corresponding to the current RelationItem."""
