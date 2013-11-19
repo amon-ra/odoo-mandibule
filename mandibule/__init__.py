@@ -21,7 +21,7 @@
 from PySide import QtGui, QtCore
 
 from mandibule.controllers import GroupController, ServerController, \
-    RelationController
+    RelationController, DependencyController
 from mandibule.views import MainTree
 from mandibule.maintree import MainTree as MainTree2  # FIXME temporary renamed
 from mandibule.workarea import WorkAreaController
@@ -39,6 +39,7 @@ class MainApp(QtGui.QApplication):
         self.group_ctl = GroupController(self)
         self.server_ctl = ServerController(self)
         self.relation_ctl = RelationController(self)
+        self.dependency_ctl = DependencyController(self)
         # Views
         self.main_window = QtGui.QMainWindow()
         self.main_window.setWindowState(QtCore.Qt.WindowMaximized)
