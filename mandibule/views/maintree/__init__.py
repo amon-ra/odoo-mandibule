@@ -44,10 +44,7 @@ class MainTree(QtGui.QTreeWidget):
 
     def add_group(self, id_, select=True):
         """Add the group identified by `id_`."""
-        group = GroupItem(self.app, id_)
-        self.addTopLevelItem(group)
-        if group.childCount():
-            group.setExpanded(True)
+        group = GroupItem(self.app, id_, self)
         if select:
             self.setCurrentItem(group)
 
@@ -95,13 +92,11 @@ class MainTree(QtGui.QTreeWidget):
 
     def slot_item_expanded(self, item):
         """Change the icon of some items when they are expanded."""
-        if isinstance(item, GroupItem) or isinstance(item, RelationDrawer):
-            item.setIcon(0, QtGui.QIcon.fromTheme('folder-open'))
+        item.set_icon_expanded(True)
 
     def slot_item_collapsed(self, item):
         """Change the icon of some items when they are collapsed."""
-        if isinstance(item, GroupItem) or isinstance(item, RelationDrawer):
-            item.setIcon(0, QtGui.QIcon.fromTheme('folder'))
+        item.set_icon_expanded(False)
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

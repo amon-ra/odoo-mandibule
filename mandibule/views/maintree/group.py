@@ -27,8 +27,9 @@ from mandibule.views.maintree.server import ServerItem
 
 class GroupItem(QtGui.QTreeWidgetItem):
     """A group item inside the MainTree."""
-    def __init__(self, app, id_):
+    def __init__(self, app, id_, parent):
         QtGui.QTreeWidgetItem.__init__(self)
+        parent.addTopLevelItem(self)
         self.app = app
         self.app.server_ctl.created.connect(self.add_server)
         self.app.server_ctl.deleted.connect(self.remove_server)
@@ -40,6 +41,8 @@ class GroupItem(QtGui.QTreeWidgetItem):
             self.add_server(sid, select=False)
         icon = QtGui.QIcon.fromTheme('folder')
         self.setIcon(0, icon)
+        if self.childCount():
+            self.setExpanded(True)
 
     def update_group(self, id_):
         """Update the group identified by `ìd_`."""
@@ -51,9 +54,7 @@ class GroupItem(QtGui.QTreeWidgetItem):
         """Add the server identified by `id_`."""
         data = self.app.server_ctl.read(id_)
         if self.id == data['group_id']:
-            server = ServerItem(self.app, id_)
-            self.addChild(server)
-            server.setExpanded(True)
+            server = ServerItem(self.app, id_, self)
             if self.treeWidget() and select:
                 self.treeWidget().setCurrentItem(server)
 
@@ -63,6 +64,7 @@ class GroupItem(QtGui.QTreeWidgetItem):
             server = self.child(index)
             if server.id == id_:
                 server = self.takeChild(index)
+                self.set_icon_expanded()
                 return
 
     def get_menu(self):
@@ -88,5 +90,12 @@ class GroupItem(QtGui.QTreeWidgetItem):
             _("Properties"),
             lambda: self.app.group_ctl.display_form(self.id))
         return menu
+
+    def set_icon_expanded(self, expanded=True):
+        """Update the icon."""
+        if expanded and self.childCount():
+            self.setIcon(0, QtGui.QIcon.fromTheme('folder-open'))
+        else:
+            self.setIcon(0, QtGui.QIcon.fromTheme('folder'))
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

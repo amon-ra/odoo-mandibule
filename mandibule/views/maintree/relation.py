@@ -26,8 +26,9 @@ from mandibule.utils.i18n import _
 
 class RelationItem(QtGui.QTreeWidgetItem):
     """A relational graph item inside a RelationDrawer."""
-    def __init__(self, app, id_):
+    def __init__(self, app, id_, parent):
         QtGui.QTreeWidgetItem.__init__(self)
+        parent.addChild(self)
         self.app = app
         self.app.relation_ctl.updated.connect(self.update_relation)
         self.id = id_
@@ -60,11 +61,16 @@ class RelationItem(QtGui.QTreeWidgetItem):
             lambda: self.app.relation_ctl.display_form(self.id))
         return menu
 
+    def set_icon_expanded(self, expanded=True):
+        """Update the icon."""
+        pass
+
 
 class RelationDrawer(QtGui.QTreeWidgetItem):
     """A relational graph drawer item inside a ServerItem."""
-    def __init__(self, app, server_id):
+    def __init__(self, app, server_id, parent):
         QtGui.QTreeWidgetItem.__init__(self)
+        parent.addChild(self)
         self.app = app
         self.app.relation_ctl.created.connect(self.add_relation)
         self.app.relation_ctl.deleted.connect(self.remove_relation)
@@ -75,16 +81,17 @@ class RelationDrawer(QtGui.QTreeWidgetItem):
         sdata = self.app.server_ctl.read(self.server_id)
         for rid in sdata.get('relations', {}):
             self.add_relation(rid, select=False)
+        if not self.childCount():
+            self.setHidden(True)
 
     def add_relation(self, id_, select=True):
         """Add the relational graph identified by `id_`."""
         data = self.app.relation_ctl.read(id_)
         if self.server_id == data['server_id']:
-            relation = RelationItem(self.app, id_)
-            self.addChild(relation)
-            self.setExpanded(True)
+            relation = RelationItem(self.app, id_, self)
             self.setHidden(False)
             if self.treeWidget() and select:
+                self.setExpanded(True)
                 self.treeWidget().setCurrentItem(relation)
 
     def remove_relation(self, id_):
@@ -93,6 +100,8 @@ class RelationDrawer(QtGui.QTreeWidgetItem):
             relation = self.child(index)
             if relation.id == id_:
                 relation = self.takeChild(index)
+                if not self.childCount():
+                    self.setHidden(True)
                 return
 
     def get_menu(self):
@@ -105,6 +114,13 @@ class RelationDrawer(QtGui.QTreeWidgetItem):
             _("Relational graph"),
             lambda: self.app.relation_ctl.display_form(None, self.server_id))
         return menu
+
+    def set_icon_expanded(self, expanded=True):
+        """Update the icon."""
+        if expanded and self.childCount():
+            self.setIcon(0, QtGui.QIcon.fromTheme('folder-open'))
+        else:
+            self.setIcon(0, QtGui.QIcon.fromTheme('folder'))
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

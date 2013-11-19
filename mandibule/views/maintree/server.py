@@ -27,8 +27,9 @@ from mandibule.views.maintree.relation import RelationDrawer
 
 class ServerItem(QtGui.QTreeWidgetItem):
     """A server item inside a GroupItem."""
-    def __init__(self, app, id_):
+    def __init__(self, app, id_, parent):
         QtGui.QTreeWidgetItem.__init__(self)
+        parent.addChild(self)
         self.app = app
         self.app.server_ctl.updated.connect(self.update_server)
         self.id = id_
@@ -37,7 +38,7 @@ class ServerItem(QtGui.QTreeWidgetItem):
         icon = QtGui.QIcon.fromTheme('network-server')
         self.setIcon(0, icon)
         # Add the relation drawer
-        self.addChild(RelationDrawer(self.app, self.id))
+        self.addChild(RelationDrawer(self.app, self.id, self))
 
     def update_server(self, id_):
         """Update the server identified by `ìd_`."""
@@ -68,5 +69,9 @@ class ServerItem(QtGui.QTreeWidgetItem):
             _("Properties"),
             lambda: self.app.server_ctl.display_form(self.id))
         return menu
+
+    def set_icon_expanded(self, expanded=True):
+        """Update the icon."""
+        pass
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
