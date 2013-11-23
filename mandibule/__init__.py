@@ -23,9 +23,6 @@ from PySide import QtGui, QtCore
 from mandibule.controllers import GroupController, ServerController, \
     RelationController, DependencyController
 from mandibule.views import MainTree, WorkArea
-from mandibule.maintree import MainTree as MainTree2  # FIXME temporary renamed
-from mandibule.workarea import WorkAreaController
-from mandibule import config
 
 
 class MainApp(QtGui.QApplication):
@@ -48,13 +45,7 @@ class MainApp(QtGui.QApplication):
         self.main_tree = MainTree(self)
         self.work_area = WorkArea(self)
 
-        # == TODO code below need review ==
-
-        # initialize widgets
-        self.main_tree_old = MainTree2(self)
-        self.workarea = WorkAreaController(self)
-
-        # Dockable maintree
+        # Dockable main tree
         dock = QtGui.QDockWidget('OpenERP servers')
         dock.setMinimumSize(250, 250)
         dock.setWidget(self.main_tree)
@@ -62,14 +53,6 @@ class MainApp(QtGui.QApplication):
         dock.setAllowedAreas(
             QtCore.Qt.RightDockWidgetArea|QtCore.Qt.LeftDockWidgetArea)
         self.main_window.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
-        # FIXME Legacy dockable maintree (remove later)
-        dock_old = QtGui.QDockWidget('OpenERP servers')
-        dock_old.setMinimumSize(250, 250)
-        dock_old.setWidget(self.main_tree_old.widget)
-        dock_old.setFeatures(dock_old.features() & ~dock_old.DockWidgetClosable)
-        dock_old.setAllowedAreas(
-            QtCore.Qt.RightDockWidgetArea|QtCore.Qt.LeftDockWidgetArea)
-        self.main_window.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock_old)
 
         self.main_window.setCentralWidget(self.work_area)
         self.main_window.closeEvent = self._close
