@@ -96,8 +96,8 @@ class RelationDrawer(QtGui.QTreeWidgetItem):
         if self.server_id == data['server_id']:
             relation = RelationItem(self.app, id_, self)
             self.setHidden(False)
+            self.setExpanded(True)
             if self.treeWidget() and select:
-                self.setExpanded(True)
                 self.treeWidget().setCurrentItem(relation)
 
     def remove_relation(self, id_):
@@ -117,7 +117,7 @@ class RelationDrawer(QtGui.QTreeWidgetItem):
         icon_add = QtGui.QIcon.fromTheme('list-add')
         menu.addAction(
             icon_add,
-            _("Relational graph"),
+            _("Add relational graph"),
             lambda: self.app.relation_ctl.display_form(None, self.server_id))
         return menu
 

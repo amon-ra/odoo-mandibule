@@ -81,7 +81,7 @@ class DependencyDrawer(QtGui.QTreeWidgetItem):
         self.app.dependency_ctl.created.connect(self.add_dependency)
         self.app.dependency_ctl.deleted.connect(self.remove_dependency)
         self.server_id = server_id
-        self.setText(0, _("Module dependencies"))
+        self.setText(0, _("Dependencies"))
         icon = QtGui.QIcon.fromTheme('folder')
         self.setIcon(0, icon)
         sdata = self.app.server_ctl.read(self.server_id)
@@ -96,8 +96,8 @@ class DependencyDrawer(QtGui.QTreeWidgetItem):
         if self.server_id == data['server_id']:
             dependency = DependencyItem(self.app, id_, self)
             self.setHidden(False)
+            self.setExpanded(True)
             if self.treeWidget() and select:
-                self.setExpanded(True)
                 self.treeWidget().setCurrentItem(dependency)
 
     def remove_dependency(self, id_):
@@ -117,7 +117,7 @@ class DependencyDrawer(QtGui.QTreeWidgetItem):
         icon_add = QtGui.QIcon.fromTheme('list-add')
         menu.addAction(
             icon_add,
-            _("Module dependencies graph"),
+            _("Add dependencies graph"),
             lambda: self.app.dependency_ctl.display_form(None, self.server_id))
         return menu
 

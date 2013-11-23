@@ -55,13 +55,13 @@ class ServerItem(QtGui.QTreeWidgetItem):
         icon_add = QtGui.QIcon.fromTheme('list-add')
         menu.addAction(
             icon_add,
-            _("Relational graph"),
+            _("Add relational graph"),
             lambda: self.app.relation_ctl.display_form(None, self.id))
         # Add module dependencies graph
         icon_add = QtGui.QIcon.fromTheme('list-add')
         menu.addAction(
             icon_add,
-            _("Module dependencies graph"),
+            _("Add dependencies graph"),
             lambda: self.app.dependency_ctl.display_form(None, self.id))
         # Remove current server
         icon_remove = QtGui.QIcon.fromTheme('list-remove')
