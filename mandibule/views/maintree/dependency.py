@@ -46,6 +46,12 @@ class DependencyItem(QtGui.QTreeWidgetItem):
     def get_menu(self):
         """Return a QMenu corresponding to the current DependencyItem."""
         menu = QtGui.QMenu(self.treeWidget())
+        # Execute the function
+        icon_exe = QtGui.QIcon.fromTheme('system-run')
+        menu.addAction(
+            icon_exe,
+            _("Execute"),
+            lambda: self.app.dependency_ctl.execute(self.id))
         # Remove current module dependencies graph
         icon_remove = QtGui.QIcon.fromTheme('list-remove')
         menu.addAction(

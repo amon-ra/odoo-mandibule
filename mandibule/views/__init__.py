@@ -19,8 +19,9 @@
 #
 ##############################################################################
 
-__all__ = ['MainTree']
+__all__ = ['MainTree', 'WorkArea']
 
 from mandibule.views.maintree import MainTree
+from mandibule.views.workarea import WorkArea
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

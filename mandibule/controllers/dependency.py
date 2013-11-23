@@ -23,9 +23,11 @@ import copy
 
 from PySide.QtCore import QObject, Signal
 
+import oerplib
+
 from mandibule import db
 from mandibule.utils.i18n import _
-from mandibule.utils.form import FormDialog, TextField, IntField, BoolField
+from mandibule.utils.form import FormDialog, TextField, BoolField
 
 DEFAULT = {
     'name': '', 
@@ -41,6 +43,8 @@ class DependencyController(QObject):
     created = Signal(str)
     updated = Signal(str)
     deleted = Signal(str)
+    executed = Signal(str, str)
+    finished = Signal(str, tuple)
 
     def __init__(self, app):
         QObject.__init__(self)
@@ -127,5 +131,20 @@ class DependencyController(QObject):
                     db.write(db_data)
                     self.deleted.emit(id_)
                     return
+
+    def execute(self, id_):
+        """Generate the module dependencies graph."""
+        data = self.read(id_)
+        self.executed.emit(id_, "Working...")
+        oerp = oerplib.OERP.load(data['server_id'], rc_file=db.OERPLIB_FILE)
+        graph = oerp.inspect.dependencies(
+            [str(model) for model in data['modules'].split()],
+            [str(model) for model in data['models'].split()],
+            [str(model) for model in data['models_blacklist'].split()],
+            data['restrict'])
+        img = graph.make_dot().create_png()
+        # HACK: Pass the image in a tuple, otherwise the 'img' is copied by Qt
+        # making it unusable
+        self.finished.emit(id_, (img,))
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

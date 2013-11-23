@@ -22,7 +22,7 @@ from PySide import QtGui, QtCore
 
 from mandibule.controllers import GroupController, ServerController, \
     RelationController, DependencyController
-from mandibule.views import MainTree
+from mandibule.views import MainTree, WorkArea
 from mandibule.maintree import MainTree as MainTree2  # FIXME temporary renamed
 from mandibule.workarea import WorkAreaController
 from mandibule import config
@@ -46,6 +46,7 @@ class MainApp(QtGui.QApplication):
         self.main_window.setWindowTitle('Mandibule !')
         self.main_window.setContentsMargins(0, 0, 0, 0)
         self.main_tree = MainTree(self)
+        self.work_area = WorkArea(self)
 
         # == TODO code below need review ==
 
@@ -70,7 +71,7 @@ class MainApp(QtGui.QApplication):
             QtCore.Qt.RightDockWidgetArea|QtCore.Qt.LeftDockWidgetArea)
         self.main_window.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock_old)
 
-        self.main_window.setCentralWidget(self.workarea.widget)
+        self.main_window.setCentralWidget(self.work_area)
         self.main_window.closeEvent = self._close
         self.main_window.show()
 

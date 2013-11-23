@@ -46,6 +46,12 @@ class RelationItem(QtGui.QTreeWidgetItem):
     def get_menu(self):
         """Return a QMenu corresponding to the current RelationItem."""
         menu = QtGui.QMenu(self.treeWidget())
+        # Execute the function
+        icon_exe = QtGui.QIcon.fromTheme('system-run')
+        menu.addAction(
+            icon_exe,
+            _("Execute"),
+            lambda: self.app.relation_ctl.execute(self.id))
         # Remove current relational graph
         icon_remove = QtGui.QIcon.fromTheme('list-remove')
         menu.addAction(
