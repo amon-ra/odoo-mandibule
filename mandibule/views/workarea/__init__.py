@@ -26,6 +26,7 @@ from mandibule.widgets.zoomableimage import ZoomableImage
 
 class WorkArea(QtGui.QTabWidget):
     """Workarea containing request results organized with tabs."""
+
     def __init__(self, app):
         QtGui.QTabWidget.__init__(self)
         self.app = app
@@ -66,8 +67,9 @@ class WorkArea(QtGui.QTabWidget):
 
     def relation_finished(self, id_, content):
         """Update a tab with `content` when a relation graph is ready."""
-        content = ZoomableImage(content[0])
-        self._tabs[id_].set_content(content)
+        if id_ in self._tabs:
+            content = ZoomableImage(content[0])
+            self._tabs[id_].set_content(content)
 
     def dependency_updated(self, id_):
         """Update title of the corresponding tab (if any)."""
@@ -94,8 +96,9 @@ class WorkArea(QtGui.QTabWidget):
         """Update a tab with `content` when a module dependencies graph
         is ready.
         """
-        content = ZoomableImage(content[0])
-        self._tabs[id_].set_content(content)
+        if id_ in self._tabs:
+            content = ZoomableImage(content[0])
+            self._tabs[id_].set_content(content)
 
     def close_tab(self, index):
         """Close a tab at the given `index`."""
