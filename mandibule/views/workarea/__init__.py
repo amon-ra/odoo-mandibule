@@ -21,7 +21,7 @@
 
 from PySide import QtGui, QtCore
 
-from mandibule.utils import zoomableimage
+from mandibule.widgets.zoomableimage import ZoomableImage
 
 
 class WorkArea(QtGui.QTabWidget):
@@ -66,7 +66,7 @@ class WorkArea(QtGui.QTabWidget):
 
     def relation_finished(self, id_, content):
         """Update a tab with `content` when a relation graph is ready."""
-        content = zoomableimage.ZoomableImage(content[0]).widget
+        content = ZoomableImage(content[0])
         self._tabs[id_].set_content(content)
 
     def dependency_updated(self, id_):
@@ -84,7 +84,7 @@ class WorkArea(QtGui.QTabWidget):
         """
         data = self.app.dependency_ctl.read(id_)
         sdata = self.app.server_ctl.read(data['server_id'])
-        title = self._make_title("[R]", sdata, data)
+        title = self._make_title("[D]", sdata, data)
         if id_ not in self._tabs:
             self._tabs[id_] = TabContent(self.app, id_)
             self.addTab(self._tabs[id_], title)
@@ -94,7 +94,7 @@ class WorkArea(QtGui.QTabWidget):
         """Update a tab with `content` when a module dependencies graph
         is ready.
         """
-        content = zoomableimage.ZoomableImage(content[0]).widget
+        content = ZoomableImage(content[0])
         self._tabs[id_].set_content(content)
 
     def close_tab(self, index):

@@ -24,7 +24,7 @@ from PySide.QtCore import QObject, Signal
 
 from mandibule import db
 from mandibule.utils.i18n import _
-from mandibule.utils.form import FormDialog, TextField
+from mandibule.widgets.form import FormDialog, TextField
 
 
 class GroupController(QObject):

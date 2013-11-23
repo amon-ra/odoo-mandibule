@@ -27,7 +27,7 @@ import oerplib
 
 from mandibule import db
 from mandibule.utils.i18n import _
-from mandibule.utils.form import FormDialog, TextField, IntField
+from mandibule.widgets.form import FormDialog, TextField, IntField
 from mandibule.controllers import GraphWorker
 
 DEFAULT = {

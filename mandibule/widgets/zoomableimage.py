@@ -21,22 +21,25 @@
 from PySide import QtGui, QtCore
 
 
-class ZoomableImage(object):
+class ZoomableImage(QtGui.QScrollArea):
+    """Widget containing an image on which zoom in/out operations
+    can be performed.
+    """
     def __init__(self, data):
+        QtGui.QScrollArea.__init__(self)
         self.image = QtGui.QImage.fromData(data)
         self.pixmap = QtGui.QPixmap.fromImage(self.image)
         self.label = QtGui.QLabel()
         self.label.setScaledContents(True)
         self.label.setPixmap(self.pixmap)
-        self.widget = QtGui.QScrollArea()
-        self.widget.setWidget(self.label)
+        self.setWidget(self.label)
         self.label.wheelEvent = self.wheelEvent
         self._zoom = 10
 
     def wheelEvent(self, event):
         if event.modifiers() & \
                 QtCore.Qt.ControlModifier == QtCore.Qt.ControlModifier:
-            self._zoom += event.delta()/120
+            self._zoom += (event.delta() / 120)
             if self._zoom < 1:
                 self._zoom = 1
             elif self._zoom > 10:
@@ -46,6 +49,6 @@ class ZoomableImage(object):
             width = size.width() * self._zoom / 10
             self.label.resize(width, height)
         else:
-            event.ignore()
+            event.accept()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
