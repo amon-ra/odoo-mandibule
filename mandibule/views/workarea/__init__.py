@@ -42,16 +42,12 @@ class WorkArea(QtGui.QTabWidget):
         self.tabCloseRequested.connect(self.close_tab)
         self.tabBar().tabMoved.connect(self.move_tab)
 
-    def _make_title(self, prefix, sdata, data):
-        """Make and return a tab title."""
-        return "%s %s - %s" % (prefix, sdata['name'], data['name'])
-
     def relation_updated(self, id_):
         """Update title of the corresponding tab (if any)."""
         if id_ in self._tabs:
             data = self.app.relation_ctl.read(id_)
             sdata = self.app.server_ctl.read(data['server_id'])
-            title = self._make_title("[R]", sdata, data)
+            title = "%s - %s" % (sdata['name'], data['name'])
             index = self.indexOf(self._tabs[id_])
             self.setTabText(index, title)
 
@@ -59,16 +55,20 @@ class WorkArea(QtGui.QTabWidget):
         """Add/update a tab with `message` when a relation graph is executed."""
         data = self.app.relation_ctl.read(id_)
         sdata = self.app.server_ctl.read(data['server_id'])
-        title = self._make_title("[R]", sdata, data)
+        title = "%s - %s" % (sdata['name'], data['name'])
         if id_ not in self._tabs:
             self._tabs[id_] = TabContent(self.app, id_)
-            self.addTab(self._tabs[id_], title)
+            icon = QtGui.QIcon.fromTheme('view-history')
+            self.addTab(self._tabs[id_], icon, title)
         self._tabs[id_].set_content(QtGui.QLabel(message))
 
     def relation_finished(self, id_, content):
         """Update a tab with `content` when a relation graph is ready."""
         if id_ in self._tabs:
             content = ZoomableImage(content[0])
+            icon = QtGui.QIcon.fromTheme('view-time-schedule')
+            index = self.indexOf(self._tabs[id_])
+            self.setTabIcon(index, icon)
             self._tabs[id_].set_content(content)
 
     def dependency_updated(self, id_):
@@ -76,7 +76,7 @@ class WorkArea(QtGui.QTabWidget):
         if id_ in self._tabs:
             data = self.app.dependency_ctl.read(id_)
             sdata = self.app.server_ctl.read(data['server_id'])
-            title = self._make_title("[D]", sdata, data)
+            title = "%s - %s" % (sdata['name'], data['name'])
             index = self.indexOf(self._tabs[id_])
             self.setTabText(index, title)
 
@@ -86,10 +86,11 @@ class WorkArea(QtGui.QTabWidget):
         """
         data = self.app.dependency_ctl.read(id_)
         sdata = self.app.server_ctl.read(data['server_id'])
-        title = self._make_title("[D]", sdata, data)
+        title = "%s - %s" % (sdata['name'], data['name'])
         if id_ not in self._tabs:
             self._tabs[id_] = TabContent(self.app, id_)
-            self.addTab(self._tabs[id_], title)
+            icon = QtGui.QIcon.fromTheme('view-history')
+            self.addTab(self._tabs[id_], icon, title)
         self._tabs[id_].set_content(QtGui.QLabel(message))
 
     def dependency_finished(self, id_, content):
@@ -98,6 +99,9 @@ class WorkArea(QtGui.QTabWidget):
         """
         if id_ in self._tabs:
             content = ZoomableImage(content[0])
+            icon = QtGui.QIcon.fromTheme('view-list-tree')
+            index = self.indexOf(self._tabs[id_])
+            self.setTabIcon(index, icon)
             self._tabs[id_].set_content(content)
 
     def close_tab(self, index):
