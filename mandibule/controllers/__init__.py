@@ -22,6 +22,26 @@
 __all__ = ['GroupController', 'ServerController',
            'RelationController', 'DependencyController']
 
+from PySide.QtCore import QObject, QRunnable, Signal
+
+
+class GraphWorker(QObject, QRunnable):
+    """Working thread which has for result a graph/image."""
+    result_ready = Signal(str, tuple)
+
+    def __init__(self, id_, function):
+        QObject.__init__(self)
+        QRunnable.__init__(self)
+        self.id = id_
+        self._function = function
+
+    def run(self):
+        result = self._function()
+        # HACK: Pass the image in a tuple, otherwise the 'result' is
+        # copied by Qt # making it unusable
+        self.result_ready.emit(self.id, (result,))
+
+
 from mandibule.controllers.group import GroupController
 from mandibule.controllers.server import ServerController
 from mandibule.controllers.relation import RelationController

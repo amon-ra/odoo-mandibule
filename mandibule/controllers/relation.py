@@ -21,13 +21,14 @@
 import uuid
 import copy
 
-from PySide.QtCore import QObject, Signal
+from PySide.QtCore import QObject, QThreadPool, Signal
 
 import oerplib
 
 from mandibule import db
 from mandibule.utils.i18n import _
 from mandibule.utils.form import FormDialog, TextField, IntField
+from mandibule.controllers import GraphWorker
 
 DEFAULT = {
     'name': '', 
@@ -142,8 +143,14 @@ class RelationController(QObject):
 
     def execute(self, id_):
         """Generate the relation graph."""
-        data = self.read(id_)
         self.executed.emit(id_, "Working...")
+        worker = GraphWorker(id_, lambda: self._execute(id_))
+        worker.result_ready.connect(self._process_result)
+        QThreadPool.globalInstance().start(worker)
+
+    def _execute(self, id_):
+        """Internal threaded method requesting the result."""
+        data = self.read(id_)
         oerp = oerplib.OERP.load(data['server_id'], rc_file=db.OERPLIB_FILE)
         graph = oerp.inspect.relations(
             [str(model) for model in data['models'].split()],
@@ -152,9 +159,10 @@ class RelationController(QObject):
             [str(model) for model in data['blacklist'].split()],
             [str(model) for model in data['attrs_whitelist'].split()],
             [str(model) for model in data['attrs_blacklist'].split()])
-        img = graph.make_dot().create_png()
-        # HACK: Pass the image in a tuple, otherwise the 'img' is copied by Qt
-        # making it unusable
-        self.finished.emit(id_, (img,))
+        return graph.make_dot().create_png()
+
+    def _process_result(self, id_, result):
+        """Slot which emit the 'finished' signal to views."""
+        self.finished.emit(id_, result)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
