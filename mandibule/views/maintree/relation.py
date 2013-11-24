@@ -22,6 +22,7 @@
 from PySide import QtGui
 
 from mandibule.utils.i18n import _
+from mandibule.views import icons
 
 
 class RelationItem(QtGui.QTreeWidgetItem):
@@ -47,22 +48,19 @@ class RelationItem(QtGui.QTreeWidgetItem):
         """Return a QMenu corresponding to the current RelationItem."""
         menu = QtGui.QMenu(self.treeWidget())
         # Execute the function
-        icon_exe = QtGui.QIcon.fromTheme('system-run')
         menu.addAction(
-            icon_exe,
+            icons.icon_exe,
             _("Execute"),
             lambda: self.app.relation_ctl.execute(self.id))
         # Remove current relational graph
-        icon_remove = QtGui.QIcon.fromTheme('list-remove')
         menu.addAction(
-            icon_remove,
+            icons.icon_remove,
             _("Remove"),
             lambda: self.app.relation_ctl.delete(self.id))
         # Properties
         menu.addSeparator()
-        icon_properties = QtGui.QIcon.fromTheme('document-properties')
         menu.addAction(
-            icon_properties,
+            icons.icon_edit,
             _("Properties"),
             lambda: self.app.relation_ctl.display_form(self.id))
         return menu
@@ -114,9 +112,8 @@ class RelationDrawer(QtGui.QTreeWidgetItem):
         """Return a QMenu corresponding to the current RelationItem."""
         menu = QtGui.QMenu(self.treeWidget())
         # Add relational graph
-        icon_add = QtGui.QIcon.fromTheme('list-add')
         menu.addAction(
-            icon_add,
+            icons.icon_add,
             _("Add relational graph"),
             lambda: self.app.relation_ctl.display_form(None, self.server_id))
         return menu

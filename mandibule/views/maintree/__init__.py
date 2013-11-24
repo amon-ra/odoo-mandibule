@@ -19,13 +19,16 @@
 #
 ##############################################################################
 
-__all__ = ['GroupItem', 'ServerItem']
+__all__ = ['GroupItem', 'ServerItem',
+           'RelationDrawer', 'RelationItem',
+           'DependencyDrawer', 'DependencyItem']
 
 from PySide import QtGui, QtCore
 
 from mandibule.views.maintree.group import GroupItem
 from mandibule.views.maintree.server import ServerItem
-from mandibule.views.maintree.relation import RelationDrawer
+from mandibule.views.maintree.relation import RelationDrawer, RelationItem
+from mandibule.views.maintree.dependency import DependencyDrawer, DependencyItem
 from mandibule.utils.i18n import _
 
 

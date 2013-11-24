@@ -24,6 +24,7 @@ from PySide import QtGui
 from mandibule.utils.i18n import _
 from mandibule.views.maintree.relation import RelationDrawer
 from mandibule.views.maintree.dependency import DependencyDrawer
+from mandibule.views import icons
 
 
 class ServerItem(QtGui.QTreeWidgetItem):
@@ -52,28 +53,24 @@ class ServerItem(QtGui.QTreeWidgetItem):
         """Return a QMenu corresponding to the current ServerItem."""
         menu = QtGui.QMenu(self.treeWidget())
         # Add relational graph
-        icon_add = QtGui.QIcon.fromTheme('list-add')
         menu.addAction(
-            icon_add,
+            icons.icon_add,
             _("Add relational graph"),
             lambda: self.app.relation_ctl.display_form(None, self.id))
         # Add module dependencies graph
-        icon_add = QtGui.QIcon.fromTheme('list-add')
         menu.addAction(
-            icon_add,
+            icons.icon_add,
             _("Add dependencies graph"),
             lambda: self.app.dependency_ctl.display_form(None, self.id))
         # Remove current server
-        icon_remove = QtGui.QIcon.fromTheme('list-remove')
         menu.addAction(
-            icon_remove,
+            icons.icon_remove,
             _("Remove"),
             lambda: self.app.server_ctl.delete(self.id))
         # Properties
         menu.addSeparator()
-        icon_properties = QtGui.QIcon.fromTheme('document-properties')
         menu.addAction(
-            icon_properties,
+            icons.icon_edit,
             _("Properties"),
             lambda: self.app.server_ctl.display_form(self.id))
         return menu

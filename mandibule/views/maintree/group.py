@@ -23,6 +23,7 @@ from PySide import QtGui
 
 from mandibule.utils.i18n import _
 from mandibule.views.maintree.server import ServerItem
+from mandibule.views import icons
 
 
 class GroupItem(QtGui.QTreeWidgetItem):
@@ -70,23 +71,20 @@ class GroupItem(QtGui.QTreeWidgetItem):
     def get_menu(self):
         """Return a QMenu corresponding to the current GroupItem."""
         menu = QtGui.QMenu(self.treeWidget())
-        # Add server
-        icon_add = QtGui.QIcon.fromTheme('list-add')
+        # New server
         menu.addAction(
-            icon_add,
-            _("Add server"),
+            icons.icon_add,
+            _("New server"),
             self.app.server_ctl.display_form)
         # Remove current group
-        icon_remove = QtGui.QIcon.fromTheme('list-remove')
         menu.addAction(
-            icon_remove,
+            icons.icon_remove,
             _("Remove"),
             lambda: self.app.group_ctl.delete(self.id))
         # Properties
         menu.addSeparator()
-        icon_properties = QtGui.QIcon.fromTheme('document-properties')
         menu.addAction(
-            icon_properties,
+            icons.icon_edit,
             _("Properties"),
             lambda: self.app.group_ctl.display_form(self.id))
         return menu

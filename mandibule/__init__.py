@@ -18,11 +18,12 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+
 from PySide import QtGui, QtCore
 
 from mandibule.controllers import GroupController, ServerController, \
     RelationController, DependencyController
-from mandibule.views import MainTree, WorkArea
+from mandibule.views import ToolBar, MainTree, WorkArea
 
 
 class MainApp(QtGui.QApplication):
@@ -44,6 +45,7 @@ class MainApp(QtGui.QApplication):
         self.main_window.setContentsMargins(0, 0, 0, 0)
         self.main_tree = MainTree(self)
         self.work_area = WorkArea(self)
+        self.toolbar = ToolBar(self)
 
         # Dockable main tree
         dock = QtGui.QDockWidget('OpenERP servers')
@@ -55,6 +57,7 @@ class MainApp(QtGui.QApplication):
         self.main_window.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
 
         self.main_window.setCentralWidget(self.work_area)
+        self.main_window.addToolBar(self.toolbar)
         self.main_window.closeEvent = self._close
         self.main_window.show()
 

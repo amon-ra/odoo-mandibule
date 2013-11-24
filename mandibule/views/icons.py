@@ -19,10 +19,11 @@
 #
 ##############################################################################
 
-__all__ = ['ToolBar', 'MainTree', 'WorkArea']
+from PySide import QtGui
 
-from mandibule.views.toolbar import ToolBar
-from mandibule.views.maintree import MainTree
-from mandibule.views.workarea import WorkArea
+icon_add = QtGui.QIcon.fromTheme('list-add')
+icon_edit = QtGui.QIcon.fromTheme('document-properties')
+icon_remove = QtGui.QIcon.fromTheme('list-remove')
+icon_exe = QtGui.QIcon.fromTheme('system-run')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
