@@ -66,7 +66,7 @@ class ServerController(QObject):
             })
         return data
 
-    def display_form(self, id_=None):
+    def display_form(self, id_=None, group_id=None):
         """Display the form to create/update a server."""
         db_data = id_ and self.read(id_) or copy.deepcopy(DEFAULT)
         groups = self.app.group_ctl.read_all()
@@ -75,7 +75,7 @@ class ServerController(QObject):
             ('group', SelectField(
                 _("Group"),
                 [(group['name'], gid) for gid, group in groups.iteritems()],
-                list(groups)[0])),
+                group_id)),
             ('server',
                 TextField(_("Host"), db_data['oerplib'].get('server', ''))),
             ('port', IntField(

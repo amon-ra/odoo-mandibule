@@ -75,7 +75,7 @@ class GroupItem(QtGui.QTreeWidgetItem):
         menu.addAction(
             icons.icon_add,
             _("New server"),
-            self.app.server_ctl.display_form)
+            lambda: self.app.server_ctl.display_form(None, self.id))
         # Remove current group
         menu.addAction(
             icons.icon_remove,

@@ -65,13 +65,14 @@ class ToolBar(QtGui.QToolBar):
             self.addAction(
                 icons.icon_add,
                 _("New server"),
-                self.app.server_ctl.display_form)
+                lambda: self.app.server_ctl.display_form(None, current.id))
         elif isinstance(current, ServerItem):
             # New server
             self.addAction(
                 icons.icon_add,
                 _("New server"),
-                self.app.server_ctl.display_form)
+                lambda: self.app.server_ctl.display_form(
+                    None, current.parent().id))
             self.addSeparator()
             # Edit server
             self.addAction(
@@ -100,7 +101,8 @@ class ToolBar(QtGui.QToolBar):
             self.addAction(
                 icons.icon_add,
                 _("New server"),
-                self.app.server_ctl.display_form)
+                lambda: self.app.server_ctl.display_form(
+                    None, current.parent().parent().id))
             self.addSeparator()
             # Edit server
             self.addAction(
@@ -130,7 +132,8 @@ class ToolBar(QtGui.QToolBar):
             self.addAction(
                 icons.icon_add,
                 _("New server"),
-                self.app.server_ctl.display_form)
+                lambda: self.app.server_ctl.display_form(
+                    None, current.parent().parent().parent().id))
             self.addSeparator()
             # Edit function
             self.addAction(
@@ -153,7 +156,8 @@ class ToolBar(QtGui.QToolBar):
             self.addAction(
                 icons.icon_add,
                 _("New server"),
-                self.app.server_ctl.display_form)
+                lambda: self.app.server_ctl.display_form(
+                    None, current.parent().parent().parent().id))
             self.addSeparator()
             # Edit function
             self.addAction(
