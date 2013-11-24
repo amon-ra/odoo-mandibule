@@ -83,7 +83,8 @@ class RelationDrawer(QtGui.QTreeWidgetItem):
         icon = QtGui.QIcon.fromTheme('folder')
         self.setIcon(0, icon)
         sdata = self.app.server_ctl.read(self.server_id)
-        for rid in sdata.get('relations', {}):
+        relations = sdata.get('relations', {})
+        for rid in sorted(relations, key=lambda rid: relations[rid]['name']):
             self.add_relation(rid, select=False)
         if not self.childCount():
             self.setHidden(True)

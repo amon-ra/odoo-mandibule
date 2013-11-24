@@ -38,7 +38,8 @@ class GroupItem(QtGui.QTreeWidgetItem):
         self.id = id_
         data = self.app.group_ctl.read(id_)
         self.setText(0, data['name'])
-        for sid in data.get('servers', {}):
+        servers = data.get('servers', {})
+        for sid in sorted(servers, key=lambda sid: servers[sid]['name']):
             self.add_server(sid, select=False)
         icon = QtGui.QIcon.fromTheme('folder')
         self.setIcon(0, icon)

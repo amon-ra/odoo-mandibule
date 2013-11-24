@@ -42,7 +42,8 @@ class MainTree(QtGui.QTreeWidget):
         self.setHeaderHidden(True)
         self.itemExpanded.connect(self.slot_item_expanded)
         self.itemCollapsed.connect(self.slot_item_collapsed)
-        for id_ in self.app.group_ctl.read_all():
+        groups = self.app.group_ctl.read_all()
+        for id_ in sorted(groups, key=lambda gid: groups[gid]['name']):
             self.add_group(id_, select=False)
 
     def add_group(self, id_, select=True):

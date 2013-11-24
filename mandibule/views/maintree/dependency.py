@@ -83,8 +83,10 @@ class DependencyDrawer(QtGui.QTreeWidgetItem):
         icon = QtGui.QIcon.fromTheme('folder')
         self.setIcon(0, icon)
         sdata = self.app.server_ctl.read(self.server_id)
-        for rid in sdata.get('dependencies', {}):
-            self.add_dependency(rid, select=False)
+        dependencies = sdata.get('dependencies', {})
+        for did in sorted(
+                dependencies, key=lambda did: dependencies[did]['name']):
+            self.add_dependency(did, select=False)
         if not self.childCount():
             self.setHidden(True)
 
