@@ -1,0 +1,17 @@
+ROADMAP
+=======
+
+0.1:
+    - handle error message,
+    - required fields on forms,
+    - tooltip/label on forms helping the user,
+    - avoid to run several times the same thread/function
+      while it is already running.
+    - be able to scroll on a graph (move up, move down),
+
+0.X:
+    - give up forms as pop-up, look at the possibility to draw them
+      over the workarea (form panel to display/hide),
+    - improve form components (field widgets),
+    - browse data,
+    - open a terminal with a Python session and OERP class instanciated,
