@@ -44,9 +44,9 @@ class ErrorHandler(QtGui.QMessageBox):
         """Exception hook bound to `sys.excepthook` which displayed a
         dialog to the user.
         """
-        traceback_str = self.get_traceback_str(exc_traceback)
-        self.setDetailedText(traceback_str)
-        self.setText(unicode(exc_value))
+        #traceback_str = self.get_traceback_str(exc_traceback)
+        #self.setDetailedText(traceback_str)
+        self.setText(exc_value.message)
         self.exec_()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

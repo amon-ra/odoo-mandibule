@@ -91,7 +91,7 @@ class GroupController(QObject):
         if id_ in db_data:
             if db_data[id_].get('servers'):
                 raise ValueError(
-                    _("Unable to delete this group while it contains servers."))
+                    _("Unable to delete a group while it contains servers."))
             del db_data[id_]
             db.write(db_data)
             self.deleted.emit(id_)

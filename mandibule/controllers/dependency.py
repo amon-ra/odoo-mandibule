@@ -45,6 +45,7 @@ class DependencyController(QObject):
     updated = Signal(str)
     deleted = Signal(str)
     executed = Signal(str, str)
+    execute_error = Signal(str)
     finished = Signal(str, tuple)
 
     def __init__(self, app):
@@ -138,6 +139,7 @@ class DependencyController(QObject):
         self.executed.emit(id_, "Working...")
         worker = GraphWorker(id_, lambda: self._execute(id_))
         worker.result_ready.connect(self._process_result)
+        worker.exception_raised.connect(self._handle_exception)
         QThreadPool.globalInstance().start(worker)
 
     def _execute(self, id_):
@@ -154,5 +156,10 @@ class DependencyController(QObject):
     def _process_result(self, id_, result):
         """Slot which emit the 'finished' signal to views."""
         self.finished.emit(id_, result)
+
+    def _handle_exception(self, id_, message):
+        """Slot performed if the threaded method has raised an exception."""
+        self.execute_error.emit(id_)
+        raise RuntimeError(message)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

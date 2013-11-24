@@ -35,9 +35,11 @@ class WorkArea(QtGui.QTabWidget):
         self.setMovable(True)
         self.app.relation_ctl.updated.connect(self.relation_updated)
         self.app.relation_ctl.executed.connect(self.relation_executed)
+        self.app.relation_ctl.execute_error.connect(self.execute_error)
         self.app.relation_ctl.finished.connect(self.relation_finished)
         self.app.dependency_ctl.updated.connect(self.dependency_updated)
         self.app.dependency_ctl.executed.connect(self.dependency_executed)
+        self.app.dependency_ctl.execute_error.connect(self.execute_error)
         self.app.dependency_ctl.finished.connect(self.dependency_finished)
         self.tabCloseRequested.connect(self.close_tab)
         self.tabBar().tabMoved.connect(self.move_tab)
@@ -103,6 +105,11 @@ class WorkArea(QtGui.QTabWidget):
             index = self.indexOf(self._tabs[id_])
             self.setTabIcon(index, icon)
             self._tabs[id_].set_content(content)
+
+    def execute_error(self, id_):
+        """Close the tab if an error occurred during the execution."""
+        index = self.indexOf(self._tabs[id_])
+        self.close_tab(index)
 
     def close_tab(self, index):
         """Close a tab at the given `index`."""

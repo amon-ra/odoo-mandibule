@@ -28,6 +28,7 @@ from PySide.QtCore import QObject, QRunnable, Signal
 class GraphWorker(QObject, QRunnable):
     """Working thread which has for result a graph/image."""
     result_ready = Signal(str, tuple)
+    exception_raised = Signal(str, str)
 
     def __init__(self, id_, function):
         QObject.__init__(self)
@@ -36,10 +37,17 @@ class GraphWorker(QObject, QRunnable):
         self._function = function
 
     def run(self):
-        result = self._function()
-        # HACK: Pass the image in a tuple, otherwise the 'result' is
-        # copied by Qt # making it unusable
-        self.result_ready.emit(self.id, (result,))
+        try:
+            result = self._function()
+        except Exception as exc:
+            message = getattr(exc, 'message') or getattr(exc, 'strerror')
+            if type(message) == str:
+                message = message.decode('utf-8')
+            self.exception_raised.emit(self.id, message)
+        else:
+            # HACK: Pass the image in a tuple, otherwise the 'result' is
+            # copied by Qt # making it unusable
+            self.result_ready.emit(self.id, (result,))
 
 
 from mandibule.controllers.group import GroupController
