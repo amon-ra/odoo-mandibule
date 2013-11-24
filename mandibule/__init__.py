@@ -24,6 +24,7 @@ from PySide import QtGui, QtCore
 from mandibule.controllers import GroupController, ServerController, \
     RelationController, DependencyController
 from mandibule.views import ToolBar, MainTree, WorkArea
+from mandibule.error import ErrorHandler
 
 
 class MainApp(QtGui.QApplication):
@@ -33,6 +34,8 @@ class MainApp(QtGui.QApplication):
         super(MainApp, self).__init__(argv)
         self.setAttribute(QtCore.Qt.AA_DontShowIconsInMenus, False)
         QtGui.QIcon.setThemeName('oxygen')
+        # Error handler
+        self.error_handler = ErrorHandler(self)
         # Controllers
         self.group_ctl = GroupController(self)
         self.server_ctl = ServerController(self)
