@@ -59,19 +59,25 @@ class RelationController(QObject):
         db_data = id_ and self.read(id_) or copy.deepcopy(DEFAULT)
         fields = [
             ('name', TextField(_("Name"), db_data.get('name', ''))),
-            ('models', TextField(_("Models"), db_data.get('models', ''))),
+            ('models', TextField(
+                u"%s\n(e.g. 'res.partner sale.order')" % (
+                    _(u"Starting models")),
+                db_data.get('models', ''))),
             ('maxdepth', IntField(
-                _("Max depth"), db_data.get('maxdepth', 1), range_=(1, 10))),
+                _(u"Max depth"), db_data.get('maxdepth', 1), range_=(1, 10))),
             ('whitelist', TextField(
-                _("Whitelist"), db_data.get('whitelist', ''), multi=True)),
+                u"%s\n(e.g. 'sale.* product.product')" % (_(u"Whitelist")),
+                db_data.get('whitelist', ''), multi=True)),
             ('blacklist', TextField(
-                _("Blacklist"), db_data.get('blacklist', ''), multi=True)),
+                u"%s\n(e.g. 'res.users')" % (_(u"Blacklist")),
+                db_data.get('blacklist', ''), multi=True)),
             ('attrs_whitelist', TextField(
-                _("Attrs whitelist"),
+                u"%s\n(models to display with attributes)" % (
+                    _(u"Attrs whitelist")),
                 db_data.get('attrs_whitelist', ''),
                 multi=True)),
             ('attrs_blacklist', TextField(
-                _("Attrs black list"),
+                _(u"Attrs black list"),
                 db_data.get('attrs_blacklist', ''),
                 multi=True)),
         ]
