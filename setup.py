@@ -5,8 +5,8 @@ from distutils.core import setup
 
 name = 'Mandibule'
 version = '0.1'
-description = "Mandibule provides a raw way to explore data models of OpenERP."
-keywords = "openerp client developper analyse data metadata model oerplib qt"
+description = "Mandibule is a graphical tool to explore OpenERP servers."
+keywords = "openerp client developper analyse data metadata model oerplib"
 author = u"Sebastien Alix"
 author_email = 'seb@usr-src.org'
 #url = 'https://bitbucket.org/Mandibule/'

@@ -1,0 +1,44 @@
+Mandibule
+=========
+
+`Mandibule` is a graphical tool to explore data of OpenERP servers, helping
+developpers to quickly obtain useful informations.
+
+It is able to:
+    - draw relations between models and display their attributes,
+    - draw dependencies between modules and data models related to them.
+
+Installation
+------------
+
+Mandibule depends on the following packages:
+    - OERPLib (>= 0.8),
+    - PySide QtGui (>= 1.1.0),
+    - Oxygen theme icon.
+
+To install OERPLib on a Debian-based system, you can use the PPA:
+
+    http://ppa.usr-src.org/oerplib/
+
+Or install it manually from PyPI:
+
+    # pip install oerplib
+
+Others requirements can be easily installed through APT:
+
+    # apt-get install python-pyside-qtgui oxygen-icon-theme
+
+Supported Python versions
+-------------------------
+
+`Mandibule` support Python versions 2.6 and 2.7.
+
+License
+-------
+
+This software is made available under the `GPL v3` license.
+
+Changes in this version
+-----------------------
+
+Consult the ``CHANGELOG`` file.
