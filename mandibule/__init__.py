@@ -18,6 +18,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+__author__ = 'Sebastien Alix'
+__email__ = 'seb@usr-src.org'
+__licence__ = 'GPL v3'
+__version__ = '0.1.0'
 
 from PySide import QtGui, QtCore
 
