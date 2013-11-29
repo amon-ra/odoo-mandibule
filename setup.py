@@ -9,8 +9,8 @@ description = "Mandibule is a graphical tool to explore OpenERP servers."
 keywords = "openerp client developper analyse data metadata model oerplib"
 author = u"Sebastien Alix"
 author_email = 'seb@usr-src.org'
-#url = 'https://bitbucket.org/mandibule/'
-#download_url = 'https://bitbucket.org/mandibule/Mandibule-%s.tar.gz' % version
+url = 'https://bitbucket.org/mandibule/mandibule'
+download_url = 'https://bitbucket.org/mandibule/mandibule/downloads/Mandibule-%s.tar.gz' % version
 license = 'GPLv3'
 
 setup(
@@ -21,8 +21,8 @@ setup(
     keywords=keywords,
     author=author,
     author_email=author_email,
-    #url=url,
-    #download_url=download_url,
+    url=url,
+    download_url=download_url,
     packages=[
         'mandibule',
         'mandibule.controllers',
