@@ -47,6 +47,12 @@ setup(
     #download_url=download_url,
     packages=[
         'mandibule',
+        'mandibule.controllers',
+        'mandibule.utils',
+        'mandibule.views',
+        'mandibule.views.maintree',
+        'mandibule.views.widgets',
+        'mandibule.views.workarea',
     ],
     include_package_data=True,
     install_requires=[

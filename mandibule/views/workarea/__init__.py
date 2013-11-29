@@ -21,7 +21,7 @@
 
 from PySide import QtGui, QtCore
 
-from mandibule.widgets.zoomableimage import ZoomableImage
+from mandibule.views.widgets.zoomableimage import ZoomableImage
 
 
 class WorkArea(QtGui.QTabWidget):
