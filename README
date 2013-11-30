@@ -28,7 +28,7 @@ To install Mandibule from the tarball::
 Installation (Debian/Ubuntu)
 ----------------------------
 
-Frist, install OERPLib from the PPA (>= 0.8):
+First, install OERPLib from the PPA (>= 0.8):
 
     http://ppa.usr-src.org/oerplib/
 
