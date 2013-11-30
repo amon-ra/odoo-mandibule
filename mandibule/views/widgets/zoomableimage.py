@@ -27,28 +27,45 @@ class ZoomableImage(QtGui.QScrollArea):
     """
     def __init__(self, data):
         QtGui.QScrollArea.__init__(self)
-        self.image = QtGui.QImage.fromData(data)
-        self.pixmap = QtGui.QPixmap.fromImage(self.image)
-        self.label = QtGui.QLabel()
+        self.setAlignment(QtCore.Qt.AlignCenter)
+        self.pixmap = None
+        self._zoom = 0
+        self.label = QtGui.QLabel(self)
         self.label.setScaledContents(True)
-        self.label.setPixmap(self.pixmap)
         self.setWidget(self.label)
-        self.label.wheelEvent = self.wheelEvent
-        self._zoom = 10
+        self.update_image(data)
 
     def wheelEvent(self, event):
         if event.modifiers() & \
                 QtCore.Qt.ControlModifier == QtCore.Qt.ControlModifier:
-            self._zoom += (event.delta() / 120)
-            if self._zoom < 1:
-                self._zoom = 1
-            elif self._zoom > 10:
-                self._zoom = 10
-            size = self.image.size()
-            height = size.height() * self._zoom / 10
-            width = size.width() * self._zoom / 10
-            self.label.resize(width, height)
+            self.zoom(event.delta() / 120)
         else:
-            event.accept()
+            if event.modifiers() & \
+                QtCore.Qt.ShiftModifier == QtCore.Qt.ShiftModifier:
+                scrollbar = self.horizontalScrollBar()
+            else:
+                scrollbar = self.verticalScrollBar()
+            scrollbar.setValue(scrollbar.value() - event.delta())
+
+    def zoom(self, zoom):
+        """Resize the image according to the value of `zoom`."""
+        self._zoom += zoom
+        if self._zoom < 1:
+            self._zoom = 1
+        elif self._zoom > 10:
+            self._zoom = 10
+        size = self.pixmap.size()
+        height = size.height() * self._zoom / 10
+        width = size.width() * self._zoom / 10
+        self.label.resize(width, height)
+
+    def update_image(self, data):
+        """Update the image with `data`."""
+        image = QtGui.QImage.fromData(data)
+        self.pixmap = QtGui.QPixmap.fromImage(image)
+        self.label.setPixmap(self.pixmap)
+        self.zoom(10)
+        self.label.update()
+        self.update()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
