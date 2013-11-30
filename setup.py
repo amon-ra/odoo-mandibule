@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 import os
+import glob
 from distutils.core import setup
 
 name = 'Mandibule'
@@ -37,6 +38,9 @@ setup(
         'PySide (>=1.1)',
     ],
     scripts=['bin/mandibule'],
+    data_files=[
+        ('share/applications', glob.glob('share/applications/*.desktop')),
+    ],
     license=license,
     classifiers=[
         "Environment :: X11 Applications :: Qt",

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Mandibule
+GenericName=Mandibule
+Comment=Tool to explore OpenERP servers.
+Icon=applications-development
+Exec=mandibule
+Terminal=false
+StartupNotify=true
+Categories=Development;
