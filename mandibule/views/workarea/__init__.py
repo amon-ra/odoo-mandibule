@@ -42,7 +42,6 @@ class WorkArea(QtGui.QTabWidget):
         self.app.dependency_ctl.execute_error.connect(self.execute_error)
         self.app.dependency_ctl.finished.connect(self.dependency_finished)
         self.tabCloseRequested.connect(self.close_tab)
-        self.tabBar().tabMoved.connect(self.move_tab)
 
     def relation_updated(self, id_):
         """Update title of the corresponding tab (if any)."""
@@ -120,15 +119,6 @@ class WorkArea(QtGui.QTabWidget):
             if tab_content == widget:
                 del self._tabs[id_]
                 break
-
-    def move_tab(self, mfrom, mto):
-        """Move a tab."""
-        idx_from = self._server_windows[mfrom]
-        idx_to = self._server_windows[mto]
-        self._controlers[idx_from].index = mto
-        self._controlers[idx_to].index = mfrom
-        self._server_windows[mfrom], self._server_windows[mto] = \
-                self._server_windows[mto], self._server_windows[mfrom]
 
 
 class TabContent(QtGui.QWidget):
