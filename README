@@ -25,14 +25,16 @@ To install Mandibule from the tarball::
     # cd Mandibule-X.Y.Z
     # python setup.py install
 
+To test the version in development from the source repository::
+
+    # hg clone https://bitbucket.org/mandibule/mandibule
+    # cd mandibule
+    # ./run.py      # To run it directly, no installation
+
 Installation (Debian/Ubuntu)
 ----------------------------
 
-First, install OERPLib from the PPA (>= 0.8):
-
-    http://ppa.usr-src.org/oerplib/
-
-Then, install Mandibule in the same way:
+To install Mandibule from the PPA, follow the instructions:
 
     http://ppa.usr-src.org/mandibule/
 
