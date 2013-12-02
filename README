@@ -2,7 +2,7 @@ Mandibule
 =========
 
 Mandibule is a graphical tool to explore data of OpenERP servers, helping
-developpers to quickly obtain useful informations.
+developpers to quickly obtain useful information.
 
 It is able to:
 
@@ -38,7 +38,8 @@ To install Mandibule from the PPA, follow the instructions:
 
     http://ppa.usr-src.org/mandibule/
 
-The dependencies will be installed at the same time.
+The dependencies will be installed at the same time (i.e. ``python-oerplib``,
+``python-pydot``, ``python-pyside.qtgui`` and ``oxygen-icon-theme``).
 
 Supported Python versions
 -------------------------
@@ -49,8 +50,3 @@ License
 -------
 
 This software is made available under the GPL v3 license.
-
-Changes in this version
------------------------
-
-Consult the ``CHANGELOG`` file.
