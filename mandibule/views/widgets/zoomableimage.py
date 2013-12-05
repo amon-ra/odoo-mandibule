@@ -30,7 +30,7 @@ class ZoomableImage(QtGui.QScrollArea):
         self._mt_prev_pos = None
         self.setAlignment(QtCore.Qt.AlignCenter)
         self.pixmap = None
-        self._zoom = 0
+        self.zoom_rate = 0.1    # Zoom/Unzoom by steps of 10%
         self.label = QtGui.QLabel(self)
         self.label.setScaledContents(True)
         self.setWidget(self.label)
@@ -40,7 +40,10 @@ class ZoomableImage(QtGui.QScrollArea):
         """Overloaded to zoom/unzoom the image when the Ctrl key is pressed."""
         if event.modifiers() & \
                 QtCore.Qt.ControlModifier == QtCore.Qt.ControlModifier:
-            self.zoom(event.delta() / 120)
+            if event.delta() > 0:
+                self.zoom()
+            else:
+                self.unzoom()
         else:
             super(ZoomableImage, self).wheelEvent(event)
 
@@ -49,11 +52,11 @@ class ZoomableImage(QtGui.QScrollArea):
         if event.modifiers() & \
                 QtCore.Qt.ControlModifier == QtCore.Qt.ControlModifier:
             if event.text() == '+':
-                self.zoom(1)
+                self.zoom()
             if event.text() == '-':
-                self.zoom(-1)
+                self.unzoom()
             if event.text() == '0':
-                self.zoom(10)
+                self.zoom_normal()
             if event.text() == '=':
                 self.zoom_best()
         else:
@@ -73,34 +76,54 @@ class ZoomableImage(QtGui.QScrollArea):
                 hsb.setValue(hsb.value()+xdelta)
         self._mt_prev_pos = pos
 
-    def zoom(self, zoom):
-        """Resize the image according to the value of `zoom`."""
-        self._zoom += zoom
-        if self._zoom < 1:
-            self._zoom = 1
-        elif self._zoom > 10:
-            self._zoom = 10
-        size = self.pixmap.size()
-        height = size.height() * self._zoom / 10
-        width = size.width() * self._zoom / 10
+    def zoom(self):
+        """Unzoom the image."""
+        user_size = self.label.size()
+        rate = (1 + self.zoom_rate)
+        height = user_size.height() * rate
+        width = user_size.width() * rate
+        self.label.resize(width, height)
+
+    def unzoom(self):
+        """Unzoom the image."""
+        user_size = self.label.size()
+        rate = (1 - self.zoom_rate)
+        height = user_size.height() * rate
+        width = user_size.width() * rate
+        self.label.resize(width, height)
+
+    def zoom_normal(self):
+        """Set the real size of the image."""
+        print dir(self.pixmap.size())
+        real_size = self.pixmap.size()
+        width, height = real_size.toTuple()
         self.label.resize(width, height)
 
     def zoom_best(self):
-        """Adjust zoom to fit the image to the window size."""
-        img_size = self.pixmap.size()
-        vp_size = self.size()
-        height = float(vp_size.height())/float(img_size.height())
-        width = float(vp_size.width())/float(img_size.width())
-        ratio = min(img_size.width() * width, img_size.height() * height)
-        self._zoom = ratio / 100
-        self.zoom(0)
+        """Adjust zoom to fit the image to the parent widget size."""
+        if self.parent():
+            pixel_fix = 5   # Just to fit well in the parent widget
+            real_width = self.pixmap.size().width() - pixel_fix
+            real_height = self.pixmap.size().height() - pixel_fix
+            parent_width = self.size().width() - pixel_fix
+            parent_height = self.size().height() - pixel_fix
+            height_rate = float(parent_height) / float(real_height)
+            width_rate = float(parent_width) / float(real_width)
+            # Give the priority to the height
+            if height_rate < width_rate:
+                width = real_width * height_rate
+                self.label.resize(width, parent_height)
+            # Or to the width
+            else:
+                height = real_height * width_rate
+                self.label.resize(parent_width, height)
 
     def update_image(self, data):
         """Update the image with `data`."""
         image = QtGui.QImage.fromData(data)
         self.pixmap = QtGui.QPixmap.fromImage(image)
         self.label.setPixmap(self.pixmap)
-        self.zoom(10)
+        self.zoom_normal()
         self.label.update()
         self.update()
 
