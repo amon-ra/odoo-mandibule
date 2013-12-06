@@ -19,8 +19,9 @@
 #
 ##############################################################################
 
-__all__ = ['ToolBar', 'MainTree', 'WorkArea']
+__all__ = ['Icons', 'ToolBar', 'MainTree', 'WorkArea']
 
+from mandibule.views.icons import Icons
 from mandibule.views.toolbar import ToolBar
 from mandibule.views.maintree import MainTree
 from mandibule.views.workarea import WorkArea

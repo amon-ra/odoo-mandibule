@@ -22,7 +22,6 @@
 from PySide import QtGui
 
 from mandibule.utils.i18n import _
-from mandibule.views import icons
 
 
 class DependencyItem(QtGui.QTreeWidgetItem):
@@ -49,18 +48,18 @@ class DependencyItem(QtGui.QTreeWidgetItem):
         menu = QtGui.QMenu(self.treeWidget())
         # Execute the function
         menu.addAction(
-            icons.icon_exe,
+            self.app.icons.icon_exe,
             _("Execute"),
             lambda: self.app.dependency_ctl.execute(self.id))
         # Remove current module dependencies graph
         menu.addAction(
-            icons.icon_remove,
+            self.app.icons.icon_remove,
             _("Remove"),
             lambda: self.app.dependency_ctl.delete(self.id))
         # Properties
         menu.addSeparator()
         menu.addAction(
-            icons.icon_edit,
+            self.app.icons.icon_edit,
             _("Properties"),
             lambda: self.app.dependency_ctl.display_form(self.id))
         return menu
@@ -115,7 +114,7 @@ class DependencyDrawer(QtGui.QTreeWidgetItem):
         menu = QtGui.QMenu(self.treeWidget())
         # Add module dependencies graph
         menu.addAction(
-            icons.icon_add,
+            self.app.icons.icon_add,
             _("Add dependencies graph"),
             lambda: self.app.dependency_ctl.display_form(None, self.server_id))
         return menu

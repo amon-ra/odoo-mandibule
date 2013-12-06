@@ -24,7 +24,6 @@ from PySide import QtGui, QtCore
 from mandibule.utils.i18n import _
 from mandibule.views.maintree import GroupItem, ServerItem, \
     RelationDrawer, DependencyDrawer, RelationItem, DependencyItem
-from mandibule.views import icons
 
 
 class ToolBar(QtGui.QToolBar):
@@ -40,48 +39,48 @@ class ToolBar(QtGui.QToolBar):
         if current is None:
             # New group
             self.addAction(
-                icons.icon_add,
+                self.app.icons.icon_add,
                 _("New group"),
                 self.app.group_ctl.display_form)
         elif isinstance(current, GroupItem):
             # New group
             self.addAction(
-                icons.icon_add,
+                self.app.icons.icon_add,
                 _("New group"),
                 self.app.group_ctl.display_form)
             self.addSeparator()
             # Edit group
             self.addAction(
-                icons.icon_edit,
+                self.app.icons.icon_edit,
                 _("Properties"),
                 lambda: self.app.group_ctl.display_form(current.id))
             # Remove group
             self.addAction(
-                icons.icon_remove,
+                self.app.icons.icon_remove,
                 _("Remove"),
                 lambda: self.app.group_ctl.delete(current.id))
             self.addSeparator()
             # New server
             self.addAction(
-                icons.icon_add,
+                self.app.icons.icon_add,
                 _("New server"),
                 lambda: self.app.server_ctl.display_form(None, current.id))
         elif isinstance(current, ServerItem):
             # New server
             self.addAction(
-                icons.icon_add,
+                self.app.icons.icon_add,
                 _("New server"),
                 lambda: self.app.server_ctl.display_form(
                     None, current.parent().id))
             self.addSeparator()
             # Edit server
             self.addAction(
-                icons.icon_edit,
+                self.app.icons.icon_edit,
                 _("Properties"),
                 lambda: self.app.server_ctl.display_form(current.id))
             # Remove server
             self.addAction(
-                icons.icon_remove,
+                self.app.icons.icon_remove,
                 _("Remove"),
                 lambda: self.app.server_ctl.delete(current.id))
             self.addSeparator()
@@ -99,19 +98,19 @@ class ToolBar(QtGui.QToolBar):
                 or isinstance(current, DependencyDrawer):
             # New server
             self.addAction(
-                icons.icon_add,
+                self.app.icons.icon_add,
                 _("New server"),
                 lambda: self.app.server_ctl.display_form(
                     None, current.parent().parent().id))
             self.addSeparator()
             # Edit server
             self.addAction(
-                icons.icon_edit,
+                self.app.icons.icon_edit,
                 _("Properties"),
                 lambda: self.app.server_ctl.display_form(current.parent().id))
             # Remove server
             self.addAction(
-                icons.icon_remove,
+                self.app.icons.icon_remove,
                 _("Remove"),
                 lambda: self.app.server_ctl.delete(current.parent().id))
             self.addSeparator()
@@ -130,49 +129,49 @@ class ToolBar(QtGui.QToolBar):
         elif isinstance(current, RelationItem):
             # New server
             self.addAction(
-                icons.icon_add,
+                self.app.icons.icon_add,
                 _("New server"),
                 lambda: self.app.server_ctl.display_form(
                     None, current.parent().parent().parent().id))
             self.addSeparator()
             # Edit function
             self.addAction(
-                icons.icon_edit,
+                self.app.icons.icon_edit,
                 _("Properties"),
                 lambda: self.app.relation_ctl.display_form(current.id))
             # Remove function
             self.addAction(
-                icons.icon_remove,
+                self.app.icons.icon_remove,
                 _("Remove"),
                 lambda: self.app.relation_ctl.delete(current.id))
             self.addSeparator()
             # Execute the function
             self.addAction(
-                icons.icon_exe,
+                self.app.icons.icon_exe,
                 _("Execute"),
                 lambda: self.app.relation_ctl.execute(current.id))
         elif isinstance(current, DependencyItem):
             # New server
             self.addAction(
-                icons.icon_add,
+                self.app.icons.icon_add,
                 _("New server"),
                 lambda: self.app.server_ctl.display_form(
                     None, current.parent().parent().parent().id))
             self.addSeparator()
             # Edit function
             self.addAction(
-                icons.icon_edit,
+                self.app.icons.icon_edit,
                 _("Properties"),
                 lambda: self.app.dependency_ctl.display_form(current.id))
             # Remove function
             self.addAction(
-                icons.icon_remove,
+                self.app.icons.icon_remove,
                 _("Remove"),
                 lambda: self.app.dependency_ctl.delete(current.id))
             self.addSeparator()
             # Execute the function
             self.addAction(
-                icons.icon_exe,
+                self.app.icons.icon_exe,
                 _("Execute"),
                 lambda: self.app.dependency_ctl.execute(current.id))
 

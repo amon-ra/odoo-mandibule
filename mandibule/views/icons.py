@@ -21,9 +21,17 @@
 
 from PySide import QtGui
 
-icon_add = QtGui.QIcon.fromTheme('list-add')
-icon_edit = QtGui.QIcon.fromTheme('document-properties')
-icon_remove = QtGui.QIcon.fromTheme('list-remove')
-icon_exe = QtGui.QIcon.fromTheme('system-run')
+
+class Icons(object):
+    """Libraries of icons."""
+    # NOTE: A class is used as a store here because the QApplication has to be
+    # instanciated before QtGui.QIcon objects (causing a segmentation fault on
+    # some systems like Ubuntu Lucid).
+    def __init__(self, app):
+        self.app = app
+        self.icon_add = QtGui.QIcon.fromTheme('list-add')
+        self.icon_edit = QtGui.QIcon.fromTheme('document-properties')
+        self.icon_remove = QtGui.QIcon.fromTheme('list-remove')
+        self.icon_exe = QtGui.QIcon.fromTheme('system-run')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

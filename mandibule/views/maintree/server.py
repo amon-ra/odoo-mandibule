@@ -24,7 +24,6 @@ from PySide import QtGui
 from mandibule.utils.i18n import _
 from mandibule.views.maintree.relation import RelationDrawer
 from mandibule.views.maintree.dependency import DependencyDrawer
-from mandibule.views import icons
 
 
 class ServerItem(QtGui.QTreeWidgetItem):
@@ -54,23 +53,23 @@ class ServerItem(QtGui.QTreeWidgetItem):
         menu = QtGui.QMenu(self.treeWidget())
         # Add relational graph
         menu.addAction(
-            icons.icon_add,
+            self.app.icons.icon_add,
             _("Add relational graph"),
             lambda: self.app.relation_ctl.display_form(None, self.id))
         # Add module dependencies graph
         menu.addAction(
-            icons.icon_add,
+            self.app.icons.icon_add,
             _("Add dependencies graph"),
             lambda: self.app.dependency_ctl.display_form(None, self.id))
         # Remove current server
         menu.addAction(
-            icons.icon_remove,
+            self.app.icons.icon_remove,
             _("Remove"),
             lambda: self.app.server_ctl.delete(self.id))
         # Properties
         menu.addSeparator()
         menu.addAction(
-            icons.icon_edit,
+            self.app.icons.icon_edit,
             _("Properties"),
             lambda: self.app.server_ctl.display_form(self.id))
         return menu
