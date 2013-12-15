@@ -46,22 +46,10 @@ class RelationItem(QtGui.QTreeWidgetItem):
     def get_menu(self):
         """Return a QMenu corresponding to the current RelationItem."""
         menu = QtGui.QMenu(self.treeWidget())
-        # Execute the function
-        menu.addAction(
-            self.app.icons.icon_exe,
-            _("Execute"),
-            lambda: self.app.relation_ctl.execute(self.id))
-        # Remove current relational graph
-        menu.addAction(
-            self.app.icons.icon_remove,
-            _("Remove"),
-            lambda: self.app.relation_ctl.delete(self.id))
-        # Properties
+        menu.addAction(self.app.actions.action_exec_relation)
+        menu.addAction(self.app.actions.action_remove_relation)
         menu.addSeparator()
-        menu.addAction(
-            self.app.icons.icon_edit,
-            _("Properties"),
-            lambda: self.app.relation_ctl.display_form(self.id))
+        menu.addAction(self.app.actions.action_edit_relation)
         return menu
 
     def set_icon_expanded(self, expanded=True):
@@ -111,19 +99,14 @@ class RelationDrawer(QtGui.QTreeWidgetItem):
     def get_menu(self):
         """Return a QMenu corresponding to the current RelationItem."""
         menu = QtGui.QMenu(self.treeWidget())
-        # Add relational graph
-        menu.addAction(
-            self.app.icons.icon_add,
-            _("Add relational graph"),
-            lambda: self.app.relation_ctl.display_form(None, self.server_id))
+        menu.addAction(self.app.actions.action_new_relation)
         return menu
 
     def set_icon_expanded(self, expanded=True):
         """Update the icon."""
         if expanded and self.childCount():
-            self.setIcon(0, QtGui.QIcon.fromTheme('folder-open'))
+            self.setIcon(0, self.app.icons.icon_group_exp)
         else:
-            self.setIcon(0, QtGui.QIcon.fromTheme('folder'))
-
+            self.setIcon(0, self.app.icons.icon_group)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

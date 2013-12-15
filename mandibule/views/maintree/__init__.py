@@ -39,6 +39,7 @@ class MainTree(QtGui.QTreeWidget):
         self.app = app
         self.app.group_ctl.created.connect(self.add_group)
         self.app.group_ctl.deleted.connect(self.remove_group)
+        self.currentItemChanged.connect(self.tree_item_changed)
         self.setHeaderHidden(True)
         self.itemExpanded.connect(self.slot_item_expanded)
         self.itemCollapsed.connect(self.slot_item_collapsed)
@@ -70,10 +71,7 @@ class MainTree(QtGui.QTreeWidget):
         else:
             menu = QtGui.QMenu(self)
             icon_add = QtGui.QIcon.fromTheme('list-add')
-            menu.addAction(
-                icon_add,
-                _("New group"),
-                self.app.group_ctl.display_form)
+            menu.addAction(self.app.actions.action_new_group)
             menu.popup(event.globalPos())
 
     def mousePressEvent(self, event):
@@ -102,5 +100,10 @@ class MainTree(QtGui.QTreeWidget):
         """Change the icon of some items when they are collapsed."""
         item.set_icon_expanded(False)
 
+    def tree_item_changed(self, current, previous):
+        """Enable/disable application actions according to the current
+        item selected in the main tree.
+        """
+        self.app.actions.update()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

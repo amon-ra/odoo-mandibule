@@ -71,29 +71,17 @@ class GroupItem(QtGui.QTreeWidgetItem):
     def get_menu(self):
         """Return a QMenu corresponding to the current GroupItem."""
         menu = QtGui.QMenu(self.treeWidget())
-        # New server
-        menu.addAction(
-            self.app.icons.icon_add,
-            _("New server"),
-            lambda: self.app.server_ctl.display_form(None, self.id))
-        # Remove current group
-        menu.addAction(
-            self.app.icons.icon_remove,
-            _("Remove"),
-            lambda: self.app.group_ctl.delete(self.id))
-        # Properties
+        menu.addAction(self.app.actions.action_new_server)
+        menu.addAction(self.app.actions.action_remove_group)
         menu.addSeparator()
-        menu.addAction(
-            self.app.icons.icon_edit,
-            _("Properties"),
-            lambda: self.app.group_ctl.display_form(self.id))
+        menu.addAction(self.app.actions.action_edit_group)
         return menu
 
     def set_icon_expanded(self, expanded=True):
         """Update the icon."""
         if expanded and self.childCount():
-            self.setIcon(0, QtGui.QIcon.fromTheme('folder-open'))
+            self.setIcon(0, self.app.icons.icon_group_exp)
         else:
-            self.setIcon(0, QtGui.QIcon.fromTheme('folder'))
+            self.setIcon(0, self.app.icons.icon_group)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

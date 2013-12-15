@@ -29,9 +29,19 @@ class Icons(object):
     # some systems like Ubuntu Lucid).
     def __init__(self, app):
         self.app = app
+        self.icon_group_add = QtGui.QIcon.fromTheme('folder-new')
+        self.icon_group = QtGui.QIcon.fromTheme('folder')
+        self.icon_group_exp = QtGui.QIcon.fromTheme('folder-open')
+        self.icon_server = QtGui.QIcon.fromTheme('network-server')
+        self.icon_function = QtGui.QIcon.fromTheme('tab-new')
         self.icon_add = QtGui.QIcon.fromTheme('list-add')
         self.icon_edit = QtGui.QIcon.fromTheme('document-properties')
         self.icon_remove = QtGui.QIcon.fromTheme('list-remove')
+        self.icon_relation = QtGui.QIcon.fromTheme('view-time-schedule')
+        self.icon_dependencies = QtGui.QIcon.fromTheme('view-list-tree')
         self.icon_exe = QtGui.QIcon.fromTheme('system-run')
+        self.icon_settings = QtGui.QIcon.fromTheme('preferences-other')
+        self.icon_about = QtGui.QIcon.fromTheme('help-about')
+        self.icon_quit = QtGui.QIcon.fromTheme('application-exit')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

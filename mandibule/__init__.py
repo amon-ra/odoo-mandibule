@@ -27,7 +27,7 @@ from PySide import QtGui, QtCore
 
 from mandibule.controllers import GroupController, ServerController, \
     RelationController, DependencyController
-from mandibule.views import Icons, ToolBar, MainTree, WorkArea
+from mandibule.views import Icons, Actions, ToolBar, MainTree, WorkArea
 from mandibule.error import ErrorHandler
 
 
@@ -38,7 +38,6 @@ class MainApp(QtGui.QApplication):
         super(MainApp, self).__init__(argv)
         self.setAttribute(QtCore.Qt.AA_DontShowIconsInMenus, False)
         QtGui.QIcon.setThemeName('oxygen')
-        self.icons = Icons(self)
         # Error handler
         self.error_handler = ErrorHandler(self)
         # Controllers
@@ -47,6 +46,8 @@ class MainApp(QtGui.QApplication):
         self.relation_ctl = RelationController(self)
         self.dependency_ctl = DependencyController(self)
         # Views
+        self.icons = Icons(self)
+        self.actions = Actions(self)
         self.main_window = QtGui.QMainWindow()
         self.main_window.setWindowState(QtCore.Qt.WindowMaximized)
         self.main_window.setWindowTitle('Mandibule !')

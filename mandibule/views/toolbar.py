@@ -22,8 +22,6 @@
 from PySide import QtGui, QtCore
 
 from mandibule.utils.i18n import _
-from mandibule.views.maintree import GroupItem, ServerItem, \
-    RelationDrawer, DependencyDrawer, RelationItem, DependencyItem
 
 
 class ToolBar(QtGui.QToolBar):
@@ -31,148 +29,37 @@ class ToolBar(QtGui.QToolBar):
     def __init__(self, app):
         QtGui.QToolBar.__init__(self)
         self.app = app
-        self.app.main_tree.currentItemChanged.connect(self.tree_item_changed)
+        self.app.main_tree.currentItemChanged.connect(self._tree_item_changed)
         self.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
+        self.action_functions = QtGui.QAction(
+            self.app.icons.icon_function, _("Functions"), self)
+        # Add actions to the toolbar
+        self.addAction(self.app.actions.action_new_group)
+        self.addAction(self.app.actions.action_new_server)
+        self.addAction(self.action_functions)
+        separator = QtGui.QWidget()
+        separator.setSizePolicy(
+            QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
+        self.addWidget(separator)
+        #self.addAction(self._actions['settings'])
+        self.addAction(self.app.actions.action_about)
+        self.addAction(self.app.actions.action_quit)
+        # Add a submenu on the 'functions' tool button
+        fmenu = QtGui.QMenu()
+        fmenu.addAction(self.app.actions.action_new_relation)
+        fmenu.addAction(self.app.actions.action_new_dependency)
+        self.action_functions.setMenu(fmenu)
+        for widget in self.action_functions.associatedWidgets():
+            if isinstance(widget, QtGui.QToolButton):
+                widget.setPopupMode(QtGui.QToolButton.InstantPopup)
 
-    def tree_item_changed(self, current, previous):
-        self.clear()
-        if current is None:
-            # New group
-            self.addAction(
-                self.app.icons.icon_add,
-                _("New group"),
-                self.app.group_ctl.display_form)
-        elif isinstance(current, GroupItem):
-            # New group
-            self.addAction(
-                self.app.icons.icon_add,
-                _("New group"),
-                self.app.group_ctl.display_form)
-            self.addSeparator()
-            # Edit group
-            self.addAction(
-                self.app.icons.icon_edit,
-                _("Properties"),
-                lambda: self.app.group_ctl.display_form(current.id))
-            # Remove group
-            self.addAction(
-                self.app.icons.icon_remove,
-                _("Remove"),
-                lambda: self.app.group_ctl.delete(current.id))
-            self.addSeparator()
-            # New server
-            self.addAction(
-                self.app.icons.icon_add,
-                _("New server"),
-                lambda: self.app.server_ctl.display_form(None, current.id))
-        elif isinstance(current, ServerItem):
-            # New server
-            self.addAction(
-                self.app.icons.icon_add,
-                _("New server"),
-                lambda: self.app.server_ctl.display_form(
-                    None, current.parent().id))
-            self.addSeparator()
-            # Edit server
-            self.addAction(
-                self.app.icons.icon_edit,
-                _("Properties"),
-                lambda: self.app.server_ctl.display_form(current.id))
-            # Remove server
-            self.addAction(
-                self.app.icons.icon_remove,
-                _("Remove"),
-                lambda: self.app.server_ctl.delete(current.id))
-            self.addSeparator()
-            # Add relational graph
-            self.addAction(
-                QtGui.QIcon.fromTheme('view-time-schedule'),
-                _("Add relational graph"),
-                lambda: self.app.relation_ctl.display_form(None, current.id))
-            # Add module dependencies graph
-            self.addAction(
-                QtGui.QIcon.fromTheme('view-list-tree'),
-                _("Add dependencies graph"),
-                lambda: self.app.dependency_ctl.display_form(None, current.id))
-        elif isinstance(current, RelationDrawer) \
-                or isinstance(current, DependencyDrawer):
-            # New server
-            self.addAction(
-                self.app.icons.icon_add,
-                _("New server"),
-                lambda: self.app.server_ctl.display_form(
-                    None, current.parent().parent().id))
-            self.addSeparator()
-            # Edit server
-            self.addAction(
-                self.app.icons.icon_edit,
-                _("Properties"),
-                lambda: self.app.server_ctl.display_form(current.parent().id))
-            # Remove server
-            self.addAction(
-                self.app.icons.icon_remove,
-                _("Remove"),
-                lambda: self.app.server_ctl.delete(current.parent().id))
-            self.addSeparator()
-            # Add relational graph
-            self.addAction(
-                QtGui.QIcon.fromTheme('view-time-schedule'),
-                _("Add relational graph"),
-                lambda: self.app.relation_ctl.display_form(
-                    None, current.parent().id))
-            # Add module dependencies graph
-            self.addAction(
-                QtGui.QIcon.fromTheme('view-list-tree'),
-                _("Add dependencies graph"),
-                lambda: self.app.dependency_ctl.display_form(
-                    None, current.parent().id))
-        elif isinstance(current, RelationItem):
-            # New server
-            self.addAction(
-                self.app.icons.icon_add,
-                _("New server"),
-                lambda: self.app.server_ctl.display_form(
-                    None, current.parent().parent().parent().id))
-            self.addSeparator()
-            # Edit function
-            self.addAction(
-                self.app.icons.icon_edit,
-                _("Properties"),
-                lambda: self.app.relation_ctl.display_form(current.id))
-            # Remove function
-            self.addAction(
-                self.app.icons.icon_remove,
-                _("Remove"),
-                lambda: self.app.relation_ctl.delete(current.id))
-            self.addSeparator()
-            # Execute the function
-            self.addAction(
-                self.app.icons.icon_exe,
-                _("Execute"),
-                lambda: self.app.relation_ctl.execute(current.id))
-        elif isinstance(current, DependencyItem):
-            # New server
-            self.addAction(
-                self.app.icons.icon_add,
-                _("New server"),
-                lambda: self.app.server_ctl.display_form(
-                    None, current.parent().parent().parent().id))
-            self.addSeparator()
-            # Edit function
-            self.addAction(
-                self.app.icons.icon_edit,
-                _("Properties"),
-                lambda: self.app.dependency_ctl.display_form(current.id))
-            # Remove function
-            self.addAction(
-                self.app.icons.icon_remove,
-                _("Remove"),
-                lambda: self.app.dependency_ctl.delete(current.id))
-            self.addSeparator()
-            # Execute the function
-            self.addAction(
-                self.app.icons.icon_exe,
-                _("Execute"),
-                lambda: self.app.dependency_ctl.execute(current.id))
+    def _tree_item_changed(self, current, previous):
+        """Enable/disable actions of the toolbar according to the current
+        item selected in the main tree.
+        """
+        if self.app.actions.get_server_id():
+            self.action_functions.setDisabled(False)
+        else:
+            self.action_functions.setDisabled(True)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
