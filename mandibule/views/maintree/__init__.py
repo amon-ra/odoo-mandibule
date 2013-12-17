@@ -106,4 +106,9 @@ class MainTree(QtGui.QTreeWidget):
         """
         self.app.actions.update()
 
+    def rowsInserted(self, parent, start, end):
+        """Automatically sort items when an item is added to the tree."""
+        super(MainTree, self).rowsInserted(parent, start, end)
+        self.sortItems(0, QtCore.Qt.SortOrder.AscendingOrder)
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

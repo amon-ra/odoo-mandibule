@@ -109,4 +109,8 @@ class RelationDrawer(QtGui.QTreeWidgetItem):
         else:
             self.setIcon(0, self.app.icons.icon_group)
 
+    def __lt__(self, other):
+        """Avoid to sort drawers to keep the defined order."""
+        return False
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
