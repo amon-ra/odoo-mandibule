@@ -24,6 +24,7 @@ from PySide import QtCore, QtGui
 from mandibule.utils.i18n import _
 from mandibule.views.maintree import GroupItem, ServerItem, \
     RelationDrawer, DependencyDrawer, RelationItem, DependencyItem
+from mandibule.views import about
 
 
 class Actions(QtCore.QObject):
@@ -86,7 +87,7 @@ class Actions(QtCore.QObject):
         # About
         self.action_about = QtGui.QAction(
             self.app.icons.icon_about, _("About"), self.app)
-        self.action_about.triggered.connect(self.show_about_dialog)
+        self.action_about.triggered.connect(lambda: about.display(self.app))
         # Quit
         self.action_quit = QtGui.QAction(
             self.app.icons.icon_quit, _("Quit"), self.app)
@@ -226,27 +227,5 @@ class Actions(QtCore.QObject):
         """Generate the dependencies graph."""
         id_ = self.get_dependency_id()
         self.app.dependency_ctl.execute(id_)
-
-    # -- About --
-
-    def show_about_dialog(self):
-        QtGui.QMessageBox.about(
-            self.app.main_window,
-            u"About Mandibule",
-            u"""
-            <h3>About Mandibule</h3>
-            <p>Mandibule is a graphical tool to explore data of OpenERP
-            servers, helping developpers to quickly obtain useful
-            information.</p>
-            <p>It is developped in Python, and relies on
-            <a href="http://pythonhosted.org/OERPLib/">OERPLib</a> and PySide
-            libraries.</p>
-            <p>This software is available under the GNU General Public License
-            version 3.0.</p>
-            <p>For bugs or suggestions, please visit the
-            <a href="https://bitbucket.org/mandibule/mandibule/issues?status=new&status=open">
-            Bug Tracker</a>.</p>
-            <p>Copyright (C) 2013 Sébastien Alix, Frédéric Fidon.</p>
-            """)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
