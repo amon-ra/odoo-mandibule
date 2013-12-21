@@ -25,6 +25,7 @@ __version__ = '0.1.0'
 
 from PySide import QtGui, QtCore
 
+from mandibule import defaults
 from mandibule.controllers import GroupController, ServerController, \
     RelationController, DependencyController
 from mandibule.views import Icons, Actions, ToolBar, MainTree, WorkArea
@@ -45,6 +46,8 @@ class MainApp(QtGui.QApplication):
         self.server_ctl = ServerController(self)
         self.relation_ctl = RelationController(self)
         self.dependency_ctl = DependencyController(self)
+        # Initialize the database and insert default values
+        defaults.init(self)
         # Views
         self.icons = Icons(self)
         self.actions = Actions(self)
