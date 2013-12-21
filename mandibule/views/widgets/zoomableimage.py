@@ -25,12 +25,12 @@ class ZoomableImage(QtGui.QScrollArea):
     """Widget containing an image on which zoom in/out operations
     can be performed.
     """
-    def __init__(self, data):
+    def __init__(self, data=None):
         QtGui.QScrollArea.__init__(self)
         self._mt_prev_pos = None
         self.setAlignment(QtCore.Qt.AlignCenter)
         self.pixmap = None
-        self.zoom_rate = 0.1    # Zoom/Unzoom by steps of 10%
+        self.zoom_rate = 0.1    # Zoom in/out with a rate of 10%
         self.label = QtGui.QLabel(self)
         self.label.setScaledContents(True)
         self.setWidget(self.label)
@@ -41,26 +41,11 @@ class ZoomableImage(QtGui.QScrollArea):
         if event.modifiers() & \
                 QtCore.Qt.ControlModifier == QtCore.Qt.ControlModifier:
             if event.delta() > 0:
-                self.zoom()
+                self.zoom_in()
             else:
-                self.unzoom()
+                self.zoom_out()
         else:
             super(ZoomableImage, self).wheelEvent(event)
-
-    def keyPressEvent(self, event):
-        """Overloaded to manage the zoom state with keyboard shortcuts."""
-        if event.modifiers() & \
-                QtCore.Qt.ControlModifier == QtCore.Qt.ControlModifier:
-            if event.text() == '+':
-                self.zoom()
-            if event.text() == '-':
-                self.unzoom()
-            if event.text() == '0':
-                self.zoom_normal()
-            if event.text() == '=':
-                self.zoom_best()
-        else:
-            super(ZoomableImage, self).keyPressEvent(event)
 
     def mouseMoveEvent(self, event):
         """Overloaded to grab and scroll the image."""
@@ -76,30 +61,29 @@ class ZoomableImage(QtGui.QScrollArea):
                 hsb.setValue(hsb.value()+xdelta)
         self._mt_prev_pos = pos
 
-    def zoom(self):
-        """Unzoom the image."""
+    def zoom_in(self):
+        """Zoom in the image."""
         user_size = self.label.size()
         rate = (1 + self.zoom_rate)
         height = user_size.height() * rate
         width = user_size.width() * rate
         self.label.resize(width, height)
 
-    def unzoom(self):
-        """Unzoom the image."""
+    def zoom_out(self):
+        """Zoom out the image."""
         user_size = self.label.size()
         rate = (1 - self.zoom_rate)
         height = user_size.height() * rate
         width = user_size.width() * rate
         self.label.resize(width, height)
 
-    def zoom_normal(self):
-        """Set the real size of the image."""
-        print dir(self.pixmap.size())
+    def zoom_original(self):
+        """Set the original size of the image."""
         real_size = self.pixmap.size()
         width, height = real_size.toTuple()
         self.label.resize(width, height)
 
-    def zoom_best(self):
+    def zoom_fit_best(self):
         """Adjust zoom to fit the image to the parent widget size."""
         if self.parent():
             pixel_fix = 5   # Just to fit well in the parent widget
@@ -118,12 +102,15 @@ class ZoomableImage(QtGui.QScrollArea):
                 height = real_height * width_rate
                 self.label.resize(parent_width, height)
 
-    def update_image(self, data):
+    def update_image(self, data=None):
         """Update the image with `data`."""
-        image = QtGui.QImage.fromData(data)
-        self.pixmap = QtGui.QPixmap.fromImage(image)
+        if data:
+            image = QtGui.QImage.fromData(data)
+            self.pixmap = QtGui.QPixmap.fromImage(image)
+        else:
+            self.pixmap = QtGui.QPixmap()
         self.label.setPixmap(self.pixmap)
-        self.zoom_normal()
+        self.zoom_original()
         self.label.update()
         self.update()
 

@@ -40,8 +40,13 @@ class Icons(object):
         self.icon_relation = QtGui.QIcon.fromTheme('view-time-schedule')
         self.icon_dependencies = QtGui.QIcon.fromTheme('view-list-tree')
         self.icon_exe = QtGui.QIcon.fromTheme('system-run')
+        self.icon_wait = QtGui.QIcon.fromTheme('view-history')
         self.icon_settings = QtGui.QIcon.fromTheme('preferences-other')
         self.icon_about = QtGui.QIcon.fromTheme('help-about')
         self.icon_quit = QtGui.QIcon.fromTheme('application-exit')
+        self.icon_zoom_in = QtGui.QIcon.fromTheme('zoom-in')
+        self.icon_zoom_out = QtGui.QIcon.fromTheme('zoom-out')
+        self.icon_zoom_orig = QtGui.QIcon.fromTheme('zoom-original')
+        self.icon_zoom_fit = QtGui.QIcon.fromTheme('zoom-fit-best')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

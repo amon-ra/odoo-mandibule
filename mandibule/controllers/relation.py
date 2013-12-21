@@ -47,7 +47,7 @@ class RelationController(QObject):
     created = Signal(str)
     updated = Signal(str)
     deleted = Signal(str)
-    executed = Signal(str, str)
+    executed = Signal(str)
     execute_error = Signal(str)
     finished = Signal(str, tuple)
 
@@ -161,7 +161,7 @@ class RelationController(QObject):
 
     def execute(self, id_):
         """Generate the relation graph."""
-        self.executed.emit(id_, "Working...")
+        self.executed.emit(id_)
         worker = GraphWorker(id_, lambda: self._execute(id_))
         worker.result_ready.connect(self._process_result)
         worker.exception_raised.connect(self._handle_exception)

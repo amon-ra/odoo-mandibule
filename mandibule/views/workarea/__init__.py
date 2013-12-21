@@ -21,7 +21,8 @@
 
 from PySide import QtGui, QtCore
 
-from mandibule.views.widgets.zoomableimage import ZoomableImage
+from mandibule.views.workarea.dependency import DependencyContent
+from mandibule.views.workarea.relation import RelationContent
 
 
 class WorkArea(QtGui.QTabWidget):
@@ -52,25 +53,24 @@ class WorkArea(QtGui.QTabWidget):
             index = self.indexOf(self._tabs[id_])
             self.setTabText(index, title)
 
-    def relation_executed(self, id_, message):
-        """Add/update a tab with `message` when a relation graph is executed."""
+    def relation_executed(self, id_):
+        """Add/update a content when a relation graph is executed."""
         data = self.app.relation_ctl.read(id_)
         sdata = self.app.server_ctl.read(data['server_id'])
         title = "%s - %s" % (sdata['name'], data['name'])
         if id_ not in self._tabs:
-            self._tabs[id_] = TabContent(self.app, id_)
-            icon = QtGui.QIcon.fromTheme('view-history')
-            self.addTab(self._tabs[id_], icon, title)
-        self._tabs[id_].set_content(QtGui.QLabel(message))
-
-    def relation_finished(self, id_, content):
-        """Update a tab with `content` when a relation graph is ready."""
-        if id_ in self._tabs:
-            content = ZoomableImage(content[0])
-            icon = QtGui.QIcon.fromTheme('view-time-schedule')
+            self._tabs[id_] = RelationContent(self.app, id_)
+            self.addTab(self._tabs[id_], self.app.icons.icon_wait, title)
+        else:
             index = self.indexOf(self._tabs[id_])
-            self.setTabIcon(index, icon)
-            self._tabs[id_].set_content(content)
+            self.setTabIcon(index, self.app.icons.icon_wait)
+        self.setCurrentWidget(self._tabs[id_])
+
+    def relation_finished(self, id_, data):
+        """Update the tab icon when a relation graph is ready."""
+        if id_ in self._tabs:
+            index = self.indexOf(self._tabs[id_])
+            self.setTabIcon(index, self.app.icons.icon_relation)
 
     def dependency_updated(self, id_):
         """Update title of the corresponding tab (if any)."""
@@ -81,29 +81,24 @@ class WorkArea(QtGui.QTabWidget):
             index = self.indexOf(self._tabs[id_])
             self.setTabText(index, title)
 
-    def dependency_executed(self, id_, message):
-        """Add/update a tab with `message` when a module dependencies graph
-        is executed.
-        """
+    def dependency_executed(self, id_):
+        """Add/update a content when a module dependencies graph is executed."""
         data = self.app.dependency_ctl.read(id_)
         sdata = self.app.server_ctl.read(data['server_id'])
         title = "%s - %s" % (sdata['name'], data['name'])
         if id_ not in self._tabs:
-            self._tabs[id_] = TabContent(self.app, id_)
-            icon = QtGui.QIcon.fromTheme('view-history')
-            self.addTab(self._tabs[id_], icon, title)
-        self._tabs[id_].set_content(QtGui.QLabel(message))
-
-    def dependency_finished(self, id_, content):
-        """Update a tab with `content` when a module dependencies graph
-        is ready.
-        """
-        if id_ in self._tabs:
-            content = ZoomableImage(content[0])
-            icon = QtGui.QIcon.fromTheme('view-list-tree')
+            self._tabs[id_] = DependencyContent(self.app, id_)
+            self.addTab(self._tabs[id_], self.app.icons.icon_wait, title)
+        else:
             index = self.indexOf(self._tabs[id_])
-            self.setTabIcon(index, icon)
-            self._tabs[id_].set_content(content)
+            self.setTabIcon(index, self.app.icons.icon_wait)
+        self.setCurrentWidget(self._tabs[id_])
+
+    def dependency_finished(self, id_, data):
+        """Update the tab icon when a module dependencies graph is ready."""
+        if id_ in self._tabs:
+            index = self.indexOf(self._tabs[id_])
+            self.setTabIcon(index, self.app.icons.icon_dependencies)
 
     def execute_error(self, id_):
         """Close the tab if an error occurred during the execution."""
@@ -119,25 +114,5 @@ class WorkArea(QtGui.QTabWidget):
             if tab_content == widget:
                 del self._tabs[id_]
                 break
-
-
-class TabContent(QtGui.QWidget):
-    """Content of a tab inside the workarea."""
-    def __init__(self, app, id_):
-        QtGui.QWidget.__init__(self)
-        self.app = app
-        self.id_ = id_
-        self.setLayout(QtGui.QVBoxLayout())
-
-    def set_content(self, content):
-        """Set the content of this tab."""
-        # Remove the previous content
-        for index in range(self.layout().count()):
-            widget = self.layout().takeAt(index)
-            widget.widget().deleteLater()
-            del widget
-        # Set the content and switch to its tab
-        self.layout().addWidget(content)
-        self.app.work_area.setCurrentWidget(self)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
