@@ -83,8 +83,8 @@ class ZoomableImage(QtGui.QScrollArea):
         width, height = real_size.toTuple()
         self.label.resize(width, height)
 
-    def zoom_fit_best(self):
-        """Adjust zoom to fit the image to the parent widget size."""
+    def _get_size_fit_best(self):
+        """Compute and return width and height of the fit best size."""
         if self.parent():
             pixel_fix = 5   # Just to fit well in the parent widget
             real_width = self.pixmap.size().width() - pixel_fix
@@ -96,11 +96,26 @@ class ZoomableImage(QtGui.QScrollArea):
             # Give the priority to the height
             if height_rate < width_rate:
                 width = real_width * height_rate
-                self.label.resize(width, parent_height)
+                return width, parent_height
             # Or to the width
             else:
                 height = real_height * width_rate
-                self.label.resize(parent_width, height)
+                return parent_width, height
+
+    def zoom_fit_best(self):
+        """Adjust zoom to fit the image to the parent widget size."""
+        if self.parent():
+            width, height = self._get_size_fit_best()
+            self.label.resize(width, height)
+
+    def is_large(self):
+        """Return `True` if the image is larger than its parent."""
+        if self.parent():
+            width, height = self._get_size_fit_best()
+            return any([width < self.pixmap.size().width(),
+                        height < self.pixmap.size().height()])
+        return False
+
 
     def update_image(self, data=None):
         """Update the image with `data`."""

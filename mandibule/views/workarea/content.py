@@ -118,7 +118,8 @@ class GraphContent(Content):
         if id_ == self.id_:
             self.set_data(data[0])
             self.toolbar.setEnabled(True)
-            self._image.zoom_fit_best()
+            if self._image.is_large():
+                self._image.zoom_fit_best()
             self._image.setEnabled(True)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
