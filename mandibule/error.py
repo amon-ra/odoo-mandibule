@@ -22,15 +22,13 @@
 import sys
 import cStringIO, traceback
 
-from PySide import QtGui
+from mandibule.views.widgets import dialog
 
 
-class ErrorHandler(QtGui.QMessageBox):
+class ErrorHandler(object):
     """Handle error/exceptions raised by the application."""
     def __init__(self, app):
-        QtGui.QMessageBox.__init__(self)
         self.app = app
-        self.setIcon(QtGui.QMessageBox.Critical)
         sys.excepthook = self.excepthook
 
     def get_traceback_str(self, exc_traceback):
@@ -46,7 +44,9 @@ class ErrorHandler(QtGui.QMessageBox):
         """
         #traceback_str = self.get_traceback_str(exc_traceback)
         #self.setDetailedText(traceback_str)
-        self.setText(exc_value.message)
-        self.exec_()
+        if issubclass(exc_type, Warning):
+            dialog.warning(self.app.main_window, exc_value.message)
+        else:
+            dialog.error(self.app.main_window, exc_value.message)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

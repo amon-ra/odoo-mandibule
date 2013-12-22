@@ -95,7 +95,7 @@ class GroupController(QObject):
         db_data = db.read()
         if id_ in db_data:
             if db_data[id_].get('servers'):
-                raise ValueError(
+                raise Warning(
                     _(u"Unable to delete a group while it contains servers."))
             del db_data[id_]
             db.write(db_data)
@@ -105,7 +105,7 @@ class GroupController(QObject):
         """Display a confirmation dialog to the user before delete."""
         data = self.read(id_)
         response = confirm(
-            self.app.main_window, _(u"Confirmation"),
+            self.app.main_window,
             _(u"Are you sure you want to delete the group "
               u"<strong>%s</strong>?") % (data['name']))
         if response:

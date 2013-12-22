@@ -18,17 +18,35 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
+"""Contains functions to pop-up useful dialogs to the user."""
 from PySide import QtGui
 
+from mandibule.utils.i18n import _
 
-def confirm(parent, title, message):
+
+def confirm(parent, message, title=None):
     """Display a confirmation dialog (Yes/No response) and returns the
     boolean response.
     """
+    if title is None:
+        title = _(u"Confirmation")
     response = QtGui.QMessageBox.question(
         parent, title, message,
         QtGui.QMessageBox.Yes | QtGui.QMessageBox.No, QtGui.QMessageBox.No)
     return response == QtGui.QMessageBox.Yes
+
+
+def warning(parent, message, title=None):
+    """Display a warning dialog."""
+    if title is None:
+        title = _(u"Warning")
+    return QtGui.QMessageBox.warning(parent, title, message)
+
+
+def error(parent, message, title=None):
+    """Display an error dialog."""
+    if title is None:
+        title = _(u"Error")
+    return QtGui.QMessageBox.critical(parent, title, message)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

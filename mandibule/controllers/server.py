@@ -172,7 +172,7 @@ class ServerController(QObject):
         """Display a confirmation dialog to the user before delete."""
         data = self.read(id_)
         response = confirm(
-            self.app.main_window, _(u"Confirmation"),
+            self.app.main_window,
             _(u"Are you sure you want to delete the server "
               u"<strong>%s</strong>?") % (data['name']))
         if response:
