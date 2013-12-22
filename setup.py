@@ -5,7 +5,7 @@ import glob
 from distutils.core import setup
 
 name = 'Mandibule'
-version = '0.1.0'
+version = '0.2.0'
 description = "Mandibule is a graphical tool to explore OpenERP servers."
 keywords = "openerp client developper analyse data metadata model oerplib"
 author = u"Sebastien Alix"

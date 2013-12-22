@@ -21,7 +21,7 @@
 __author__ = 'Sebastien Alix'
 __email__ = 'seb@usr-src.org'
 __licence__ = 'GPL v3'
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 
 from PySide import QtGui, QtCore
 
@@ -60,7 +60,7 @@ class MainApp(QtGui.QApplication):
         self.toolbar = ToolBar(self)
 
         # Dockable main tree
-        dock = QtGui.QDockWidget('OpenERP servers')
+        dock = QtGui.QDockWidget()
         dock.setMinimumSize(250, 250)
         dock.setWidget(self.main_tree)
         dock.setFeatures(dock.features() & ~dock.DockWidgetClosable)
