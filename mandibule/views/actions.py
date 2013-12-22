@@ -177,7 +177,7 @@ class Actions(QtCore.QObject):
     def remove_server(self):
         """Remove the current server."""
         id_ = self.get_server_id()
-        self.app.server_ctl.delete(id_)
+        self.app.server_ctl.delete_confirm(id_)
 
     def edit_server(self):
         """Display the form to edit a server."""
@@ -194,7 +194,7 @@ class Actions(QtCore.QObject):
     def remove_relation(self):
         """Remove the current relational graph."""
         id_ = self.get_relation_id()
-        self.app.relation_ctl.delete(id_)
+        self.app.relation_ctl.delete_confirm(id_)
 
     def edit_relation(self):
         """Display the form to edit a relational graph."""
@@ -216,7 +216,7 @@ class Actions(QtCore.QObject):
     def remove_dependency(self):
         """Remove the current relational graph."""
         id_ = self.get_dependency_id()
-        self.app.dependency_ctl.delete(id_)
+        self.app.dependency_ctl.delete_confirm(id_)
 
     def edit_dependency(self):
         """Display the form to edit a dependencies graph."""

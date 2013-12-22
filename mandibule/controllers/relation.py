@@ -28,6 +28,7 @@ import oerplib
 from mandibule import db
 from mandibule.utils.i18n import _
 from mandibule.views.widgets.form import FormDialog, TextField, IntField
+from mandibule.views.widgets.dialog import confirm
 from mandibule.controllers import GraphWorker
 
 DEFAULT = {
@@ -147,6 +148,16 @@ class RelationController(QObject):
                     db.write(db_data)
                     self.deleted.emit(id_)
                     return
+
+    def delete_confirm(self, id_):
+        """Display a confirmation dialog to the user before delete."""
+        data = self.read(id_)
+        response = confirm(
+            self.app.main_window, _(u"Confirmation"),
+            _(u"Are you sure you want to delete the function "
+              u"<strong>%s</strong>?") % (data['name']))
+        if response:
+            self.delete(id_)
 
     def execute(self, id_):
         """Generate the relation graph."""

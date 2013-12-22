@@ -27,6 +27,7 @@ from PySide.QtCore import QObject, Signal
 from mandibule import db
 from mandibule.utils.i18n import _
 from mandibule.views.widgets.form import FormDialog, TextField, IntField, SelectField
+from mandibule.views.widgets.dialog import confirm
 
 DEFAULT = {
     'name': '',
@@ -166,5 +167,15 @@ class ServerController(QObject):
                 db.write(db_data)
                 self.deleted.emit(id_)
                 break
+
+    def delete_confirm(self, id_):
+        """Display a confirmation dialog to the user before delete."""
+        data = self.read(id_)
+        response = confirm(
+            self.app.main_window, _(u"Confirmation"),
+            _(u"Are you sure you want to delete the server "
+              u"<strong>%s</strong>?") % (data['name']))
+        if response:
+            self.delete(id_)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
