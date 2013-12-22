@@ -65,6 +65,14 @@ class GraphContent(Content):
             lambda: self.ctl.display_form(self.id_))
         self.toolbar.addAction(self._actions['edit'])
         self.toolbar.addSeparator()
+        # Execute
+        self._actions['execute'] = QtGui.QAction(
+            self.app.icons.icon_exe, _(u"Execute"), self)
+        self._actions['execute'].setShortcut('Ctrl+X')
+        self._actions['execute'].triggered.connect(
+            lambda: self.ctl.execute(self.id_))
+        self.toolbar.addAction(self._actions['execute'])
+        self.toolbar.addSeparator()
         # Zoom in
         self._actions['zoom_in'] = QtGui.QAction(
             self.app.icons.icon_zoom_in, _(u"Zoom in"), self)
