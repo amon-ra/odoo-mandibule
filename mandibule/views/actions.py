@@ -171,8 +171,7 @@ class Actions(QtCore.QObject):
 
     def new_server(self):
         """Display the form to add a server."""
-        group_id = self.get_group_id()
-        self.app.server_ctl.display_form(None, group_id)
+        self.app.server_ctl.display_form()
 
     def remove_server(self):
         """Remove the current server."""
@@ -188,8 +187,7 @@ class Actions(QtCore.QObject):
 
     def new_relation(self):
         """Display the form to add a relational graph."""
-        server_id = self.get_server_id()
-        self.app.relation_ctl.display_form(None, server_id)
+        self.app.relation_ctl.display_form()
 
     def remove_relation(self):
         """Remove the current relational graph."""
@@ -210,8 +208,7 @@ class Actions(QtCore.QObject):
 
     def new_dependency(self):
         """Display the form to add a dependencies graph."""
-        server_id = self.get_server_id()
-        self.app.dependency_ctl.display_form(None, server_id)
+        self.app.dependency_ctl.display_form()
 
     def remove_dependency(self):
         """Remove the current relational graph."""

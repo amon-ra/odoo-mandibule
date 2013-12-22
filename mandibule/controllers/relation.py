@@ -21,14 +21,15 @@
 import uuid
 import copy
 
-from PySide.QtCore import QObject, QThreadPool, Signal
+from PySide.QtCore import QThreadPool, Signal
 
 import oerplib
 
 from mandibule import db
 from mandibule.utils.i18n import _
-from mandibule.views.widgets.form import FormDialog, TextField, IntField
+from mandibule.controllers import Controller
 from mandibule.views.widgets.dialog import confirm
+from mandibule.views.forms import RelationForm
 from mandibule.controllers import GraphWorker
 
 DEFAULT = {
@@ -42,7 +43,7 @@ DEFAULT = {
 }
 
 
-class RelationController(QObject):
+class RelationController(Controller):
     """Relational graph function controller."""
     created = Signal(str)
     updated = Signal(str)
@@ -51,48 +52,18 @@ class RelationController(QObject):
     execute_error = Signal(str)
     finished = Signal(str, tuple)
 
-    def __init__(self, app):
-        QObject.__init__(self)
-        self.app = app
-
-    def display_form(self, id_=None, server_id=None):
-        """Display the form to create/update a relation graph."""
-        db_data = id_ and self.read(id_) or copy.deepcopy(DEFAULT)
-        fields = [
-            ('name', TextField(_("Name"), db_data.get('name', ''))),
-            ('models', TextField(
-                u"%s\n(e.g. 'res.partner sale.order')" % (
-                    _(u"Starting models")),
-                db_data.get('models', ''))),
-            ('maxdepth', IntField(
-                _(u"Max depth"), db_data.get('maxdepth', 1), range_=(1, 10))),
-            ('whitelist', TextField(
-                u"%s\n(e.g. 'sale.* product.product')" % (_(u"Whitelist")),
-                db_data.get('whitelist', ''), multi=True)),
-            ('blacklist', TextField(
-                u"%s\n(e.g. 'res.users')" % (_(u"Blacklist")),
-                db_data.get('blacklist', ''), multi=True)),
-            ('attrs_whitelist', TextField(
-                u"%s\n(models to display with attributes)" % (
-                    _(u"Attrs whitelist")),
-                db_data.get('attrs_whitelist', ''),
-                multi=True)),
-            ('attrs_blacklist', TextField(
-                _(u"Attrs black list"),
-                db_data.get('attrs_blacklist', ''),
-                multi=True)),
-        ]
-        new_data, ok = FormDialog(fields).exec_()
-        if ok:
-            new_data['server_id'] = server_id or db_data['server_id']
-            if id_:
-                self.update(id_, new_data)
-            else:
-                self.create(new_data)
-        return ok
+    def display_form(self, id_=None, data=None):
+        """Display a form to create/edit an existing record. If `id_` is None,
+        no data will be saved (live-edit on the view). Default values of the
+        form can be set through the `data` dictionary.
+        """
+        data = data or (id_ and self.read(id_)) or copy.deepcopy(DEFAULT)
+        data['server_id'] = data.get('server_id') \
+            or self.app.actions.get_server_id()
+        RelationForm(self.app, id_, data).exec_()
 
     def create(self, data):
-        """Create a new relational graph and return its ID."""
+        """Create a new record from `data` and return its ID."""
         id_ = uuid.uuid4().hex
         db_data = db.read()
         sid = data['server_id']
@@ -105,7 +76,7 @@ class RelationController(QObject):
         return id_
 
     def read(self, id_):
-        """Return data related to a relational graph."""
+        """Return data related to the record identified by `id_`."""
         db_data = db.read()
         for gdata in db_data.itervalues():
             for sid, sdata in gdata['servers'].iteritems():
@@ -116,7 +87,7 @@ class RelationController(QObject):
         return None
 
     def read_all(self):
-        """Return all relational graph data."""
+        """Return all records data."""
         db_data = db.read()
         data = {}
         for gdata in db_data.itervalues():
@@ -127,7 +98,7 @@ class RelationController(QObject):
         return data
 
     def update(self, id_, data):
-        """Update a relationl graph."""
+        """Update a record identified by `id_` with `data`."""
         del data['server_id']
         db_data = db.read()
         for gdata in db_data.itervalues():
@@ -139,7 +110,7 @@ class RelationController(QObject):
                     return
 
     def delete(self, id_):
-        """Delete a relational graph."""
+        """Delete a record identified by `id_`."""
         db_data = db.read()
         for gdata in db_data.itervalues():
             for sdata in gdata['servers'].itervalues():

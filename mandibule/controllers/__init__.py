@@ -50,6 +50,45 @@ class GraphWorker(QObject, QRunnable):
             self.result_ready.emit(self.id, (result,))
 
 
+class Controller(QObject):
+    """Base controller which defines common methods."""
+
+    def __init__(self, app):
+        QObject.__init__(self)
+        self.app = app
+
+    def display_form(self, id_=None, data=None):
+        """Display a form to create/edit an existing record. If `id_` is None,
+        no data will be saved (live-edit on the view). Default values of the
+        form can be set through the `data` dictionary.
+        """
+        raise NotImplementedError
+
+    def create(self, data):
+        """Create a new record from `data` and return its ID."""
+        raise NotImplementedError
+
+    def read(self, id_):
+        """Return data related to the record identified by `id_`."""
+        raise NotImplementedError
+
+    def read_all(self):
+        """Return all records data."""
+        raise NotImplementedError
+
+    def update(self, id_, data):
+        """Update a record identified by `id_` with `data`."""
+        raise NotImplementedError
+
+    def delete(self, id_):
+        """Delete a record identified by `id_`."""
+        raise NotImplementedError
+
+    def delete_confirm(self, id_):
+        """Display a confirmation dialog to the user before delete."""
+        raise NotImplementedError
+
+
 from mandibule.controllers.group import GroupController
 from mandibule.controllers.server import ServerController
 from mandibule.controllers.relation import RelationController

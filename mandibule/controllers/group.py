@@ -21,44 +21,35 @@
 import uuid
 import copy
 
-from PySide.QtCore import QObject, Signal
+from PySide.QtCore import Signal
 
 from mandibule import db
 from mandibule.utils.i18n import _
-from mandibule.views.widgets.form import FormDialog, TextField
+from mandibule.controllers import Controller
 from mandibule.views.widgets.dialog import confirm
+from mandibule.views.forms import GroupForm
 
 DEFAULT = {
     'name': '',
 }
 
 
-class GroupController(QObject):
+class GroupController(Controller):
     """Group controller."""
     created = Signal(str)
     updated = Signal(str)
     deleted = Signal(str)
 
-    def __init__(self, app):
-        QObject.__init__(self)
-        self.app = app
-
-    def display_form(self, id_=None):
-        """Display the form to create/update a group."""
-        db_data = id_ and self.read(id_) or copy.deepcopy(DEFAULT)
-        fields = [
-            ('name', TextField(_("Name"), db_data.get('name', ''))),
-        ]
-        new_data, ok = FormDialog(fields).exec_()
-        if ok:
-            if id_:
-                self.update(id_, new_data)
-            else:
-                self.create(new_data)
-        return ok
+    def display_form(self, id_=None, data=None):
+        """Display a form to edit an existing record. If `id_` is None, no
+        data will be saved (live-edit on the view). Default values of the form
+        can be set through the `data` dictionary.
+        """
+        data = data or (id_ and self.read(id_)) or copy.deepcopy(DEFAULT)
+        GroupForm(self.app, id_, data).exec_()
 
     def create(self, data):
-        """Create a new group and return its ID."""
+        """Create a new record from `data` and return its ID."""
         id_ = uuid.uuid4().hex
         data['servers'] = {}
         db_data = db.read()
@@ -68,7 +59,7 @@ class GroupController(QObject):
         return id_
 
     def read(self, id_):
-        """Return data related to a group."""
+        """Return data related to the record identified by `id_`."""
         db_data = db.read()
         if id_ in db_data:
             # We remove servers from data returned
@@ -77,13 +68,14 @@ class GroupController(QObject):
         return None
 
     def read_all(self):
+        """Return all records data."""
         db_data = db.read()
         #for id_ in db_data:
         #    del db_data[id_]['servers']
         return db_data
 
     def update(self, id_, data):
-        """Update a group."""
+        """Update a record identified by `id_` with `data`."""
         db_data = db.read()
         if id_ in db_data:
             db_data[id_].update(data)
@@ -91,7 +83,7 @@ class GroupController(QObject):
             self.updated.emit(id_)
 
     def delete(self, id_):
-        """Delete a group."""
+        """Delete a record identified by `id_`."""
         db_data = db.read()
         if id_ in db_data:
             if db_data[id_].get('servers'):

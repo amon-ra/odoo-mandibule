@@ -22,12 +22,13 @@ import uuid
 import copy
 
 import oerplib
-from PySide.QtCore import QObject, Signal
+from PySide.QtCore import Signal
 
 from mandibule import db
 from mandibule.utils.i18n import _
-from mandibule.views.widgets.form import FormDialog, TextField, IntField, SelectField
+from mandibule.controllers import Controller
 from mandibule.views.widgets.dialog import confirm
+from mandibule.views.forms import ServerForm
 
 DEFAULT = {
     'name': '',
@@ -45,62 +46,22 @@ DEFAULT = {
 }
 
 
-class ServerController(QObject):
+class ServerController(Controller):
     """Server controller."""
     created = Signal(str)
     updated = Signal(str)
     deleted = Signal(str)
 
-    def __init__(self, app):
-        QObject.__init__(self)
-        self.app = app
-
-    def _clean_form_data(self, data):
-        data['group_id'] = data.pop('group')[1]
-        data['oerplib'] = DEFAULT['oerplib'].copy()
-        data['oerplib'].update({
-            'server': data.pop('server'),
-            'port': data.pop('port'),
-            'database': data.pop('database'),
-            'user': data.pop('user'),
-            'passwd': data.pop('passwd')
-            })
-        return data
-
-    def display_form(self, id_=None, group_id=None):
-        """Display the form to create/update a server."""
-        db_data = id_ and self.read(id_) or copy.deepcopy(DEFAULT)
-        groups = self.app.group_ctl.read_all()
-        fields = [
-            ('name', TextField(_("Name"), db_data.get('name', ''))),
-            ('group', SelectField(
-                _("Group"),
-                [(group['name'], gid) for gid, group in groups.iteritems()],
-                group_id)),
-            ('server',
-                TextField(_("Host"), db_data['oerplib'].get('server', ''))),
-            ('port', IntField(
-                _("Port"),
-                db_data['oerplib'].get('port', 8069),
-                range_=(1, 65535))),
-            ('database', TextField(
-                _("Database"), db_data['oerplib'].get('database', ''))),
-            ('user', TextField(
-                _("User"), db_data['oerplib'].get('user', ''))),
-            ('passwd', TextField(
-                _("Password"), db_data['oerplib'].get('passwd', ''))),
-        ]
-        new_data, ok = FormDialog(fields).exec_()
-        if ok:
-            new_data = self._clean_form_data(new_data)
-            if id_:
-                self.update(id_, new_data)
-            else:
-                self.create(new_data)
-        return ok
+    def display_form(self, id_=None, data=None):
+        """Display a form to create/edit an existing record. If `id_` is None,
+        no data will be saved (live-edit on the view). Default values of the
+        form can be set through the `data` dictionary.
+        """
+        data = data or (id_ and self.read(id_)) or copy.deepcopy(DEFAULT)
+        ServerForm(self.app, id_, data).exec_()
 
     def create(self, data):
-        """Create a new server and return its ID."""
+        """Create a new record from `data` and return its ID."""
         id_ = uuid.uuid4().hex
         # OERPLib credentials
         oerplib.tools.session.save(
@@ -115,7 +76,7 @@ class ServerController(QObject):
         return id_
 
     def read(self, id_):
-        """Return data related to a server."""
+        """Return data related to the record identified by `id_`."""
         db_data = db.read()
         oe_data = oerplib.tools.session.get(id_, rc_file=db.OERPLIB_FILE)
         for gid, gdata in db_data.iteritems():
@@ -127,7 +88,7 @@ class ServerController(QObject):
         return None
 
     def read_all(self):
-        """Return all servers data."""
+        """Return all records data."""
         db_data = db.read()
         data = {}
         for gid, gdata in db_data.iteritems():
@@ -140,7 +101,7 @@ class ServerController(QObject):
         return data
 
     def update(self, id_, data):
-        """Update a server."""
+        """Update a record identified by `id_` with `data`."""
         # OERPLib credentials
         oerplib.tools.session.save(
             id_, data['oerplib'], rc_file=db.OERPLIB_FILE)
@@ -156,7 +117,7 @@ class ServerController(QObject):
                 break
 
     def delete(self, id_):
-        """Delete a server."""
+        """Delete a record identified by `id_`."""
         # OERPLib credentials
         oerplib.tools.session.remove(id_, rc_file=db.OERPLIB_FILE)
         # Application specific data
