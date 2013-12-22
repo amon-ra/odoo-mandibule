@@ -17,6 +17,7 @@ The following packages are required:
     - OERPLib (>= 0.8),
     - pydot (>= 1.0),
     - PySide QtGui (>= 1.1.0),
+    - PyXDG (>= 0.19),
     - Oxygen theme icon.
 
 To install Mandibule from the tarball::
@@ -39,7 +40,8 @@ To install Mandibule from the PPA, follow the instructions:
     http://ppa.usr-src.org/mandibule/
 
 The dependencies will be installed at the same time (i.e. ``python-oerplib``,
-``python-pydot``, ``python-pyside.qtgui`` and ``oxygen-icon-theme``).
+``python-pydot``, ``python-pyside.qtgui``, ``python-xdg`` and
+``oxygen-icon-theme``).
 
 Supported Python versions
 -------------------------
