@@ -19,12 +19,17 @@
 #
 ##############################################################################
 import uuid
+import copy
 
 from PySide.QtCore import QObject, Signal
 
 from mandibule import db
 from mandibule.utils.i18n import _
 from mandibule.views.widgets.form import FormDialog, TextField
+
+DEFAULT = {
+    'name': '',
+}
 
 
 class GroupController(QObject):
@@ -39,9 +44,9 @@ class GroupController(QObject):
 
     def display_form(self, id_=None):
         """Display the form to create/update a group."""
-        data = self.read(id_) or {}
+        db_data = id_ and self.read(id_) or copy.deepcopy(DEFAULT)
         fields = [
-            ('name', TextField(_("Name"), data.get('name', ''))),
+            ('name', TextField(_("Name"), db_data.get('name', ''))),
         ]
         new_data, ok = FormDialog(fields).exec_()
         if ok:
@@ -86,7 +91,6 @@ class GroupController(QObject):
 
     def delete(self, id_):
         """Delete a group."""
-        # TODO confirmation via popup
         db_data = db.read()
         if id_ in db_data:
             if db_data[id_].get('servers'):

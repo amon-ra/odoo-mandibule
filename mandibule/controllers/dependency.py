@@ -31,10 +31,10 @@ from mandibule.views.widgets.form import FormDialog, TextField, BoolField
 from mandibule.controllers import GraphWorker
 
 DEFAULT = {
-    'name': '', 
-    'modules': '', 
-    'models': '', 
-    'models_blacklist': '', 
+    'name': '',
+    'modules': '',
+    'models': '',
+    'models_blacklist': '',
     'restrict': False,
 }
 

@@ -31,12 +31,12 @@ from mandibule.views.widgets.form import FormDialog, TextField, IntField
 from mandibule.controllers import GraphWorker
 
 DEFAULT = {
-    'name': '', 
+    'name': '',
     'attrs_blacklist': '',
-    'models': '', 
-    'whitelist': '*', 
-    'blacklist': '', 
-    'attrs_whitelist': '*', 
+    'models': '',
+    'whitelist': '*',
+    'blacklist': '',
+    'attrs_whitelist': '*',
     'maxdepth': 1,
 }
 

@@ -31,7 +31,8 @@ def _get_trans():
                     localedir = dir_,
                     languages = lang).ugettext
         except Exception, e:
-            print dir_, lang
+            #print dir_, lang
+            pass
 
     return lambda x: x
 
