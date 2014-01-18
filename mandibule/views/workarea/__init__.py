@@ -18,11 +18,14 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+import uuid
 
 from PySide import QtGui, QtCore
 
+from mandibule.utils.i18n import _
 from mandibule.views.workarea.dependency import DependencyContent
 from mandibule.views.workarea.relation import RelationContent
+from mandibule.views.widgets import dialog
 
 
 class WorkArea(QtGui.QTabWidget):
@@ -31,88 +34,151 @@ class WorkArea(QtGui.QTabWidget):
     def __init__(self, app):
         QtGui.QTabWidget.__init__(self)
         self.app = app
-        self._tabs = {}
+        self._tabs = {}         # Identify persistent functions
+        self._tabs_tmp = {}     # Identify temporary functions
         self.setTabsClosable(True)
         self.setMovable(True)
-        self.app.relation_ctl.updated.connect(self.relation_updated)
-        self.app.relation_ctl.executed.connect(self.relation_executed)
-        self.app.relation_ctl.execute_error.connect(self.execute_error)
-        self.app.relation_ctl.finished.connect(self.relation_finished)
-        self.app.dependency_ctl.updated.connect(self.dependency_updated)
-        self.app.dependency_ctl.executed.connect(self.dependency_executed)
-        self.app.dependency_ctl.execute_error.connect(self.execute_error)
-        self.app.dependency_ctl.finished.connect(self.dependency_finished)
+        for ctl in ['relation_ctl', 'dependency_ctl']:
+            getattr(self.app, ctl).created.connect(self.function_saved)
+            getattr(self.app, ctl).deleted.connect(self.function_deleted)
+            getattr(self.app, ctl).updated.connect(self.function_updated)
+            getattr(self.app, ctl).executed.connect(self.function_executed)
+            getattr(self.app, ctl).finished.connect(self.function_finished)
         self.tabCloseRequested.connect(self.close_tab)
 
-    def relation_updated(self, id_):
-        """Update title of the corresponding tab (if any)."""
-        if id_ in self._tabs:
-            data = self.app.relation_ctl.read(id_)
-            sdata = self.app.server_ctl.read(data['server_id'])
-            title = "%s - %s" % (sdata['name'], data['name'])
-            index = self.indexOf(self._tabs[id_])
-            self.setTabText(index, title)
+    def new_function(self, server_id, context):
+        """Add a new relation tab which can be saved later."""
+        sdata = self.app.server_ctl.read(server_id)
+        title = u"%s - %s" % (sdata['name'], _(u"New"))
+        id_tmp = uuid.uuid4().hex
+        if context.get('model') == 'relation':
+            self._tabs_tmp[id_tmp] = RelationContent(
+                self.app, server_id, id_tmp, new=True)
+            self.addTab(
+                self._tabs_tmp[id_tmp], self.app.icons.icon_relation, title)
+        if context.get('model') == 'dependency':
+            self._tabs_tmp[id_tmp] = DependencyContent(
+                self.app, server_id, id_tmp, new=True)
+            self.addTab(
+                self._tabs_tmp[id_tmp], self.app.icons.icon_dependencies, title)
+        self._tabs_tmp[id_tmp].data_changed.connect(self.function_unsaved)
+        self._tabs_tmp[id_tmp].data_restored.connect(self.function_restored)
+        self._tabs_tmp[id_tmp].show_panel()
+        self.setCurrentWidget(self._tabs_tmp[id_tmp])
 
-    def relation_executed(self, id_):
-        """Add/update a content when a relation graph is executed."""
-        data = self.app.relation_ctl.read(id_)
+    def edit_function(self, id_, context):
+        """Open an existing function to edit it."""
+        if context.get('model') == 'relation':
+            ctl = self.app.relation_ctl
+            data = ctl.read(id_)
+            ContentClass = RelationContent
+            icon = self.app.icons.icon_relation
+        if context.get('model') == 'dependency':
+            ctl = self.app.dependency_ctl
+            data = ctl.read(id_)
+            ContentClass = DependencyContent
+            icon = self.app.icons.icon_dependencies
         sdata = self.app.server_ctl.read(data['server_id'])
         title = "%s - %s" % (sdata['name'], data['name'])
         if id_ not in self._tabs:
-            self._tabs[id_] = RelationContent(self.app, id_)
-            self.addTab(self._tabs[id_], self.app.icons.icon_wait, title)
-        else:
-            index = self.indexOf(self._tabs[id_])
-            self.setTabIcon(index, self.app.icons.icon_wait)
+            content = ContentClass(self.app, data['server_id'], id_)
+            content.data_changed.connect(self.function_unsaved)
+            content.data_restored.connect(self.function_restored)
+            self._tabs[id_] = content
+            self.addTab(self._tabs[id_], icon, title)
+        self._tabs[id_].show_panel()
         self.setCurrentWidget(self._tabs[id_])
 
-    def relation_finished(self, id_, data):
-        """Update the tab icon when a relation graph is ready."""
-        if id_ in self._tabs:
-            index = self.indexOf(self._tabs[id_])
-            self.setTabIcon(index, self.app.icons.icon_relation)
-
-    def dependency_updated(self, id_):
-        """Update title of the corresponding tab (if any)."""
-        if id_ in self._tabs:
-            data = self.app.dependency_ctl.read(id_)
+    def function_saved(self, id_, data, context):
+        """Update title of the corresponding tab when a function is saved."""
+        from_id_tmp = context.get('from_id_tmp')
+        if from_id_tmp:
+            content = self._tabs_tmp.pop(from_id_tmp)
+            self._tabs[id_] = content
             sdata = self.app.server_ctl.read(data['server_id'])
             title = "%s - %s" % (sdata['name'], data['name'])
-            index = self.indexOf(self._tabs[id_])
+            index = self.indexOf(content)
             self.setTabText(index, title)
 
-    def dependency_executed(self, id_):
-        """Add/update a content when a module dependencies graph is executed."""
-        data = self.app.dependency_ctl.read(id_)
-        sdata = self.app.server_ctl.read(data['server_id'])
-        title = "%s - %s" % (sdata['name'], data['name'])
-        if id_ not in self._tabs:
-            self._tabs[id_] = DependencyContent(self.app, id_)
-            self.addTab(self._tabs[id_], self.app.icons.icon_wait, title)
-        else:
-            index = self.indexOf(self._tabs[id_])
-            self.setTabIcon(index, self.app.icons.icon_wait)
-        self.setCurrentWidget(self._tabs[id_])
+    def function_unsaved(self, id_, data):
+        """Update title of the corresponding tab when function data
+        has been changed.
+        """
+        content = self._tabs.get(id_)
+        if content and content.unsaved:
+            sdata = self.app.server_ctl.read(data['server_id'])
+            title = "%s - %s*" % (sdata['name'], data['name'])
+            index = self.indexOf(content)
+            self.setTabText(index, title)
 
-    def dependency_finished(self, id_, data):
-        """Update the tab icon when a module dependencies graph is ready."""
+    def function_restored(self, id_, data):
+        """Update title of the corresponding tab when function data
+        has been restored.
+        """
+        content = self._tabs.get(id_)
+        if content and not content.unsaved:
+            sdata = self.app.server_ctl.read(data['server_id'])
+            title = "%s - %s" % (sdata['name'], data['name'])
+            index = self.indexOf(content)
+            self.setTabText(index, title)
+
+    def function_deleted(self, id_, context):
+        """Update title of the corresponding tab when a function is deleted."""
         if id_ in self._tabs:
-            index = self.indexOf(self._tabs[id_])
-            self.setTabIcon(index, self.app.icons.icon_dependencies)
+            content = self._tabs.pop(id_)
+            self._tabs_tmp[id_] = content
+            sdata = self.app.server_ctl.read(content.server_id)
+            title = "%s - %s" % (sdata['name'], _(u"New"))
+            index = self.indexOf(content)
+            self.setTabText(index, title)
 
-    def execute_error(self, id_):
-        """Close the tab if an error occurred during the execution."""
-        index = self.indexOf(self._tabs[id_])
-        self.close_tab(index)
+    def function_updated(self, id_, data, context):
+        """Update title of the corresponding tab when a function is updated."""
+        content = self._tabs.get(id_)
+        if content:
+            sdata = self.app.server_ctl.read(data['server_id'])
+            title = "%s - %s" % (sdata['name'], data['name'])
+            index = self.indexOf(content)
+            self.setTabText(index, title)
+
+    def function_executed(self, id_, data, context):
+        """Update title of the corresponding tab when a function is executed."""
+        content = self._tabs.get(id_) or self._tabs_tmp.get(id_)
+        if content:
+            index = self.indexOf(content)
+            self.setTabIcon(index, self.app.icons.icon_wait)
+            self.setCurrentWidget(content)
+
+    def function_finished(self, id_, data, context):
+        """Update the tab icon when a function is ready."""
+        if context.get('model') == 'relation':
+            icon = self.app.icons.icon_relation
+        if context.get('model') == 'dependency':
+            icon = self.app.icons.icon_dependencies
+        content = self._tabs.get(id_) or self._tabs_tmp.get(id_)
+        if content:
+            index = self.indexOf(content)
+            self.setTabIcon(index, icon)
 
     def close_tab(self, index):
         """Close a tab at the given `index`."""
         widget = self.widget(index)
-        self.removeTab(index)
-        widget.deleteLater()
-        for id_, tab_content in self._tabs.iteritems():
-            if tab_content == widget:
-                del self._tabs[id_]
-                break
+        close = True
+        if widget.unsaved:
+            close = dialog.confirm(
+                self,
+                _(u"This function has been modified. Close anyway?"),
+                _(u"Modified function"))
+        if close:
+            self.removeTab(index)
+            widget.deleteLater()
+            for id_, tab_content in self._tabs.iteritems():
+                if tab_content == widget:
+                    del self._tabs[id_]
+                    break
+            for id_, tab_content in self._tabs_tmp.iteritems():
+                if tab_content == widget:
+                    del self._tabs_tmp[id_]
+                    break
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

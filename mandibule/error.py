@@ -42,7 +42,8 @@ class ErrorHandler(object):
         """Exception hook bound to `sys.excepthook` which displayed a
         dialog to the user.
         """
-        #traceback_str = self.get_traceback_str(exc_traceback)
+        traceback_str = self.get_traceback_str(exc_traceback)
+        print traceback_str
         #self.setDetailedText(traceback_str)
         if issubclass(exc_type, Warning):
             dialog.warning(self.app.main_window, exc_value.message)

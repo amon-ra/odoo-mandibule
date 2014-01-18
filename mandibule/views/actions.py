@@ -46,7 +46,7 @@ class Actions(QtCore.QObject):
         # Server
         self.action_new_server = QtGui.QAction(
             self.app.icons.icon_server, _("New server"), self.app)
-        self.action_new_server.setShortcut('Ctrl+S')
+        self.action_new_server.setShortcut('Ctrl+H')
         self.action_new_server.triggered.connect(self.new_server)
         self.action_remove_server = QtGui.QAction(
             self.app.icons.icon_remove, _("Remove"), self.app)
@@ -202,6 +202,7 @@ class Actions(QtCore.QObject):
     def exec_relation(self):
         """Generate the relational graph."""
         id_ = self.get_relation_id()
+        self.app.relation_ctl.display_form(id_)
         self.app.relation_ctl.execute(id_)
 
     # -- Dependency --
@@ -223,6 +224,7 @@ class Actions(QtCore.QObject):
     def exec_dependency(self):
         """Generate the dependencies graph."""
         id_ = self.get_dependency_id()
+        self.app.dependency_ctl.display_form(id_)
         self.app.dependency_ctl.execute(id_)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -19,7 +19,6 @@
 #
 ##############################################################################
 import uuid
-import copy
 
 from PySide.QtCore import QThreadPool, Signal
 
@@ -29,52 +28,71 @@ from mandibule import db
 from mandibule.utils.i18n import _
 from mandibule.controllers import Controller
 from mandibule.views.widgets.dialog import confirm
-from mandibule.views.forms import DependencyForm
 from mandibule.controllers import GraphWorker
-
-DEFAULT = {
-    'name': '',
-    'modules': '',
-    'models': '',
-    'models_blacklist': '',
-    'restrict': False,
-}
 
 
 class DependencyController(Controller):
     """Module dependencies graph function controller."""
-    created = Signal(str)
-    updated = Signal(str)
-    deleted = Signal(str)
-    executed = Signal(str)
-    execute_error = Signal(str)
-    finished = Signal(str, tuple)
+    created = Signal(str, dict, dict)
+    updated = Signal(str, dict, dict)
+    deleted = Signal(str, dict)
+    executed = Signal(str, dict, dict)
+    execute_error = Signal(str, dict)
+    finished = Signal(str, tuple, dict)
 
-    def display_form(self, id_=None, data=None):
+    def default_get(self, default=None, context=None):
+        """Return default data values."""
+        if context is None:
+            context = {}
+        if default is None:
+            default = {}
+        context['model'] = 'dependency'
+        data = {
+            'name': '',
+            'modules': '',
+            'models': '',
+            'models_blacklist': '',
+            'restrict': False,
+        }
+        data.update(default)
+        return data
+
+    def display_form(self, id_=None, data=None, context=None):
         """Display a form to create/edit an existing record. If `id_` is None,
         no data will be saved (live-edit on the view). Default values of the
         form can be set through the `data` dictionary.
         """
-        data = data or (id_ and self.read(id_)) or copy.deepcopy(DEFAULT)
-        data['server_id'] = data.get('server_id') \
-            or self.app.actions.get_server_id()
-        DependencyForm(self.app, id_, data).exec_()
+        if context is None:
+            context = {}
+        context['model'] = 'dependency'
+        if id_:
+            self.app.work_area.edit_function(id_, context)
+        else:
+            self.app.work_area.new_function(
+                self.app.actions.get_server_id(), context)
 
-    def create(self, data):
+    def create(self, data, context=None):
         """Create a new record from `data` and return its ID."""
+        if context is None:
+            context = {}
+        context['model'] = 'dependency'
         id_ = uuid.uuid4().hex
         db_data = db.read()
-        sid = data['server_id']
+        data_copy = data.copy()
+        sid = data_copy.pop('server_id')
         gid = self.app.server_ctl.read(sid)['group_id']
         if 'dependencies' not in db_data[gid]['servers'][sid]:
             db_data[gid]['servers'][sid]['dependencies'] = {}
-        db_data[gid]['servers'][sid]['dependencies'][id_] = data
+        db_data[gid]['servers'][sid]['dependencies'][id_] = data_copy
         db.write(db_data)
-        self.created.emit(id_)
+        self.created.emit(id_, data, context)
         return id_
 
-    def read(self, id_):
+    def read(self, id_, context=None):
         """Return data related to the record identified by `id_`."""
+        if context is None:
+            context = {}
+        context['model'] = 'dependency'
         db_data = db.read()
         for gdata in db_data.itervalues():
             for sid, sdata in gdata['servers'].iteritems():
@@ -84,8 +102,11 @@ class DependencyController(Controller):
                     return rdata
         return None
 
-    def read_all(self):
+    def read_all(self, context=None):
         """Return all records data."""
+        if context is None:
+            context = {}
+        context['model'] = 'dependency'
         db_data = db.read()
         data = {}
         for gdata in db_data.itervalues():
@@ -95,31 +116,41 @@ class DependencyController(Controller):
                     data[rid]['server_id'] = sid
         return data
 
-    def update(self, id_, data):
+    def update(self, id_, data, context=None):
         """Update a record identified by `id_` with `data`."""
-        del data['server_id']
+        if context is None:
+            context = {}
+        context['model'] = 'dependency'
+        data_copy = data.copy()
+        data_copy.pop('server_id')
         db_data = db.read()
         for gdata in db_data.itervalues():
             for sdata in gdata['servers'].itervalues():
                 if id_ in sdata.get('dependencies', {}):
-                    sdata['dependencies'][id_].update(data)
+                    sdata['dependencies'][id_].update(data_copy)
                     db.write(db_data)
-                    self.updated.emit(id_)
+                    self.updated.emit(id_, data, context)
                     return
 
-    def delete(self, id_):
+    def delete(self, id_, context=None):
         """Delete a record identified by `id_`."""
+        if context is None:
+            context = {}
+        context['model'] = 'dependency'
         db_data = db.read()
         for gdata in db_data.itervalues():
             for sdata in gdata['servers'].itervalues():
                 if id_ in sdata.get('dependencies', {}):
                     del sdata['dependencies'][id_]
                     db.write(db_data)
-                    self.deleted.emit(id_)
+                    self.deleted.emit(id_, context)
                     return
 
-    def delete_confirm(self, id_):
+    def delete_confirm(self, id_, context=None):
         """Display a confirmation dialog to the user before delete."""
+        if context is None:
+            context = {}
+        context['model'] = 'dependency'
         data = self.read(id_)
         response = confirm(
             self.app.main_window,
@@ -128,17 +159,21 @@ class DependencyController(Controller):
         if response:
             self.delete(id_)
 
-    def execute(self, id_):
+    def execute(self, id_, data=None, context=None):
         """Generate the relation graph."""
-        self.executed.emit(id_)
-        worker = GraphWorker(id_, lambda: self._execute(id_))
+        if context is None:
+            context = {}
+        context['model'] = 'dependency'
+        if not data:
+            data = self.read(id_)
+        self.executed.emit(id_, data, context)
+        worker = GraphWorker(id_, lambda: self._execute(id_, data), context)
         worker.result_ready.connect(self._process_result)
         worker.exception_raised.connect(self._handle_exception)
         QThreadPool.globalInstance().start(worker)
 
-    def _execute(self, id_):
+    def _execute(self, id_, data):
         """Internal threaded method requesting the result."""
-        data = self.read(id_)
         oerp = oerplib.OERP.load(data['server_id'], rc_file=db.OERPLIB_FILE)
         graph = oerp.inspect.dependencies(
             [str(model) for model in data['modules'].split()],
@@ -147,13 +182,13 @@ class DependencyController(Controller):
             data['restrict'])
         return graph.make_dot().create_png()
 
-    def _process_result(self, id_, result):
+    def _process_result(self, id_, result, context):
         """Slot which emit the 'finished' signal to views."""
-        self.finished.emit(id_, result)
+        self.finished.emit(id_, result, context)
 
-    def _handle_exception(self, id_, message):
+    def _handle_exception(self, id_, message, context):
         """Slot performed if the threaded method has raised an exception."""
-        self.execute_error.emit(id_)
+        self.execute_error.emit(id_, context)
         raise RuntimeError(message)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

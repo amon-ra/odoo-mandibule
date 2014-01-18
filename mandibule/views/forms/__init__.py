@@ -19,11 +19,9 @@
 #
 ##############################################################################
 
-__all__ = ['GroupForm', 'ServerForm', 'RelationForm', 'DependencyForm']
+__all__ = ['GroupForm', 'ServerForm']
 
 from mandibule.views.forms.group import GroupForm
 from mandibule.views.forms.server import ServerForm
-from mandibule.views.forms.relation import RelationForm
-from mandibule.views.forms.dependency import DependencyForm
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -27,14 +27,15 @@ from PySide.QtCore import QObject, QRunnable, Signal
 
 class GraphWorker(QObject, QRunnable):
     """Working thread which has for result a graph/image."""
-    result_ready = Signal(str, tuple)
-    exception_raised = Signal(str, str)
+    result_ready = Signal(str, tuple, dict)
+    exception_raised = Signal(str, str, dict)
 
-    def __init__(self, id_, function):
+    def __init__(self, id_, function, context):
         QObject.__init__(self)
         QRunnable.__init__(self)
         self.id = id_
         self._function = function
+        self._context = context.copy()
 
     def run(self):
         try:
@@ -43,11 +44,11 @@ class GraphWorker(QObject, QRunnable):
             message = getattr(exc, 'message') or getattr(exc, 'strerror')
             if type(message) == str:
                 message = message.decode('utf-8')
-            self.exception_raised.emit(self.id, message)
+            self.exception_raised.emit(self.id, message, self._context)
         else:
             # HACK: Pass the image in a tuple, otherwise the 'result' is
             # copied by Qt # making it unusable
-            self.result_ready.emit(self.id, (result,))
+            self.result_ready.emit(self.id, (result,), self._context)
 
 
 class Controller(QObject):
@@ -57,34 +58,38 @@ class Controller(QObject):
         QObject.__init__(self)
         self.app = app
 
-    def display_form(self, id_=None, data=None):
+    def default_get(self, default=None, context=None):
+        """Return default data values."""
+        raise NotImplementedError
+
+    def display_form(self, id_=None, data=None, context=None):
         """Display a form to create/edit an existing record. If `id_` is None,
         no data will be saved (live-edit on the view). Default values of the
         form can be set through the `data` dictionary.
         """
         raise NotImplementedError
 
-    def create(self, data):
+    def create(self, data, context=None):
         """Create a new record from `data` and return its ID."""
         raise NotImplementedError
 
-    def read(self, id_):
+    def read(self, id_, context=None):
         """Return data related to the record identified by `id_`."""
         raise NotImplementedError
 
-    def read_all(self):
+    def read_all(self, context=None):
         """Return all records data."""
         raise NotImplementedError
 
-    def update(self, id_, data):
+    def update(self, id_, data, context=None):
         """Update a record identified by `id_` with `data`."""
         raise NotImplementedError
 
-    def delete(self, id_):
+    def delete(self, id_, context=None):
         """Delete a record identified by `id_`."""
         raise NotImplementedError
 
-    def delete_confirm(self, id_):
+    def delete_confirm(self, id_, context=None):
         """Display a confirmation dialog to the user before delete."""
         raise NotImplementedError
 
