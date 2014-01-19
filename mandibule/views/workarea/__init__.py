@@ -34,8 +34,8 @@ class WorkArea(QtGui.QTabWidget):
     def __init__(self, app):
         QtGui.QTabWidget.__init__(self)
         self.app = app
-        self._tabs = {}         # Identify persistent functions
-        self._tabs_tmp = {}     # Identify temporary functions
+        self.tabs = {}         # Identify persistent functions
+        self.tabs_tmp = {}     # Identify temporary functions
         self.setTabsClosable(True)
         self.setMovable(True)
         for ctl in ['relation_ctl', 'dependency_ctl']:
@@ -52,19 +52,19 @@ class WorkArea(QtGui.QTabWidget):
         title = u"%s - %s" % (sdata['name'], _(u"New"))
         id_tmp = uuid.uuid4().hex
         if context.get('model') == 'relation':
-            self._tabs_tmp[id_tmp] = RelationContent(
+            self.tabs_tmp[id_tmp] = RelationContent(
                 self.app, server_id, id_tmp, new=True)
             self.addTab(
-                self._tabs_tmp[id_tmp], self.app.icons.icon_relation, title)
+                self.tabs_tmp[id_tmp], self.app.icons.icon_relation, title)
         if context.get('model') == 'dependency':
-            self._tabs_tmp[id_tmp] = DependencyContent(
+            self.tabs_tmp[id_tmp] = DependencyContent(
                 self.app, server_id, id_tmp, new=True)
             self.addTab(
-                self._tabs_tmp[id_tmp], self.app.icons.icon_dependencies, title)
-        self._tabs_tmp[id_tmp].data_changed.connect(self.function_unsaved)
-        self._tabs_tmp[id_tmp].data_restored.connect(self.function_restored)
-        self._tabs_tmp[id_tmp].show_panel()
-        self.setCurrentWidget(self._tabs_tmp[id_tmp])
+                self.tabs_tmp[id_tmp], self.app.icons.icon_dependencies, title)
+        self.tabs_tmp[id_tmp].data_changed.connect(self.function_unsaved)
+        self.tabs_tmp[id_tmp].data_restored.connect(self.function_restored)
+        self.tabs_tmp[id_tmp].show_panel()
+        self.setCurrentWidget(self.tabs_tmp[id_tmp])
 
     def edit_function(self, id_, context):
         """Open an existing function to edit it."""
@@ -80,21 +80,21 @@ class WorkArea(QtGui.QTabWidget):
             icon = self.app.icons.icon_dependencies
         sdata = self.app.server_ctl.read(data['server_id'])
         title = "%s - %s" % (sdata['name'], data['name'])
-        if id_ not in self._tabs:
+        if id_ not in self.tabs:
             content = ContentClass(self.app, data['server_id'], id_)
             content.data_changed.connect(self.function_unsaved)
             content.data_restored.connect(self.function_restored)
-            self._tabs[id_] = content
-            self.addTab(self._tabs[id_], icon, title)
-        self._tabs[id_].show_panel()
-        self.setCurrentWidget(self._tabs[id_])
+            self.tabs[id_] = content
+            self.addTab(self.tabs[id_], icon, title)
+        self.tabs[id_].show_panel()
+        self.setCurrentWidget(self.tabs[id_])
 
     def function_saved(self, id_, data, context):
         """Update title of the corresponding tab when a function is saved."""
         from_id_tmp = context.get('from_id_tmp')
         if from_id_tmp:
-            content = self._tabs_tmp.pop(from_id_tmp)
-            self._tabs[id_] = content
+            content = self.tabs_tmp.pop(from_id_tmp)
+            self.tabs[id_] = content
             sdata = self.app.server_ctl.read(data['server_id'])
             title = "%s - %s" % (sdata['name'], data['name'])
             index = self.indexOf(content)
@@ -104,7 +104,7 @@ class WorkArea(QtGui.QTabWidget):
         """Update title of the corresponding tab when function data
         has been changed.
         """
-        content = self._tabs.get(id_)
+        content = self.tabs.get(id_)
         if content and content.unsaved:
             sdata = self.app.server_ctl.read(data['server_id'])
             title = "%s - %s*" % (sdata['name'], data['name'])
@@ -115,7 +115,7 @@ class WorkArea(QtGui.QTabWidget):
         """Update title of the corresponding tab when function data
         has been restored.
         """
-        content = self._tabs.get(id_)
+        content = self.tabs.get(id_)
         if content and not content.unsaved:
             sdata = self.app.server_ctl.read(data['server_id'])
             title = "%s - %s" % (sdata['name'], data['name'])
@@ -124,9 +124,9 @@ class WorkArea(QtGui.QTabWidget):
 
     def function_deleted(self, id_, context):
         """Update title of the corresponding tab when a function is deleted."""
-        if id_ in self._tabs:
-            content = self._tabs.pop(id_)
-            self._tabs_tmp[id_] = content
+        if id_ in self.tabs:
+            content = self.tabs.pop(id_)
+            self.tabs_tmp[id_] = content
             sdata = self.app.server_ctl.read(content.server_id)
             title = "%s - %s" % (sdata['name'], _(u"New"))
             index = self.indexOf(content)
@@ -134,7 +134,7 @@ class WorkArea(QtGui.QTabWidget):
 
     def function_updated(self, id_, data, context):
         """Update title of the corresponding tab when a function is updated."""
-        content = self._tabs.get(id_)
+        content = self.tabs.get(id_)
         if content:
             sdata = self.app.server_ctl.read(data['server_id'])
             title = "%s - %s" % (sdata['name'], data['name'])
@@ -143,7 +143,7 @@ class WorkArea(QtGui.QTabWidget):
 
     def function_executed(self, id_, data, context):
         """Update title of the corresponding tab when a function is executed."""
-        content = self._tabs.get(id_) or self._tabs_tmp.get(id_)
+        content = self.tabs.get(id_) or self.tabs_tmp.get(id_)
         if content:
             index = self.indexOf(content)
             self.setTabIcon(index, self.app.icons.icon_wait)
@@ -155,7 +155,7 @@ class WorkArea(QtGui.QTabWidget):
             icon = self.app.icons.icon_relation
         if context.get('model') == 'dependency':
             icon = self.app.icons.icon_dependencies
-        content = self._tabs.get(id_) or self._tabs_tmp.get(id_)
+        content = self.tabs.get(id_) or self.tabs_tmp.get(id_)
         if content:
             index = self.indexOf(content)
             self.setTabIcon(index, icon)
@@ -172,13 +172,13 @@ class WorkArea(QtGui.QTabWidget):
         if close:
             self.removeTab(index)
             widget.deleteLater()
-            for id_, tab_content in self._tabs.iteritems():
+            for id_, tab_content in self.tabs.iteritems():
                 if tab_content == widget:
-                    del self._tabs[id_]
+                    del self.tabs[id_]
                     break
-            for id_, tab_content in self._tabs_tmp.iteritems():
+            for id_, tab_content in self.tabs_tmp.iteritems():
                 if tab_content == widget:
-                    del self._tabs_tmp[id_]
+                    del self.tabs_tmp[id_]
                     break
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

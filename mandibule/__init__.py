@@ -25,10 +25,12 @@ __version__ = '0.2.0'
 
 from PySide import QtGui, QtCore
 
+from mandibule.utils.i18n import _
 from mandibule import defaults
 from mandibule.controllers import GroupController, ServerController, \
     RelationController, DependencyController
 from mandibule.views import Icons, Actions, ToolBar, MainTree, WorkArea
+from mandibule.views.widgets import dialog
 from mandibule.error import ErrorHandler
 
 
@@ -70,13 +72,44 @@ class MainApp(QtGui.QApplication):
 
         self.main_window.setCentralWidget(self.work_area)
         self.main_window.addToolBar(self.toolbar)
-        self.main_window.closeEvent = self._close
+        self.main_window.closeEvent = self._close_event
+        self.aboutToQuit.connect(self._about_to_quit)
         self.main_window.show()
 
-    @staticmethod
-    def _close(event):
-        """Called on main window closing."""
-        print "DEBUG -> closing"
-        event.accept()
+    def confirm_quit(self):
+        """Return `True` if the application can be closed.
+        If there is unsaved work, ask the user to confirm its action.
+        """
+        # Check unsaved work.
+        confirm = True
+        for content in self.work_area.tabs.itervalues():
+            if content.unsaved:
+                confirm = False
+        for content in self.work_area.tabs_tmp.itervalues():
+            if content.unsaved:
+                confirm = False
+        # Ask the user to confirm if unsaved work has been detected
+        if not confirm:
+            confirm = dialog.confirm(
+                self.main_window,
+                _(u"Unsaved work detected. Quit anyway?"),
+                _(u"Unsaved work"))
+        return confirm
+
+    def _close_event(self, event):
+        """Override the 'QMainWindow.closeEvent()' method to check
+        if the application can be closed.
+        """
+        if self.confirm_quit():
+            event.accept()
+        else:
+            event.ignore()
+
+    def _about_to_quit(self):
+        """Method connected to the 'aboutToQuit' signal to wait for running
+        threads before to quit.
+        """
+        self.main_window.hide()
+        QtCore.QThreadPool.globalInstance().waitForDone()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
