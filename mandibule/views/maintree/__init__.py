@@ -46,6 +46,7 @@ class MainTree(QtGui.QTreeWidget):
         groups = self.app.group_ctl.read_all()
         for id_ in sorted(groups, key=lambda gid: groups[gid]['name']):
             self.add_group(id_, select=False)
+        self.setSortingEnabled(True)
 
     def add_group(self, id_, select=True):
         """Add the group identified by `id_`."""
