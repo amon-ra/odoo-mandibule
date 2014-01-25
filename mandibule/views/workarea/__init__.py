@@ -45,6 +45,22 @@ class WorkArea(QtGui.QTabWidget):
             getattr(self.app, ctl).executed.connect(self.function_executed)
             getattr(self.app, ctl).finished.connect(self.function_finished)
         self.tabCloseRequested.connect(self.close_tab)
+        # Shortcuts
+        action_close = QtGui.QAction(self)
+        action_close.setShortcut(QtGui.QKeySequence.Close)
+        action_close.triggered.connect(
+            lambda: self.close_tab(self.currentIndex()))
+        self.addAction(action_close)
+        action_prev = QtGui.QAction(self)
+        action_prev.setShortcut(QtGui.QKeySequence.SelectPreviousPage)
+        action_prev.triggered.connect(
+            lambda: self.setCurrentIndex(self.currentIndex() - 1))
+        self.addAction(action_prev)
+        action_next = QtGui.QAction(self)
+        action_next.setShortcut(QtGui.QKeySequence.SelectNextPage)
+        action_next.triggered.connect(
+            lambda: self.setCurrentIndex(self.currentIndex() + 1))
+        self.addAction(action_next)
 
     def new_function(self, server_id, context):
         """Add a new relation tab which can be saved later."""

@@ -147,7 +147,7 @@ class GraphContentToolbar(QtGui.QToolBar):
         # Save
         self._actions['save'] = QtGui.QAction(
             icons.icon_save, _(u"Save function"), self)
-        self._actions['save'].setShortcut('Ctrl+S')
+        self._actions['save'].setShortcut(QtGui.QKeySequence.Save)
         self._actions['save'].setEnabled(False)
         self._actions['save'].triggered.connect(self.content.save)
         self.addAction(self._actions['save'])
@@ -176,7 +176,7 @@ class GraphContentToolbar(QtGui.QToolBar):
         # Zoom in
         self._actions['zoom_in'] = QtGui.QAction(
             icons.icon_zoom_in, _(u"Zoom in"), self)
-        self._actions['zoom_in'].setShortcut('Ctrl++')
+        self._actions['zoom_in'].setShortcut(QtGui.QKeySequence.ZoomIn)
         self._actions['zoom_in'].setEnabled(False)
         self._actions['zoom_in'].triggered.connect(
             self.content.image.zoom_in)
@@ -184,7 +184,7 @@ class GraphContentToolbar(QtGui.QToolBar):
         # Zoom out
         self._actions['zoom_out'] = QtGui.QAction(
             icons.icon_zoom_out, _(u"Zoom out"), self)
-        self._actions['zoom_out'].setShortcut('Ctrl+-')
+        self._actions['zoom_out'].setShortcut(QtGui.QKeySequence.ZoomOut)
         self._actions['zoom_out'].setEnabled(False)
         self._actions['zoom_out'].triggered.connect(
             self.content.image.zoom_out)

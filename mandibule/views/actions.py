@@ -91,7 +91,7 @@ class Actions(QtCore.QObject):
         # Quit
         self.action_quit = QtGui.QAction(
             self.app.icons.icon_quit, _("Quit"), self.app)
-        self.action_quit.setShortcut('Ctrl+Q')
+        self.action_quit.setShortcut(QtGui.QKeySequence.Quit)
         self.action_quit.triggered.connect(
             lambda: self.app.confirm_quit() and self.app.quit())
 
