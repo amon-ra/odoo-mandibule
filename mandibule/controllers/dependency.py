@@ -49,8 +49,8 @@ class DependencyController(Controller):
         context['model'] = 'dependency'
         data = {
             'name': '',
-            'modules': '',
-            'models': '',
+            'modules': 'base',
+            'models': '*',
             'models_blacklist': '',
             'restrict': False,
         }

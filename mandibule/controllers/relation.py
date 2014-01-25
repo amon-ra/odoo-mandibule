@@ -50,7 +50,7 @@ class RelationController(Controller):
         data = {
             'name': '',
             'attrs_blacklist': '',
-            'models': '',
+            'models': 'model.to.scan',
             'whitelist': '*',
             'blacklist': '',
             'attrs_whitelist': '*',

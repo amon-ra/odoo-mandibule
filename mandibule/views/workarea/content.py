@@ -18,7 +18,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from PySide import QtCore, QtGui
 
 from mandibule.utils.i18n import _
@@ -42,7 +41,7 @@ class GraphPanel(QtGui.QScrollArea):
         QtGui.QScrollArea.setLayout(self, layout)
         self.resize(
             self.layout().minimumSize().width(),
-            self.layout().minimumSize().height() * 0.8)
+            self.layout().minimumSize().height())
 
     def hide(self):
         """Emit the 'hidden' with `True` once the panel is hidden."""
