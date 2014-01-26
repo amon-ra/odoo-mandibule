@@ -18,7 +18,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from PySide import QtGui
 
 from mandibule.utils.i18n import _
@@ -30,9 +29,10 @@ class RelationItem(QtGui.QTreeWidgetItem):
         QtGui.QTreeWidgetItem.__init__(self)
         parent.addChild(self)
         self.app = app
-        self.app.relation_ctl.updated.connect(self.update_relation)
+        self.ctl = self.app.relation_ctl
+        self.ctl.updated.connect(self.update_relation)
         self.id = id_
-        data = self.app.relation_ctl.read(id_)
+        data = self.ctl.read(id_)
         self.setText(0, data['name'])
         icon = QtGui.QIcon.fromTheme('system-run')
         self.setIcon(0, icon)
@@ -40,7 +40,7 @@ class RelationItem(QtGui.QTreeWidgetItem):
     def update_relation(self, id_):
         """Update the relational graph identified by `ìd_`."""
         if self.id == id_:
-            data = self.app.relation_ctl.read(id_)
+            data = self.ctl.read(id_)
             self.setText(0, data['name'])
 
     def get_menu(self):

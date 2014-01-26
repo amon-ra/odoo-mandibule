@@ -43,6 +43,8 @@ class MainTree(QtGui.QTreeWidget):
         self.setHeaderHidden(True)
         self.itemExpanded.connect(self.slot_item_expanded)
         self.itemCollapsed.connect(self.slot_item_collapsed)
+        self.itemDoubleClicked.connect(self.slot_item_activated)
+        self.itemActivated.connect(self.slot_item_activated)
         groups = self.app.group_ctl.read_all()
         for id_ in sorted(groups, key=lambda gid: groups[gid]['name']):
             self.add_group(id_, select=False)
@@ -100,6 +102,12 @@ class MainTree(QtGui.QTreeWidget):
     def slot_item_collapsed(self, item):
         """Change the icon of some items when they are collapsed."""
         item.set_icon_expanded(False)
+
+    def slot_item_activated(self, item):
+        """Execute functions when they are double clicked or activated."""
+        if isinstance(item, RelationItem) or isinstance(item, DependencyItem):
+            item.ctl.display_form(item.id)
+            item.ctl.execute(item.id)
 
     def tree_item_changed(self, current, previous):
         """Enable/disable application actions according to the current
