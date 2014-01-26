@@ -33,6 +33,7 @@ class GroupItem(QtGui.QTreeWidgetItem):
         self.app = app
         self.app.server_ctl.created.connect(self.add_server)
         self.app.server_ctl.deleted.connect(self.remove_server)
+        self.app.server_ctl.group_changed.connect(self.change_server_group)
         self.app.group_ctl.updated.connect(self.update_group)
         self.id = id_
         data = self.app.group_ctl.read(id_)
@@ -67,6 +68,13 @@ class GroupItem(QtGui.QTreeWidgetItem):
                 server = self.takeChild(index)
                 self.set_icon_expanded()
                 return
+
+    def change_server_group(self, id_, old_gid, new_gid):
+        """Move the server in another group."""
+        if self.id == old_gid:
+            self.remove_server(id_)
+        if self.id == new_gid:
+            self.add_server(id_)
 
     def get_menu(self):
         """Return a QMenu corresponding to the current GroupItem."""

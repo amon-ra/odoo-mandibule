@@ -42,7 +42,6 @@ DEFAULT = {
         'passwd': '',
         'timeout': 120,
     },
-    'relations': {},
 }
 
 
@@ -51,6 +50,7 @@ class ServerController(Controller):
     created = Signal(str)
     updated = Signal(str)
     deleted = Signal(str)
+    group_changed = Signal(str, str, str)
 
     def display_form(self, id_=None, data=None):
         """Display a form to create/edit an existing record. If `id_` is None,
@@ -107,14 +107,25 @@ class ServerController(Controller):
             id_, data['oerplib'], rc_file=db.OERPLIB_FILE)
         del data['oerplib']
         # Application specific data
-        del data['group_id']
+        new_gid =  data.pop('group_id')
         db_data = db.read()
-        for gdata in db_data.itervalues():
+        for gid, gdata in db_data.iteritems():
             if id_ in gdata['servers']:
-                gdata['servers'][id_].update(data)
-                db.write(db_data)
-                self.updated.emit(id_)
+                # If the server group has not changed, update it in place
+                if gid == new_gid:
+                    gdata['servers'][id_].update(data)
+                # Otherwise, remove the server from its old group, and add it
+                # to the new one
+                else:
+                    gdata['servers'].pop(id_)
+                    db_data[new_gid]['servers'][id_] = data
                 break
+        # Update the data
+        db.write(db_data)
+        self.updated.emit(id_)
+        # Signal if the group has changed
+        if gid != new_gid:
+            self.group_changed.emit(id_, gid, new_gid)
 
     def delete(self, id_):
         """Delete a record identified by `id_`."""
