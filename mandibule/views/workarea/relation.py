@@ -178,7 +178,7 @@ class RelationFormLayout(GraphFormLayout):
         self.fields['maxdepth'].set_value(data.get('maxdepth', 1))
         # Prepare data for the table
         table_data = {}
-        line = {'root_ok': False, 'show_ok': True, 'attr_ok': False}
+        line = {'root_ok': False, 'show_ok': True, 'attr_ok': True}
         for model in data['models'].split():
             if model not in table_data:
                 table_data[model] = line.copy()
