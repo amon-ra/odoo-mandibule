@@ -18,7 +18,8 @@ The following packages are required:
     - pydot (>= 1.0),
     - PySide QtGui (>= 1.1.0),
     - PyXDG (>= 0.19),
-    - Oxygen theme icon.
+    - Oxygen theme icon,
+    - DistUtils Extra.
 
 To install Mandibule from the tarball::
 

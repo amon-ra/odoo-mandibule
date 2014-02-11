@@ -1,0 +1,8 @@
+From the project directory, update all PO files with the following command:
+
+    $ python setup.py build_i18n -m
+
+Edit PO files in the ./po/ directory, and save your work:
+
+    $ hg ci -m "Update translations"
+    $ hg push

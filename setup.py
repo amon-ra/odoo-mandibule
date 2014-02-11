@@ -2,7 +2,9 @@
 # -*- coding: UTF-8 -*-
 import os
 import glob
-from distutils.core import setup
+from subprocess import call
+from DistUtilsExtra.command import build_i18n
+from DistUtilsExtra.auto import setup
 
 name = 'Mandibule'
 version = '0.2.0'
@@ -13,6 +15,22 @@ author_email = 'seb@usr-src.org'
 url = 'https://bitbucket.org/mandibule/mandibule'
 download_url = 'https://bitbucket.org/mandibule/mandibule/downloads/Mandibule-%s.tar.gz' % version
 license = 'GPLv3'
+
+
+class BuildPotFiles(build_i18n.build_i18n):
+    """Custom 'build_i18n' command to automatically generate the
+    POTFILES.in file, and remove it when the work is done.
+    """
+    def run(self):
+        files = [os.path.join(dp, f)
+                 for dp, dn, filenames in os.walk('mandibule/')
+                 for f in filenames if os.path.splitext(f)[1] == '.py']
+        with open('po/POTFILES.in', 'w') as potfiles:
+            for file_ in files:
+                potfiles.write("%s\n" % file_)
+        build_i18n.build_i18n.run(self)
+        os.remove('po/POTFILES.in')
+
 
 setup(
     name=name,
@@ -57,6 +75,9 @@ setup(
         "Topic :: Multimedia :: Graphics :: Viewers",
         "Topic :: Database :: Front-Ends",
     ],
+    cmdclass={
+        'build_i18n': BuildPotFiles,
+    },
 )
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
