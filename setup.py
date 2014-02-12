@@ -29,6 +29,7 @@ setup(
         'mandibule.controllers',
         'mandibule.utils',
         'mandibule.views',
+        'mandibule.views.forms',
         'mandibule.views.maintree',
         'mandibule.views.widgets',
         'mandibule.views.workarea',
