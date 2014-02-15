@@ -1,3 +1,21 @@
+v0.2.0, 2014-MM-DD:
+    Improvements:
+    - improve the UI about functionalities (new widgets and integrated forms),
+    - able to play with functionalities without having to save them at first,
+    - items in the main tree are sorted alphabetically,
+    - execute a function by double-clicking it in the main tree,
+    - keyboard shortcuts added to manage tabs, forms and functionalities,
+    - about dialog added,
+    - gettext translations integrated,
+
+    Bugfixes:
+    - create a default server group on the first launch,
+    - able to move tabs within the workarea,
+    - make Mandibule working on Ubuntu Lucid 10.04,
+    - quit the application closes properly running threads,
+    - able to change the group of a server,
+    - select the protocol to use on the server form.
+
 v0.1.0, 2013-11-30:
     - First release (some bugs but usable),
     - organize OpenERP instances within groups,
