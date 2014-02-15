@@ -52,6 +52,14 @@ class ServerForm(QtGui.QDialog):
             _("Host"), data.get('oerplib', {}).get('server', ''))
         self.layout().addRow(
             self.fields['server'].label, self.fields['server'].widget)
+        self.fields['protocol'] = SelectField(
+            _("Protocol"),
+            [("XML-RPC", 'xmlrpc'),
+             ("XML-RPC + SSL", 'xmlrpc+ssl'),
+             ("Net-RPC", 'netrpc')],
+            data.get('oerplib', {}).get('protocol', 'xmlrpc'))
+        self.layout().addRow(
+            self.fields['protocol'].label, self.fields['protocol'].widget)
         self.fields['port'] = IntField(
             _("Port"),
             data.get('oerplib', {}).get('port', 8069),
@@ -89,6 +97,7 @@ class ServerForm(QtGui.QDialog):
             })
         self.data['oerplib'].update({
             'server': self.fields['server'].result,
+            'protocol': self.fields['protocol'].result[1],
             'port': self.fields['port'].result,
             'database': self.fields['database'].result,
             'user': self.fields['user'].result,
