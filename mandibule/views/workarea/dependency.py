@@ -120,14 +120,14 @@ class DependencyFormLayout(GraphFormLayout):
             lambda item: self.data_changed.emit())
         table_modules_model.dataChanged.connect(self.function_unsaved)
         table_modules_model.modelReset.connect(self._update_buttons)
-        self.table_modules.selectionModel().selectionChanged.connect(
-            self._update_buttons)
+        modules_selection_model = self.table_modules.selectionModel()
+        modules_selection_model.selectionChanged.connect(self._update_buttons)
         table_models_model.dataChanged.connect(
             lambda item: self.data_changed.emit())
         table_models_model.dataChanged.connect(self.function_unsaved)
         table_models_model.modelReset.connect(self._update_buttons)
-        self.table_models.selectionModel().selectionChanged.connect(
-            self._update_buttons)
+        models_selection_model = self.table_models.selectionModel()
+        models_selection_model.selectionChanged.connect(self._update_buttons)
 
     def init_fields(self, data):
         """Prepare and insert fields in the form."""

@@ -109,8 +109,8 @@ class RelationFormLayout(GraphFormLayout):
         table_model.dataChanged.connect(lambda item: self.data_changed.emit())
         table_model.dataChanged.connect(self.function_unsaved)
         table_model.modelReset.connect(self._update_buttons)
-        self.table.selectionModel().selectionChanged.connect(
-            self._update_buttons)
+        selection_model = self.table.selectionModel()
+        selection_model.selectionChanged.connect(self._update_buttons)
 
     def init_fields(self, data):
         """Prepare and insert fields in the form."""
