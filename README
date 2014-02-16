@@ -21,28 +21,26 @@ The following packages are required:
     - Oxygen theme icon,
     - DistUtils Extra.
 
+On Debian/Ubuntu, the following command will install most of them::
+
+    $ sudo apt-get install python-pydot python-pyside.qtgui python-xdg oxygen-icon-theme python-distutils-extra
+
+OERPLib can be found on PyPI::
+
+    $ sudo pip install oerplib
+
 To install Mandibule from the tarball::
 
-    # tar xzf Mandibule-X.Y.Z.tar.gz
-    # cd Mandibule-X.Y.Z
-    # python setup.py install
+    $ tar xzf Mandibule-X.Y.Z.tar.gz
+    $ cd Mandibule-X.Y.Z
+    $ sudo python setup.py install
 
 To test the version in development from the source repository::
 
-    # hg clone https://bitbucket.org/mandibule/mandibule
-    # cd mandibule
-    # ./run.py      # To run it directly, no installation
-
-Installation (Debian/Ubuntu)
-----------------------------
-
-To install Mandibule from the PPA, follow the instructions:
-
-    http://ppa.usr-src.org/mandibule/
-
-The dependencies will be installed at the same time (i.e. ``python-oerplib``,
-``python-pydot``, ``python-pyside.qtgui``, ``python-xdg`` and
-``oxygen-icon-theme``).
+    $ hg clone https://bitbucket.org/mandibule/mandibule
+    $ cd mandibule
+    $ python setup.py build_i18n    # Generate locales (optional)
+    $ ./run.py                      # To run Mandibule directly, no installation
 
 Supported Python versions
 -------------------------
