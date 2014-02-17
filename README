@@ -40,7 +40,7 @@ To test the version in development from the source repository::
     $ hg clone https://bitbucket.org/mandibule/mandibule
     $ cd mandibule
     $ python setup.py build_i18n    # Generate locales (optional)
-    $ ./run.py                      # To run Mandibule directly, no installation
+    $ ./run.sh                      # To run Mandibule directly, no installation
 
 Supported Python versions
 -------------------------
