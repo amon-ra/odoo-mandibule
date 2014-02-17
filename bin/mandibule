@@ -21,10 +21,21 @@
 ##############################################################################
 import sys
 
+from PySide import QtCore
+
 import mandibule
+
 
 if __name__ == '__main__':
     app = mandibule.MainApp(sys.argv)
+    # Enable the localization of standard messages included in Qt
+    locale = QtCore.QLocale.system().name()
+    translator = QtCore.QTranslator()
+    translation_path = QtCore.QLibraryInfo.location(
+        QtCore.QLibraryInfo.TranslationsPath)
+    if translator.load("qt_" + locale, translation_path):
+        app.installTranslator(translator)
+    # Run the application
     sys.exit(app.exec_())
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
