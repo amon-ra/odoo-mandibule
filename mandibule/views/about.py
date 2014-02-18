@@ -27,12 +27,12 @@ from mandibule.utils.i18n import _
 TEMPLATE = u"""
 <center>
 <h2>{subtitle}</h2>
+<p><a href="http://mandibule.bitbucket.org">http://mandibule.bitbucket.org</a></p>
 <p>{p1}</p>
 <p>{p2}</p>
 <p>{p3}</p>
 <p style="font-size: 8pt;">Copyright &copy; 2013-2014 Sébastien Alix<br/>
 Copyright &copy; 2013-2014 Frédéric Fidon</p>
-<p><a href="https://bitbucket.org/mandibule">https://bitbucket.org/mandibule</a></p>
 <p>{p4}</p>
 </center>
 """
@@ -41,9 +41,8 @@ TITLE = _(u"About Mandibule")
 SUBTITLE = _(u"Mandibule") + " {0}".format(__version__)
 P1 = _(u"Mandibule is a graphical tool to explore data of OpenERP servers, "
        u"helping developpers to quickly obtain useful information.")
-P2 = _(u"It is developped in Python, and relies on"
-       u" <a href='http://pythonhosted.org/OERPLib/'>OERPLib</a> "
-       u"and PySide libraries.")
+P2 = _(u"It is developped in Python, and relies on the "
+       u"<a href='http://pythonhosted.org/OERPLib/'>OERPLib</a> library.")
 P3 = _(u"This software is available under the GNU General Public "
        u"License v3.0.")
 P4 = _(u"For any suggestions or bugs, please visit the "
