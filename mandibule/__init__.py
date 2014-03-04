@@ -55,7 +55,7 @@ class MainApp(QtGui.QApplication):
         self.actions = Actions(self)
         self.main_window = QtGui.QMainWindow()
         self.main_window.setWindowState(QtCore.Qt.WindowMaximized)
-        self.main_window.setWindowTitle('Mandibule !')
+        self.main_window.setWindowTitle('Mandibule!')
         self.main_window.setContentsMargins(0, 0, 0, 0)
         self.main_tree = MainTree(self)
         self.work_area = WorkArea(self)

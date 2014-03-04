@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-15 10:07+0100\n"
+"POT-Creation-Date: 2014-03-04 21:58+0100\n"
 "PO-Revision-Date: 2014-02-17 01:45+0100\n"
 "Last-Translator: Alejandro Santana <alejandrosantana@anubia.es>\n"
 "Language-Team: Spanish <>\n"
@@ -111,30 +111,30 @@ msgid ""
 "developpers to quickly obtain useful information."
 msgstr ""
 "Mandibule es una herramienta gráfica para explorar datos de servidores "
-"OpenERP, "
-" ayudando a los desarrolladores a obtener rápidamente información útil."
+"OpenERP,  ayudando a los desarrolladores a obtener rápidamente información "
+"útil."
 
 #: ../mandibule/views/about.py:44
 msgid ""
-"It is developped in Python, and relies on <a href='http://pythonhosted.org/"
-"OERPLib/'>OERPLib</a> and PySide libraries."
+"It is developped in Python, and relies on the <a href='http://pythonhosted."
+"org/OERPLib/'>OERPLib</a> library."
 msgstr ""
-"Está desarrollada en Python, y utiliza las bibliotecas "
-"<a href='http://pythonhosted.org/OERPLib/'>OERPLib</a> y PySide."
+"Está desarrollada en Python, y utiliza las bibliotecas <a href='http://"
+"pythonhosted.org/OERPLib/'>OERPLib</a> y PySide."
 
-#: ../mandibule/views/about.py:47
+#: ../mandibule/views/about.py:46
 msgid "This software is available under the GNU General Public License v3.0."
 msgstr ""
 "Este software se distribuye bajo la Licencia Pública General de GNU v3.0."
 
-#: ../mandibule/views/about.py:49
+#: ../mandibule/views/about.py:48
 msgid ""
 "For any suggestions or bugs, please visit the <a href='https://bitbucket.org/"
 "mandibule/mandibule/issues?status=new&status=open'>Bug Tracker</a>."
 msgstr ""
-"Para cualquier sugerencia o aviso de errores, por favor, visite <a href='"
-"https://bitbucket.org/mandibule/mandibule/issues?status=new&status=open'>Bug "
-"Tracker</a>."
+"Para cualquier sugerencia o aviso de errores, por favor, visite <a "
+"href='https://bitbucket.org/mandibule/mandibule/issues?"
+"status=new&status=open'>Bug Tracker</a>."
 
 #: ../mandibule/views/maintree/relation.py:69
 msgid "Relations"
@@ -160,18 +160,22 @@ msgid "Host"
 msgstr "Anfitrión"
 
 #: ../mandibule/views/forms/server.py:56
+msgid "Protocol"
+msgstr "Protocolo"
+
+#: ../mandibule/views/forms/server.py:64
 msgid "Port"
 msgstr "Puerto"
 
-#: ../mandibule/views/forms/server.py:62
+#: ../mandibule/views/forms/server.py:70
 msgid "Database"
 msgstr "Base de datos"
 
-#: ../mandibule/views/forms/server.py:66
+#: ../mandibule/views/forms/server.py:74
 msgid "User"
 msgstr "Usuario"
 
-#: ../mandibule/views/forms/server.py:70
+#: ../mandibule/views/forms/server.py:78
 msgid "Password"
 msgstr "Contraseña"
 
@@ -282,5 +286,3 @@ msgstr "Esta función ha sido modificada. ¿Cerrar igualmente?"
 #: ../mandibule/views/workarea/__init__.py:187
 msgid "Modified function"
 msgstr "Función modificada"
-
-

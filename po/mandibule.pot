@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-15 10:07+0100\n"
+"POT-Creation-Date: 2014-03-04 22:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -113,15 +113,15 @@ msgstr ""
 
 #: ../mandibule/views/about.py:44
 msgid ""
-"It is developped in Python, and relies on <a href='http://pythonhosted.org/"
-"OERPLib/'>OERPLib</a> and PySide libraries."
+"It is developped in Python, and relies on the <a href='http://pythonhosted."
+"org/OERPLib/'>OERPLib</a> library."
 msgstr ""
 
-#: ../mandibule/views/about.py:47
+#: ../mandibule/views/about.py:46
 msgid "This software is available under the GNU General Public License v3.0."
 msgstr ""
 
-#: ../mandibule/views/about.py:49
+#: ../mandibule/views/about.py:48
 msgid ""
 "For any suggestions or bugs, please visit the <a href='https://bitbucket.org/"
 "mandibule/mandibule/issues?status=new&status=open'>Bug Tracker</a>."
@@ -151,18 +151,22 @@ msgid "Host"
 msgstr ""
 
 #: ../mandibule/views/forms/server.py:56
+msgid "Protocol"
+msgstr ""
+
+#: ../mandibule/views/forms/server.py:64
 msgid "Port"
 msgstr ""
 
-#: ../mandibule/views/forms/server.py:62
+#: ../mandibule/views/forms/server.py:70
 msgid "Database"
 msgstr ""
 
-#: ../mandibule/views/forms/server.py:66
+#: ../mandibule/views/forms/server.py:74
 msgid "User"
 msgstr ""
 
-#: ../mandibule/views/forms/server.py:70
+#: ../mandibule/views/forms/server.py:78
 msgid "Password"
 msgstr ""
 

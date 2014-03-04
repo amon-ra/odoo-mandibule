@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mandibule\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-15 10:07+0100\n"
+"POT-Creation-Date: 2014-03-04 21:58+0100\n"
 "PO-Revision-Date: 2014-02-11 22:00+0100\n"
 "Last-Translator: fred <frolemageblanc@wanadoo.fr>\n"
 "Language-Team: French\n"
@@ -24,7 +24,7 @@ msgstr "Serveurs"
 
 #: ../mandibule/__init__.py:95
 msgid "Unsaved work detected. Quit anyway?"
-msgstr "Travail non enregistré. Quitter quand même ?"
+msgstr "Travail non enregistré détecté. Quitter quand même ?"
 
 #: ../mandibule/__init__.py:96
 msgid "Unsaved work"
@@ -33,7 +33,7 @@ msgstr "Travail non enregistré"
 #: ../mandibule/controllers/server.py:148
 #, python-format
 msgid "Are you sure you want to delete the server <strong>%s</strong>?"
-msgstr "Êtes vous certain de vouloir supprimer le serveur <strong>%s</strong>"
+msgstr "Êtes vous certain de vouloir supprimer le serveur <strong>%s</strong> ?"
 
 #: ../mandibule/controllers/group.py:91
 msgid "Unable to delete a group while it contains servers."
@@ -42,13 +42,13 @@ msgstr "Impossible de supprimer un groupe s'il contient des serveurs."
 #: ../mandibule/controllers/group.py:101
 #, python-format
 msgid "Are you sure you want to delete the group <strong>%s</strong>?"
-msgstr "Êtes vous certain de vouloir supprimer le groupe <strong>%s</strong>"
+msgstr "Êtes vous certain de vouloir supprimer le groupe <strong>%s</strong> ?"
 
 #: ../mandibule/controllers/relation.py:159
 #: ../mandibule/controllers/dependency.py:157
 #, python-format
 msgid "Are you sure you want to delete the function <strong>%s</strong>?"
-msgstr "Êtes vous certain de vouloir supprimer la fonction <strong>%s</strong>"
+msgstr "Êtes vous certain de vouloir supprimer la fonction <strong>%s</strong> ?"
 
 #: ../mandibule/views/toolbar.py:35
 msgid "Functions"
@@ -77,7 +77,7 @@ msgstr "Nouveau serveur"
 
 #: ../mandibule/views/actions.py:60
 msgid "Add relational graph"
-msgstr "Ajouter un graphique de relations"
+msgstr "Graph. de relations"
 
 #: ../mandibule/views/actions.py:70 ../mandibule/views/actions.py:85
 #: ../mandibule/views/workarea/content.py:85
@@ -87,7 +87,7 @@ msgstr "Exécuter"
 
 #: ../mandibule/views/actions.py:75
 msgid "Add dependencies graph"
-msgstr "Ajouter un graphique de dépendances"
+msgstr "Graph. de dépendances"
 
 #: ../mandibule/views/actions.py:89
 msgid "About"
@@ -111,28 +111,28 @@ msgid ""
 "developpers to quickly obtain useful information."
 msgstr ""
 "Mandibule est un outil graphique pour étudier les données de serveurs "
-"OpenERP, permettantaux développeurs d'obtenir rapidement les informations "
-"utiles"
+"OpenERP, permettant aux développeurs d'obtenir rapidement des informations "
+"utiles."
 
 #: ../mandibule/views/about.py:44
 msgid ""
-"It is developped in Python, and relies on <a href='http://pythonhosted.org/"
-"OERPLib/'>OERPLib</a> and PySide libraries."
+"It is developped in Python, and relies on the <a href='http://pythonhosted."
+"org/OERPLib/'>OERPLib</a> library."
 msgstr ""
-"Il est développé en Python, et s'appuie sur les librairies <a href='http://"
-"pythonhosted.org/OERPLib/'>OERPLib</a> et PySide."
+"Il est développé en Python, et s'appuie sur la bibliothèque <a href='http://"
+"pythonhosted.org/OERPLib/'>OERPLib</a>."
 
-#: ../mandibule/views/about.py:47
+#: ../mandibule/views/about.py:46
 msgid "This software is available under the GNU General Public License v3.0."
 msgstr ""
 "Ce logiciel est disponible sous licence GNU General Public License v3.0."
 
-#: ../mandibule/views/about.py:49
+#: ../mandibule/views/about.py:48
 msgid ""
 "For any suggestions or bugs, please visit the <a href='https://bitbucket.org/"
 "mandibule/mandibule/issues?status=new&status=open'>Bug Tracker</a>."
 msgstr ""
-"Pour vos suggestions ou en cas de bugs, rendez vous sur le <a href='https://"
+"Pour toutes suggestions ou bugs, rendez vous sur le <a href='https://"
 "bitbucket.org/mandibule/mandibule/issues?status=new&status=open'>Bug "
 "Tracker</a>."
 
@@ -157,21 +157,25 @@ msgstr "Groupe"
 
 #: ../mandibule/views/forms/server.py:52
 msgid "Host"
-msgstr "Hôte"
+msgstr "Serveur"
 
 #: ../mandibule/views/forms/server.py:56
+msgid "Protocol"
+msgstr "Protocole"
+
+#: ../mandibule/views/forms/server.py:64
 msgid "Port"
 msgstr "Port"
 
-#: ../mandibule/views/forms/server.py:62
+#: ../mandibule/views/forms/server.py:70
 msgid "Database"
 msgstr "Base de données"
 
-#: ../mandibule/views/forms/server.py:66
+#: ../mandibule/views/forms/server.py:74
 msgid "User"
 msgstr "Utilisateur"
 
-#: ../mandibule/views/forms/server.py:70
+#: ../mandibule/views/forms/server.py:78
 msgid "Password"
 msgstr "Mot de passe"
 
