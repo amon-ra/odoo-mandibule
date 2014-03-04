@@ -6,7 +6,7 @@ v0.2.0, 2014-MM-DD:
     - execute a function by double-clicking it in the main tree,
     - keyboard shortcuts added to manage tabs, forms and functionalities,
     - about dialog added,
-    - gettext translations integrated,
+    - gettext translations integrated (en_US, fr_FR, es_ES and gl_ES),
 
     Bugfixes:
     - create a default server group on the first launch,
