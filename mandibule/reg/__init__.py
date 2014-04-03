@@ -26,6 +26,7 @@ __all__ = [
     'Action',
     'Controller',
     'Icons',
+    'TreeItem',
 ]
 
 
@@ -120,5 +121,6 @@ class Multi(Element):
 from .action import Action
 from .controller import Controller
 from .icon import Icons
+from .tree import TreeItem
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
