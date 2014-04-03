@@ -27,6 +27,7 @@ __all__ = [
     'Controller',
     'Icons',
     'TreeItem',
+    'WorkArea',
 ]
 
 
@@ -122,5 +123,6 @@ from .action import Action
 from .controller import Controller
 from .icon import Icons
 from .tree import TreeItem
+from .workarea import WorkArea
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
