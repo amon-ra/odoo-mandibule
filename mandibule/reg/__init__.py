@@ -22,6 +22,10 @@ and any elements that a module can bring to the application.
 """
 from PySide.QtCore import QObject
 
+__all__ = [
+    'Controller',
+]
+
 
 class Register(type(QObject), type):
     """Base metaclass to define a register."""
@@ -108,5 +112,8 @@ class Multi(Element):
     def __init__(self, app):
         super(Multi, self).__init__(app)
         self.__connect__()
+
+
+from .controller import Controller
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
