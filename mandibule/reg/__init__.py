@@ -24,6 +24,7 @@ from PySide.QtCore import QObject
 
 __all__ = [
     'Controller',
+    'Icons',
 ]
 
 
@@ -115,5 +116,6 @@ class Multi(Element):
 
 
 from .controller import Controller
+from .icon import Icons
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
