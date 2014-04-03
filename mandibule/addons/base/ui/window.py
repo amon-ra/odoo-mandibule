@@ -24,7 +24,7 @@ from mandibule.reg import UI
 
 #from . import tree
 #from . import workbook
-#from . import toolbar
+from . import toolbar
 
 
 class MainWindow(UI, QtGui.QMainWindow):
@@ -50,7 +50,7 @@ class MainWindow(UI, QtGui.QMainWindow):
         self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
 
         #self.setCentralWidget(workbook.WorkBook(self.app))
-        #self.addToolBar(toolbar.ToolBar(self.app))
+        self.addToolBar(toolbar.ToolBar(self.app))
         self.closeEvent = self._close_event
         self.aboutToQuit.connect(self._about_to_quit)
         self.show()
