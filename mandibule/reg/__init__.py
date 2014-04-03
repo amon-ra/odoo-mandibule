@@ -23,6 +23,7 @@ and any elements that a module can bring to the application.
 from PySide.QtCore import QObject
 
 __all__ = [
+    'Action',
     'Controller',
     'Icons',
 ]
@@ -115,6 +116,8 @@ class Multi(Element):
         self.__connect__()
 
 
+
+from .action import Action
 from .controller import Controller
 from .icon import Icons
 
