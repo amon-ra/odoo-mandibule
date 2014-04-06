@@ -17,8 +17,21 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-"""Module to generate graph of model relationships."""
-from . import icons
-from . import controller
+"""Module icons."""
+from mandibule.reg import Icons
+
+from PySide import QtGui
+
+
+class RelationIcons(Icons):
+    """Module icons."""
+    __metadata__ = {
+        'name': 'relation',
+    }
+
+    def generate(self):
+        return {
+            'relation': QtGui.QIcon.fromTheme('view-time-schedule'),
+        }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
