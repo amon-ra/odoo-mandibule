@@ -20,5 +20,6 @@
 """Defines main parts of the User Interface."""
 from . import window
 from . import toolbar
+from . import tree
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

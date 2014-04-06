@@ -22,7 +22,7 @@ from PySide import QtCore, QtGui
 
 from mandibule.reg import UI
 
-#from . import tree
+from . import tree
 #from . import workbook
 from . import toolbar
 
@@ -43,7 +43,7 @@ class MainWindow(UI, QtGui.QMainWindow):
         # Dockable main tree
         dock = QtGui.QDockWidget()
         dock.setMinimumSize(250, 250)
-        #dock.setWidget(tree.Tree(self.app))
+        dock.setWidget(tree.Tree(self.app))
         dock.setFeatures(dock.features() & ~dock.DockWidgetClosable)
         dock.setAllowedAreas(
             QtCore.Qt.RightDockWidgetArea|QtCore.Qt.LeftDockWidgetArea)
