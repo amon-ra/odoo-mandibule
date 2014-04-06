@@ -23,7 +23,7 @@ from PySide import QtCore, QtGui
 from mandibule.reg import UI
 
 from . import tree
-#from . import workbook
+from . import workbook
 from . import toolbar
 
 
@@ -49,7 +49,7 @@ class MainWindow(UI, QtGui.QMainWindow):
             QtCore.Qt.RightDockWidgetArea|QtCore.Qt.LeftDockWidgetArea)
         self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
 
-        #self.setCentralWidget(workbook.WorkBook(self.app))
+        self.setCentralWidget(workbook.WorkBook(self.app))
         self.addToolBar(toolbar.ToolBar(self.app))
         self.closeEvent = self._close_event
         self.aboutToQuit.connect(self._about_to_quit)

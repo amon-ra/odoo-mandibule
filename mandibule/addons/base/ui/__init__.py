@@ -21,5 +21,6 @@
 from . import window
 from . import toolbar
 from . import tree
+from . import workbook
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
