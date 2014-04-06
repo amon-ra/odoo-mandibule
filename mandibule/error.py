@@ -22,7 +22,8 @@
 import sys
 import cStringIO, traceback
 
-from mandibule.views.widgets import dialog
+from mandibule.reg import UI
+from mandibule.widgets import dialog
 
 
 class ErrorHandler(object):
@@ -46,8 +47,8 @@ class ErrorHandler(object):
         print traceback_str
         #self.setDetailedText(traceback_str)
         if issubclass(exc_type, Warning):
-            dialog.warning(self.app.main_window, exc_value.message)
+            dialog.warning(UI['main_window'], exc_value.message)
         else:
-            dialog.error(self.app.main_window, exc_value.message)
+            dialog.error(UI['main_window'], exc_value.message)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

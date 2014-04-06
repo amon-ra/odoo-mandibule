@@ -22,14 +22,13 @@ import uuid
 
 from PySide import QtGui, QtCore
 
+from mandibule.reg import Controller, WorkArea, Icons
 from mandibule.utils.i18n import _
-from mandibule.views.workarea.dependency import DependencyContent
-from mandibule.views.workarea.relation import RelationContent
-from mandibule.views.widgets import dialog
+from mandibule.widgets import dialog
 
 
-class WorkArea(QtGui.QTabWidget):
-    """Workarea containing request results organized with tabs."""
+class WorkBook(QtGui.QTabWidget):
+    """Contains work areas organized with tabs."""
 
     def __init__(self, app):
         QtGui.QTabWidget.__init__(self)
@@ -38,12 +37,13 @@ class WorkArea(QtGui.QTabWidget):
         self.tabs_tmp = {}     # Identify temporary functions
         self.setTabsClosable(True)
         self.setMovable(True)
-        for ctl in ['relation_ctl', 'dependency_ctl']:
-            getattr(self.app, ctl).created.connect(self.function_saved)
-            getattr(self.app, ctl).deleted.connect(self.function_deleted)
-            getattr(self.app, ctl).updated.connect(self.function_updated)
-            getattr(self.app, ctl).executed.connect(self.function_executed)
-            getattr(self.app, ctl).finished.connect(self.function_finished)
+        for name in Controller:
+            ctl = Controller[name]
+            if ctl.__metadata__.get('function'):
+                ctl.deleted.connect(self._function_deleted)
+                ctl.updated.connect(self._function_updated)
+                ctl.executed.connect(self._function_executed)
+                ctl.finished.connect(self._function_finished)
         self.tabCloseRequested.connect(self.close_tab)
         # Shortcuts
         action_close = QtGui.QAction(self)
@@ -62,115 +62,102 @@ class WorkArea(QtGui.QTabWidget):
             lambda: self.setCurrentIndex(self.currentIndex() + 1))
         self.addAction(action_next)
 
-    def new_function(self, server_id, context):
-        """Add a new relation tab which can be saved later."""
-        sdata = self.app.server_ctl.read(server_id)
+    def new_function(self, model, server_id):
+        """Add a new workarea which can be saved later."""
+        sdata = Controller['server'].read(server_id)
         title = u"%s - %s" % (sdata['name'], _(u"New"))
         id_tmp = uuid.uuid4().hex
-        if context.get('model') == 'relation':
-            self.tabs_tmp[id_tmp] = RelationContent(
-                self.app, server_id, id_tmp, new=True)
-            self.addTab(
-                self.tabs_tmp[id_tmp], self.app.icons.icon_relation, title)
-        if context.get('model') == 'dependency':
-            self.tabs_tmp[id_tmp] = DependencyContent(
-                self.app, server_id, id_tmp, new=True)
-            self.addTab(
-                self.tabs_tmp[id_tmp], self.app.icons.icon_dependencies, title)
-        self.tabs_tmp[id_tmp].data_changed.connect(self.function_unsaved)
-        self.tabs_tmp[id_tmp].data_restored.connect(self.function_restored)
+        self.tabs_tmp[id_tmp] = WorkArea[model](
+            self.app, server_id, id_tmp, new=True)
+        self.addTab(self.tabs_tmp[id_tmp], Icons[model], title)
+        self.tabs_tmp[id_tmp].created.connect(self._function_created)
+        self.tabs_tmp[id_tmp].data_changed.connect(self._function_unsaved)
+        self.tabs_tmp[id_tmp].data_restored.connect(self._function_restored)
         self.tabs_tmp[id_tmp].show_panel()
         self.setCurrentWidget(self.tabs_tmp[id_tmp])
 
-    def edit_function(self, id_, context):
+    def edit_function(self, model, id_):
         """Open an existing function to edit it."""
-        if context.get('model') == 'relation':
-            ctl = self.app.relation_ctl
-            data = ctl.read(id_)
-            ContentClass = RelationContent
-            icon = self.app.icons.icon_relation
-        if context.get('model') == 'dependency':
-            ctl = self.app.dependency_ctl
-            data = ctl.read(id_)
-            ContentClass = DependencyContent
-            icon = self.app.icons.icon_dependencies
-        sdata = self.app.server_ctl.read(data['server_id'])
+        ctl = Controller[model]
+        data = ctl.read(id_)
+        ContentClass = WorkArea[model]
+        icon = Icons[model]
+        sdata = Controller['server'].read(data['server_id'])
         title = "%s - %s" % (sdata['name'], data['name'])
         if id_ not in self.tabs:
             content = ContentClass(self.app, data['server_id'], id_)
-            content.data_changed.connect(self.function_unsaved)
-            content.data_restored.connect(self.function_restored)
+            content.data_changed.connect(self._function_unsaved)
+            content.data_restored.connect(self._function_restored)
             self.tabs[id_] = content
             self.addTab(self.tabs[id_], icon, title)
         self.tabs[id_].show_panel()
         self.setCurrentWidget(self.tabs[id_])
 
-    def function_saved(self, id_, data, context):
-        """Update title of the corresponding tab when a function is saved."""
-        from_id_tmp = context.get('from_id_tmp')
-        if from_id_tmp:
-            content = self.tabs_tmp.pop(from_id_tmp)
-            self.tabs[id_] = content
-            sdata = self.app.server_ctl.read(data['server_id'])
-            title = "%s - %s" % (sdata['name'], data['name'])
-            index = self.indexOf(content)
-            self.setTabText(index, title)
+    def _function_created(self, model, id_tmp, id_):
+        """Switch the context identified by a old temporary ID to the new one
+        when a function is saved for the first time.
+        """
+        content = self.tabs_tmp.pop(id_tmp)
+        self.tabs[id_] = content
+        data = Controller[model].read(id_)
+        sdata = Controller['server'].read(data['server_id'])
+        title = "%s - %s" % (sdata['name'], data['name'])
+        index = self.indexOf(content)
+        self.setTabText(index, title)
 
-    def function_unsaved(self, id_, data):
+    def _function_unsaved(self, model, id_, data):
         """Update title of the corresponding tab when function data
         has been changed.
         """
         content = self.tabs.get(id_)
         if content and content.unsaved:
-            sdata = self.app.server_ctl.read(data['server_id'])
+            sdata = Controller['server'].read(data['server_id'])
             title = "%s - %s*" % (sdata['name'], data['name'])
             index = self.indexOf(content)
             self.setTabText(index, title)
 
-    def function_restored(self, id_, data):
+    def _function_restored(self, model, id_, data):
         """Update title of the corresponding tab when function data
         has been restored.
         """
         content = self.tabs.get(id_)
         if content and not content.unsaved:
-            sdata = self.app.server_ctl.read(data['server_id'])
+            sdata = Controller['server'].read(data['server_id'])
             title = "%s - %s" % (sdata['name'], data['name'])
             index = self.indexOf(content)
             self.setTabText(index, title)
 
-    def function_deleted(self, id_, context):
+    def _function_deleted(self, model, id_):
         """Update title of the corresponding tab when a function is deleted."""
         if id_ in self.tabs:
             content = self.tabs.pop(id_)
             self.tabs_tmp[id_] = content
-            sdata = self.app.server_ctl.read(content.server_id)
+            sdata = Controller['server'].read(content.server_id)
             title = "%s - %s" % (sdata['name'], _(u"New"))
             index = self.indexOf(content)
             self.setTabText(index, title)
 
-    def function_updated(self, id_, data, context):
+    def _function_updated(self, model, id_, data):
         """Update title of the corresponding tab when a function is updated."""
         content = self.tabs.get(id_)
         if content:
-            sdata = self.app.server_ctl.read(data['server_id'])
+            sdata = Controller['server'].read(data['server_id'])
             title = "%s - %s" % (sdata['name'], data['name'])
             index = self.indexOf(content)
             self.setTabText(index, title)
 
-    def function_executed(self, id_, data, context):
+    def _function_executed(self, model, id_, data):
         """Update title of the corresponding tab when a function is executed."""
-        content = self.tabs.get(id_) or self.tabs_tmp.get(id_)
+        content = self.tabs.get(id_) \
+            or self.tabs_tmp.get(id_)
         if content:
             index = self.indexOf(content)
-            self.setTabIcon(index, self.app.icons.icon_wait)
+            self.setTabIcon(index, Icons['wait'])
             self.setCurrentWidget(content)
 
-    def function_finished(self, id_, data, context):
+    def _function_finished(self, model ,id_, data):
         """Update the tab icon when a function is ready."""
-        if context.get('model') == 'relation':
-            icon = self.app.icons.icon_relation
-        if context.get('model') == 'dependency':
-            icon = self.app.icons.icon_dependencies
+        icon = Icons[model]
         content = self.tabs.get(id_) or self.tabs_tmp.get(id_)
         if content:
             index = self.indexOf(content)

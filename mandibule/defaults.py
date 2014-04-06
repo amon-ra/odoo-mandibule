@@ -25,13 +25,13 @@ import os.path
 
 from mandibule import db
 from mandibule.utils.i18n import _
-from mandibule.controllers import GroupController
+from mandibule.reg import Controller
 
 
 def init(app):
     """Insert default data if the database is empty (first launch)."""
     if not db.read():
         # Default server group
-        app.group_ctl.create({'name': _(u"Servers")})
+        Controller['group'].create({'name': _(u"Servers")})
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

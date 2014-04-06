@@ -18,17 +18,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-__all__ = ['GroupItem', 'ServerItem',
-           'RelationDrawer', 'RelationItem',
-           'DependencyDrawer', 'DependencyItem']
-
 from PySide import QtGui, QtCore
 
-from mandibule.views.maintree.group import GroupItem
-from mandibule.views.maintree.server import ServerItem
-from mandibule.views.maintree.relation import RelationDrawer, RelationItem
-from mandibule.views.maintree.dependency import DependencyDrawer, DependencyItem
+from mandibule.reg import Action, Controller
+from mandibule.addons.base.tree.group import GroupItem
 from mandibule.utils.i18n import _
 
 
@@ -37,44 +30,68 @@ class MainTree(QtGui.QTreeWidget):
     def __init__(self, app):
         QtGui.QTreeWidget.__init__(self)
         self.app = app
-        self.app.group_ctl.created.connect(self.add_group)
-        self.app.group_ctl.deleted.connect(self.remove_group)
-        self.currentItemChanged.connect(self.tree_item_changed)
         self.setHeaderHidden(True)
-        self.itemExpanded.connect(self.slot_item_expanded)
-        self.itemCollapsed.connect(self.slot_item_collapsed)
-        self.itemDoubleClicked.connect(self.slot_item_activated)
-        self.itemActivated.connect(self.slot_item_activated)
-        groups = self.app.group_ctl.read_all()
+        groups = Controller['group'].read_all()
         for id_ in sorted(groups, key=lambda gid: groups[gid]['name']):
-            self.add_group(id_, select=False)
+            self._add_group(id_, select=False)
         self.setSortingEnabled(True)
+        # Select the first group
+        item = self.itemAt(0, 0)
+        if item:
+            self.setCurrentItem(item)
 
-    def add_group(self, id_, select=True):
+    def __connect__(self):
+        Controller['group'].created.connect(self._add_group)
+        Controller['group'].deleted.connect(self._remove_group)
+
+    def _add_group(self, id_, select=True):
         """Add the group identified by `id_`."""
         group = GroupItem(self.app, id_, self)
         if select:
             self.setCurrentItem(group)
 
-    def remove_group(self, id_):
+    def _remove_group(self, id_):
         """Remove the group identified by `id_`."""
         for index in range(self.topLevelItemCount()):
             group = self.topLevelItem(index)
-            if group.id == id_:
+            if group.id_ == id_:
                 group = self.takeTopLevelItem(index)
                 return
+
+    def current_ids(self):
+        """Return a dictionary with active records of the tree following the
+        current item selected::
+
+            >>> app.main_tree.current_ids()
+            {'group': '1385d48f5f5d4c29b9a2b9b83314b6f6',
+             'server': '6ba3f7a9ef77442bbf318600b1e0fa6a',
+             ...}
+        """
+        res = {}
+
+        def process(item):
+            item_id = item.__id__()
+            if item_id:
+                res.update([item_id])
+            next_item = item.parent()
+            if next_item:
+                process(next_item)
+
+        current = self.currentItem()
+        if current:
+            process(current)
+        return res
 
     def contextMenuEvent(self, event):
         """Overridden to show a contextual menu according to the
         selected item.
         """
         if self.currentItem():
-            menu = self.currentItem().get_menu()
+            menu = self.currentItem().__menu__()
             menu.popup(event.globalPos())
         else:
             menu = QtGui.QMenu(self)
-            icon_add = QtGui.QIcon.fromTheme('list-add')
-            menu.addAction(self.app.actions.action_new_group)
+            menu.addAction(Action['new_group'])
             menu.popup(event.globalPos())
 
     def mousePressEvent(self, event):
@@ -95,28 +112,10 @@ class MainTree(QtGui.QTreeWidget):
         else:
             QtGui.QTreeWidget.keyPressEvent(self, event)
 
-    def slot_item_expanded(self, item):
-        """Change the icon of some items when they are expanded."""
-        item.set_icon_expanded(True)
-
-    def slot_item_collapsed(self, item):
-        """Change the icon of some items when they are collapsed."""
-        item.set_icon_expanded(False)
-
-    def slot_item_activated(self, item):
-        """Execute functions when they are double clicked or activated."""
-        if isinstance(item, RelationItem) or isinstance(item, DependencyItem):
-            item.ctl.display_form(item.id)
-            item.ctl.execute(item.id)
-
-    def tree_item_changed(self, current, previous):
-        """Enable/disable application actions according to the current
-        item selected in the main tree.
-        """
-        self.app.actions.update()
-
     def rowsInserted(self, parent, start, end):
-        """Automatically sort items when an item is added to the tree."""
+        """Overriden to automatically sort items when an item
+        is added to the tree.
+        """
         super(MainTree, self).rowsInserted(parent, start, end)
         self.sortItems(0, QtCore.Qt.SortOrder.AscendingOrder)
 

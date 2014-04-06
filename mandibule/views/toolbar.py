@@ -21,6 +21,7 @@
 
 from PySide import QtGui, QtCore
 
+from mandibule.reg import Action, Controller, Icons
 from mandibule.utils.i18n import _
 
 
@@ -29,37 +30,41 @@ class ToolBar(QtGui.QToolBar):
     def __init__(self, app):
         QtGui.QToolBar.__init__(self)
         self.app = app
-        self.app.main_tree.currentItemChanged.connect(self._tree_item_changed)
         self.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
         self.action_functions = QtGui.QAction(
-            self.app.icons.icon_function, _("Functions"), self)
+            Icons['function'], _("Functions"), self)
+        self.action_functions.setDisabled(True)
         # Add actions to the toolbar
-        self.addAction(self.app.actions.action_new_group)
-        self.addAction(self.app.actions.action_new_server)
+        self.addAction(Action['new_group'])
+        self.addAction(Action['new_server'])
         self.addAction(self.action_functions)
         separator = QtGui.QWidget()
         separator.setSizePolicy(
             QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
         self.addWidget(separator)
         #self.addAction(self._actions['settings'])
-        self.addAction(self.app.actions.action_about)
-        self.addAction(self.app.actions.action_quit)
+        self.addAction(Action['about'])
+        self.addAction(Action['quit'])
         # Add a submenu on the 'functions' tool button
         fmenu = QtGui.QMenu()
-        fmenu.addAction(self.app.actions.action_new_relation)
-        fmenu.addAction(self.app.actions.action_new_dependency)
+        fmenu.addAction(Action['new_relation'])
+        fmenu.addAction(Action['new_dependency'])
         self.action_functions.setMenu(fmenu)
         for widget in self.action_functions.associatedWidgets():
             if isinstance(widget, QtGui.QToolButton):
                 widget.setPopupMode(QtGui.QToolButton.InstantPopup)
 
+    def __connect__(self):
+        self.app.main_tree.currentItemChanged.connect(self._tree_item_changed)
+
     def _tree_item_changed(self, current, previous):
         """Enable/disable actions of the toolbar according to the current
         item selected in the main tree.
         """
-        if self.app.actions.get_server_id():
-            self.action_functions.setDisabled(False)
-        else:
+        if (not current) or \
+                (current and current.__metadata__['name'] == 'group'):
             self.action_functions.setDisabled(True)
+        else:
+            self.action_functions.setDisabled(False)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

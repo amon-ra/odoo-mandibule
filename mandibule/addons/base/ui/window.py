@@ -52,11 +52,7 @@ class MainWindow(UI, QtGui.QMainWindow):
         self.setCentralWidget(workbook.WorkBook(self.app))
         self.addToolBar(toolbar.ToolBar(self.app))
         self.closeEvent = self._close_event
-        self.aboutToQuit.connect(self._about_to_quit)
         self.show()
-
-    def __connect__(self):
-        self.aboutToQuit.connect(self._about_to_quit)
 
     def _close_event(self, event):
         """Override the 'QMainWindow.closeEvent()' method to check
@@ -66,12 +62,5 @@ class MainWindow(UI, QtGui.QMainWindow):
             event.accept()
         else:
             event.ignore()
-
-    def _about_to_quit(self):
-        """Method connected to the 'aboutToQuit' signal to wait for running
-        threads before to quit.
-        """
-        self.hide()
-        QtCore.QThreadPool.globalInstance().waitForDone()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

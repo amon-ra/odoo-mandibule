@@ -19,12 +19,10 @@
 #
 ##############################################################################
 
-__all__ = ['Icons', 'Actions', 'ToolBar', 'MainTree', 'WorkArea']
+__all__ = ['ToolBar', 'MainTree', 'WorkBook']
 
-from mandibule.views.icons import Icons
-from mandibule.views.actions import Actions
 from mandibule.views.toolbar import ToolBar
 from mandibule.views.maintree import MainTree
-from mandibule.views.workarea import WorkArea
+from mandibule.views.workbook import WorkBook
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
