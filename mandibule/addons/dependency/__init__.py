@@ -21,5 +21,6 @@
 from . import icons
 from . import controllers
 from . import actions
+from . import tree
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
