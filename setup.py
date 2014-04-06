@@ -62,6 +62,9 @@ setup(
         'PySide (>=1.1)',
         'pyxdg (>=0.19)',
         'pydot',
+        # FIXME pydot depends on pyparsing, but pydot 1.0.28 only works
+        # with old versions of pyparsing (<2.0)
+        'pyparsing (<2.0)',
     ],
     scripts=['bin/mandibule'],
     data_files=[
