@@ -29,7 +29,7 @@ from mandibule import db
 from mandibule.utils.i18n import _
 from mandibule.widgets.dialog import confirm
 
-#from ..forms.group import GroupForm
+from ..forms.group import GroupForm
 
 DEFAULT = {
     'name': '',
@@ -52,7 +52,7 @@ class GroupController(Controller):
         can be set through the `data` dictionary.
         """
         data = data or (id_ and self.read(id_)) or copy.deepcopy(DEFAULT)
-        #GroupForm(self.app, id_, data).exec_()
+        GroupForm(self.app, id_, data).exec_()
 
     def create(self, data):
         """Create a new record from `data` and return its ID."""

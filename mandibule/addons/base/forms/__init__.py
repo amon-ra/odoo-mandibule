@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Mandibule, an explorer for OpenERP servers
-#    Copyright (C) 2014 Sébastien Alix
+#    Copyright (C) 2013 Sébastien Alix
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,12 +17,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-"""Base module which defines common stuff."""
-from . import ui
-from . import controllers
-from . import icons
-from . import actions
-from . import tree
-from . import forms
+"""Defines dialog forms."""
+from . import group
+from . import server
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
