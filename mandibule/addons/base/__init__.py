@@ -20,5 +20,6 @@
 """Base module which defines common stuff."""
 from . import ui
 from . import controllers
+from . import icons
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
