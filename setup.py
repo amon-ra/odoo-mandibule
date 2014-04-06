@@ -61,6 +61,7 @@ setup(
         'OERPLib (>=0.8)',
         'PySide (>=1.1)',
         'pyxdg (>=0.19)',
+        'pydot',
     ],
     scripts=['bin/mandibule'],
     data_files=[
