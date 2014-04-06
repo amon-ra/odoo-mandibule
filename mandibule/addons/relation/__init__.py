@@ -20,5 +20,6 @@
 """Module to generate graph of model relationships."""
 from . import icons
 from . import controller
+from . import actions
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
