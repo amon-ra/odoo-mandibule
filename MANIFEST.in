@@ -3,3 +3,4 @@ include CHANGELOG
 include COPYING
 include README
 include po/*
+include run.sh
