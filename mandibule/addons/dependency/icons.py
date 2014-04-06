@@ -17,8 +17,21 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-"""Module to generate graph of module dependencies."""
-from . import icons
-from . import controllers
+"""Module icons."""
+from mandibule.reg import Icons
+
+from PySide import QtGui
+
+
+class DependencyIcons(Icons):
+    """Module icons."""
+    __metadata__ = {
+        'name': 'dependency',
+    }
+
+    def generate(self):
+        return {
+            'dependency': QtGui.QIcon.fromTheme('view-list-tree'),
+        }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
