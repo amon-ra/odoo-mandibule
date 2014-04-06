@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-04 21:58+0100\n"
+"POT-Creation-Date: 2014-04-06 15:08+0200\n"
 "PO-Revision-Date: 2014-02-17 01:44+0100\n"
 "Last-Translator: Alejandro Santana <alejandrosantana@anubia.es>\n"
 "Language-Team: Spanish <>\n"
@@ -22,90 +22,150 @@ msgstr ""
 msgid "Servers"
 msgstr "Servidores"
 
-#: ../mandibule/__init__.py:95
+#: ../mandibule/__init__.py:71
 msgid "Unsaved work detected. Quit anyway?"
 msgstr "Hai traballo sen gardar. ¿Saír igualmente?"
 
-#: ../mandibule/__init__.py:96
+#: ../mandibule/__init__.py:72
 msgid "Unsaved work"
 msgstr "Traballo sen gardar"
 
-#: ../mandibule/controllers/server.py:148
-#, python-format
-msgid "Are you sure you want to delete the server <strong>%s</strong>?"
-msgstr "¿Está seguro de que quere eliminar o servidor <strong>%s</strong>?"
-
-#: ../mandibule/controllers/group.py:91
-msgid "Unable to delete a group while it contains servers."
-msgstr "Non pode eliminar un grupo mentras conteña servidores."
-
-#: ../mandibule/controllers/group.py:101
-#, python-format
-msgid "Are you sure you want to delete the group <strong>%s</strong>?"
-msgstr "¿Está seguro de que quere eliminar o grupo <strong>%s</strong>?"
-
-#: ../mandibule/controllers/relation.py:159
-#: ../mandibule/controllers/dependency.py:157
+#: ../mandibule/addons/relation/controller.py:140
+#: ../mandibule/addons/dependency/controllers.py:139
 #, python-format
 msgid "Are you sure you want to delete the function <strong>%s</strong>?"
 msgstr "¿Está seguro de que quere eliminar a función <strong>%s</strong>?"
 
-#: ../mandibule/views/toolbar.py:35
-msgid "Functions"
-msgstr "Funcións"
-
-#: ../mandibule/views/actions.py:37
-msgid "New group"
-msgstr "Grupo novo"
-
-#: ../mandibule/views/actions.py:41 ../mandibule/views/actions.py:52
-#: ../mandibule/views/actions.py:64 ../mandibule/views/actions.py:79
-#: ../mandibule/views/workarea/relation.py:103
-#: ../mandibule/views/workarea/dependency.py:87
-#: ../mandibule/views/workarea/dependency.py:113
-msgid "Remove"
-msgstr "Eliminar"
-
-#: ../mandibule/views/actions.py:44 ../mandibule/views/actions.py:55
-#: ../mandibule/views/actions.py:67 ../mandibule/views/actions.py:82
-msgid "Modify"
-msgstr "Modificar"
-
-#: ../mandibule/views/actions.py:48
-msgid "New server"
-msgstr "Servidor novo"
-
-#: ../mandibule/views/actions.py:60
+#: ../mandibule/addons/relation/actions.py:31
 msgid "Add relational graph"
 msgstr "Engadir gráfica de relacións"
 
-#: ../mandibule/views/actions.py:70 ../mandibule/views/actions.py:85
-#: ../mandibule/views/workarea/content.py:85
-#: ../mandibule/views/workarea/content.py:171
+#: ../mandibule/addons/relation/actions.py:56
+#: ../mandibule/addons/relation/workarea.py:105
+#: ../mandibule/addons/base/actions/server.py:53
+#: ../mandibule/addons/base/actions/group.py:44
+#: ../mandibule/addons/dependency/actions.py:56
+#: ../mandibule/addons/dependency/workarea.py:89
+#: ../mandibule/addons/dependency/workarea.py:115
+msgid "Remove"
+msgstr "Eliminar"
+
+#: ../mandibule/addons/relation/actions.py:71
+#: ../mandibule/addons/base/actions/server.py:68
+#: ../mandibule/addons/base/actions/group.py:59
+#: ../mandibule/addons/dependency/actions.py:71
+msgid "Modify"
+msgstr "Modificar"
+
+#: ../mandibule/addons/relation/actions.py:86
+#: ../mandibule/addons/dependency/actions.py:86
+#: ../mandibule/widgets/graph.py:111 ../mandibule/widgets/graph.py:196
 msgid "Execute"
 msgstr "Executar"
 
-#: ../mandibule/views/actions.py:75
-msgid "Add dependencies graph"
-msgstr "Engadir gráfica de dependencias"
+#: ../mandibule/addons/relation/tree.py:89
+msgid "Relations"
+msgstr "Relacións"
 
-#: ../mandibule/views/actions.py:89
+#: ../mandibule/addons/relation/workarea.py:57
+#: ../mandibule/addons/dependency/workarea.py:43
+#: ../mandibule/addons/dependency/workarea.py:59
+msgid "Space characters are not allowed."
+msgstr "Os caracteres de espacio non están permitidos."
+
+#: ../mandibule/addons/relation/workarea.py:97
+#: ../mandibule/addons/dependency/workarea.py:107
+msgid "Model"
+msgstr "Modelo"
+
+#: ../mandibule/addons/relation/workarea.py:97
+msgid "Base"
+msgstr "Base"
+
+#: ../mandibule/addons/relation/workarea.py:97
+#: ../mandibule/addons/dependency/workarea.py:107
+msgid "Show"
+msgstr "Amosar"
+
+#: ../mandibule/addons/relation/workarea.py:97
+msgid "Attr."
+msgstr "Atr."
+
+#: ../mandibule/addons/relation/workarea.py:102
+#: ../mandibule/addons/dependency/workarea.py:86
+#: ../mandibule/addons/dependency/workarea.py:112
+msgid "Add"
+msgstr "Engadir"
+
+#. Fields
+#: ../mandibule/addons/relation/workarea.py:119
+#: ../mandibule/addons/base/forms/server.py:43
+#: ../mandibule/addons/base/forms/group.py:39
+#: ../mandibule/addons/dependency/workarea.py:136
+msgid "Name"
+msgstr "Nome"
+
+#: ../mandibule/addons/relation/workarea.py:123
+msgid "Level"
+msgstr "Nivel"
+
+#: ../mandibule/addons/base/actions/server.py:30
+msgid "New server"
+msgstr "Servidor novo"
+
+#: ../mandibule/addons/base/actions/group.py:30
+msgid "New group"
+msgstr "Grupo novo"
+
+#: ../mandibule/addons/base/actions/__init__.py:36
 msgid "About"
 msgstr "Acerca de"
 
-#: ../mandibule/views/actions.py:93
+#: ../mandibule/addons/base/actions/__init__.py:49
 msgid "Quit"
 msgstr "Saír"
 
-#: ../mandibule/views/about.py:40
+#: ../mandibule/addons/base/forms/server.py:47
+msgid "Group"
+msgstr "Grupo"
+
+#: ../mandibule/addons/base/forms/server.py:53
+msgid "Host"
+msgstr "Anfitrión"
+
+#: ../mandibule/addons/base/forms/server.py:57
+msgid "Protocol"
+msgstr "Protocolo"
+
+#: ../mandibule/addons/base/forms/server.py:65
+msgid "Port"
+msgstr "Porto"
+
+#: ../mandibule/addons/base/forms/server.py:71
+msgid "Database"
+msgstr "Base de datos"
+
+#: ../mandibule/addons/base/forms/server.py:75
+msgid "User"
+msgstr "Usuario"
+
+#: ../mandibule/addons/base/forms/server.py:79
+msgid "Password"
+msgstr "Contrasinal"
+
+#: ../mandibule/addons/base/ui/toolbar.py:39
+msgid "Functions"
+msgstr "Funcións"
+
+#: ../mandibule/addons/base/ui/about.py:41
 msgid "About Mandibule"
 msgstr "Acerca de Mandibule"
 
-#: ../mandibule/views/about.py:41
+#: ../mandibule/addons/base/ui/about.py:42
 msgid "Mandibule"
 msgstr "Mandibule"
 
-#: ../mandibule/views/about.py:42
+#: ../mandibule/addons/base/ui/about.py:43
 msgid ""
 "Mandibule is a graphical tool to explore data of OpenERP servers, helping "
 "developpers to quickly obtain useful information."
@@ -113,7 +173,7 @@ msgstr ""
 "Mandibule é unha ferramenta gráfica para explorar datos de servidores "
 "OpenERP,axudando ós desenvolvedores a obter rapidamente información útil."
 
-#: ../mandibule/views/about.py:44
+#: ../mandibule/addons/base/ui/about.py:45
 msgid ""
 "It is developped in Python, and relies on the <a href='http://pythonhosted."
 "org/OERPLib/'>OERPLib</a> library."
@@ -121,11 +181,11 @@ msgstr ""
 "Está desenvolvida en Python, e utiliza as bibliotecas <a href='http://"
 "pythonhosted.org/OERPLib/'>OERPLib</a> e PySide."
 
-#: ../mandibule/views/about.py:46
+#: ../mandibule/addons/base/ui/about.py:47
 msgid "This software is available under the GNU General Public License v3.0."
 msgstr "Este software distribúese baixo a Licencia Pública Xeral de GNU v3.0."
 
-#: ../mandibule/views/about.py:48
+#: ../mandibule/addons/base/ui/about.py:49
 msgid ""
 "For any suggestions or bugs, please visit the <a href='https://bitbucket.org/"
 "mandibule/mandibule/issues?status=new&status=open'>Bug Tracker</a>."
@@ -134,153 +194,98 @@ msgstr ""
 "href='https://bitbucket.org/mandibule/mandibule/issues?"
 "status=new&status=open'>Bug Tracker</a>."
 
-#: ../mandibule/views/maintree/relation.py:69
-msgid "Relations"
-msgstr "Relacións"
-
-#: ../mandibule/views/maintree/dependency.py:69
-msgid "Dependencies"
-msgstr "Dependencias"
-
-#. Fields
-#: ../mandibule/views/forms/server.py:42 ../mandibule/views/forms/group.py:38
-#: ../mandibule/views/workarea/relation.py:117
-#: ../mandibule/views/workarea/dependency.py:134
-msgid "Name"
-msgstr "Nome"
-
-#: ../mandibule/views/forms/server.py:46
-msgid "Group"
-msgstr "Grupo"
-
-#: ../mandibule/views/forms/server.py:52
-msgid "Host"
-msgstr "Anfitrión"
-
-#: ../mandibule/views/forms/server.py:56
-msgid "Protocol"
-msgstr "Protocolo"
-
-#: ../mandibule/views/forms/server.py:64
-msgid "Port"
-msgstr "Porto"
-
-#: ../mandibule/views/forms/server.py:70
-msgid "Database"
-msgstr "Base de datos"
-
-#: ../mandibule/views/forms/server.py:74
-msgid "User"
-msgstr "Usuario"
-
-#: ../mandibule/views/forms/server.py:78
-msgid "Password"
-msgstr "Contrasinal"
-
-#: ../mandibule/views/widgets/dialog.py:32
-msgid "Confirmation"
-msgstr "Confirmación"
-
-#: ../mandibule/views/widgets/dialog.py:42
-msgid "Warning"
-msgstr "Aviso"
-
-#: ../mandibule/views/widgets/dialog.py:49
-msgid "Error"
-msgstr "Erro"
-
-#. Buttons
-#: ../mandibule/views/workarea/content.py:76
-msgid "Save"
-msgstr "Gardar"
-
-#: ../mandibule/views/workarea/content.py:79
-msgid "Undo"
-msgstr "Desfacer"
-
-#: ../mandibule/views/workarea/content.py:82
-msgid "Close"
-msgstr "Pechar"
-
-#: ../mandibule/views/workarea/content.py:149
-msgid "Save function"
-msgstr "Gardar función"
-
-#: ../mandibule/views/workarea/content.py:156
-msgid "Undo modifications"
-msgstr "Desfacer modificacións"
-
-#: ../mandibule/views/workarea/content.py:163
-msgid "Edit parameters"
-msgstr "Editar parámetros"
-
-#: ../mandibule/views/workarea/content.py:178
-msgid "Zoom in"
-msgstr "Ampliar"
-
-#: ../mandibule/views/workarea/content.py:186
-msgid "Zoom out"
-msgstr "Reducir"
-
-#: ../mandibule/views/workarea/content.py:194
-msgid "Original size"
-msgstr "Tamaño orixinal"
-
-#: ../mandibule/views/workarea/content.py:202
-msgid "Fit to window"
-msgstr "Axustar á ventá"
-
-#: ../mandibule/views/workarea/relation.py:55
-#: ../mandibule/views/workarea/dependency.py:41
-#: ../mandibule/views/workarea/dependency.py:57
-msgid "Space characters are not allowed."
-msgstr "Os caracteres de espacio non están permitidos."
-
-#: ../mandibule/views/workarea/relation.py:95
-#: ../mandibule/views/workarea/dependency.py:105
-msgid "Model"
-msgstr "Modelo"
-
-#: ../mandibule/views/workarea/relation.py:95
-msgid "Base"
-msgstr "Base"
-
-#: ../mandibule/views/workarea/relation.py:95
-#: ../mandibule/views/workarea/dependency.py:105
-msgid "Show"
-msgstr "Amosar"
-
-#: ../mandibule/views/workarea/relation.py:95
-msgid "Attr."
-msgstr "Atr."
-
-#: ../mandibule/views/workarea/relation.py:100
-#: ../mandibule/views/workarea/dependency.py:84
-#: ../mandibule/views/workarea/dependency.py:110
-msgid "Add"
-msgstr "Engadir"
-
-#: ../mandibule/views/workarea/relation.py:121
-msgid "Level"
-msgstr "Nivel"
-
-#: ../mandibule/views/workarea/dependency.py:79
-msgid "Root module"
-msgstr "Módulo raíz"
-
-#: ../mandibule/views/workarea/dependency.py:159
-msgid "Restrict to models"
-msgstr "Restrinxir a modelos"
-
-#: ../mandibule/views/workarea/__init__.py:68
-#: ../mandibule/views/workarea/__init__.py:147
+#: ../mandibule/addons/base/ui/workbook.py:72
+#: ../mandibule/addons/base/ui/workbook.py:140
 msgid "New"
 msgstr "Novo"
 
-#: ../mandibule/views/workarea/__init__.py:186
+#: ../mandibule/addons/base/ui/workbook.py:177
 msgid "This function has been modified. Close anyway?"
 msgstr "Esta función foi modificada. ¿Pechar igualmente?"
 
-#: ../mandibule/views/workarea/__init__.py:187
+#: ../mandibule/addons/base/ui/workbook.py:178
 msgid "Modified function"
 msgstr "Función modificada"
+
+#: ../mandibule/addons/base/controllers/server.py:154
+#, python-format
+msgid "Are you sure you want to delete the server <strong>%s</strong>?"
+msgstr "¿Está seguro de que quere eliminar o servidor <strong>%s</strong>?"
+
+#: ../mandibule/addons/base/controllers/group.py:97
+msgid "Unable to delete a group while it contains servers."
+msgstr "Non pode eliminar un grupo mentras conteña servidores."
+
+#: ../mandibule/addons/base/controllers/group.py:107
+#, python-format
+msgid "Are you sure you want to delete the group <strong>%s</strong>?"
+msgstr "¿Está seguro de que quere eliminar o grupo <strong>%s</strong>?"
+
+#: ../mandibule/addons/dependency/actions.py:31
+msgid "Add dependencies graph"
+msgstr "Engadir gráfica de dependencias"
+
+#: ../mandibule/addons/dependency/tree.py:89
+msgid "Dependencies"
+msgstr "Dependencias"
+
+#: ../mandibule/addons/dependency/workarea.py:81
+msgid "Root module"
+msgstr "Módulo raíz"
+
+#: ../mandibule/addons/dependency/workarea.py:161
+msgid "Restrict to models"
+msgstr "Restrinxir a modelos"
+
+#. Buttons
+#: ../mandibule/widgets/graph.py:102
+msgid "Save"
+msgstr "Gardar"
+
+#: ../mandibule/widgets/graph.py:105
+msgid "Undo"
+msgstr "Desfacer"
+
+#: ../mandibule/widgets/graph.py:108
+msgid "Close"
+msgstr "Pechar"
+
+#: ../mandibule/widgets/graph.py:174
+msgid "Save function"
+msgstr "Gardar función"
+
+#: ../mandibule/widgets/graph.py:181
+msgid "Undo modifications"
+msgstr "Desfacer modificacións"
+
+#: ../mandibule/widgets/graph.py:188
+msgid "Edit parameters"
+msgstr "Editar parámetros"
+
+#: ../mandibule/widgets/graph.py:203
+msgid "Zoom in"
+msgstr "Ampliar"
+
+#: ../mandibule/widgets/graph.py:211
+msgid "Zoom out"
+msgstr "Reducir"
+
+#: ../mandibule/widgets/graph.py:219
+msgid "Original size"
+msgstr "Tamaño orixinal"
+
+#: ../mandibule/widgets/graph.py:227
+msgid "Fit to window"
+msgstr "Axustar á ventá"
+
+#: ../mandibule/widgets/dialog.py:32
+msgid "Confirmation"
+msgstr "Confirmación"
+
+#: ../mandibule/widgets/dialog.py:42
+msgid "Warning"
+msgstr "Aviso"
+
+#: ../mandibule/widgets/dialog.py:49
+msgid "Error"
+msgstr "Erro"
