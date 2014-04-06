@@ -17,8 +17,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-"""Base module which defines common stuff."""
-from . import ui
-from . import controllers
+"""Defines standard controllers."""
+from . import group
+from . import server
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
