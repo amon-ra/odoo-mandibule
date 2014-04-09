@@ -39,16 +39,14 @@ class GraphWorker(QtCore.QObject, QtCore.QRunnable):
 
     def run(self):
         try:
-            result = self._function()
+            graph = self._function()
         except Exception as exc:
             message = getattr(exc, 'message') or getattr(exc, 'strerror')
             if type(message) == str:
                 message = message.decode('utf-8')
             self.exception_raised.emit(self.id_, message)
         else:
-            # HACK: Pass the image in a tuple, otherwise the 'result' is
-            # copied by Qt # making it unusable
-            self.result_ready.emit(self.id_, (result,))
+            self.result_ready.emit(self.id_, graph)
 
 
 class GraphPanel(QtGui.QScrollArea):
@@ -169,9 +167,15 @@ class GraphWorkAreaToolbar(QtGui.QToolBar):
         self.workarea = workarea
         self.setIconSize(QtCore.QSize(16, 16))
         self._actions = {}
+        # Export
+        self._actions['export'] = QtGui.QAction(
+            Icons['export'], _(u"Export"), self)
+        self._actions['export'].setEnabled(False)
+        self._actions['export'].triggered.connect(self.workarea.export)
+        self.addAction(self._actions['export'])
         # Save
         self._actions['save'] = QtGui.QAction(
-            Icons['save'], _(u"Save function"), self)
+            Icons['save'], _(u"Save"), self)
         self._actions['save'].setShortcut(QtGui.QKeySequence.Save)
         self._actions['save'].setEnabled(False)
         self._actions['save'].triggered.connect(self.workarea.save)
@@ -251,7 +255,8 @@ class GraphWorkAreaToolbar(QtGui.QToolBar):
         self._actions['save'].setEnabled(True)
 
     def function_finished(self):
-        for action in ['zoom_in', 'zoom_out', 'zoom_orig', 'zoom_fit_best']:
+        for action in ['export', 'zoom_in', 'zoom_out',
+                       'zoom_orig', 'zoom_fit_best']:
             self._actions[action].setEnabled(True)
 
 
@@ -270,6 +275,7 @@ class GraphWorkArea(WorkArea):
         self.id_ = id_
         self.new = new
         self.unsaved = False
+        self.graph = None
         # Image and toolbar
         self.image = ZoomableImage()
         self.toolbar = GraphWorkAreaToolbar(self)
@@ -305,6 +311,55 @@ class GraphWorkArea(WorkArea):
             self.panel.show()
         else:
             self.panel.hide()
+
+    def export(self):
+        """Export the graph (image) in a format among (some of) those
+        supported by Graphviz.
+        """
+        formats = [
+            # images
+            (u"%s (*.bmp)" % _(u"Image Windows BMP"), [u'.bmp']),
+            (u"%s (*.jpg *.jpeg *.jpe)" % _(u"Image JPEG"), [
+                u'.jpg', u'.jpeg', u'jpe']),
+            (u"%s (*.gif)" % _(u"Image GIF"), [u'.gif']),
+            (u"%s (*.png)" % _(u"Image PNG"), [u'.png']),
+            # other
+            (u"%s (*.dot)" % (u"DOT"), [u'.dot']),
+            (u"%s (*.pdf)" % (u"PDF"), [u'.pdf']),
+            (u"%s (*.ps)" % (u"PostScript"), [u'.ps']),
+            (u"%s (*.eps)" % (u"Encapsulated PostScript"), [u'.eps']),
+            (u"%s (*.svg)" % (u"SVG"), [u'.svg']),
+            (u"%s (*.svgz)" % (u"SVGz"), [u'.svgz']),
+        ]
+        default_format = u"%s (*.png)" % _(u"Image PNG")
+        if self.graph:
+            data = self.panel.get_data()
+            name = data.get('name', u"%s" % self._model).replace('.', '_')
+            path, format_ = QtGui.QFileDialog.getSaveFileName(
+                self, _(u"Export"), name,
+                u';;'.join([fmt[0] for fmt in formats]), default_format)
+            if path:
+                # Detect the extension from the file name without taking into
+                # account the selected extension in the list
+                path_ext = None
+                for fmt in formats:
+                    exts = fmt[1]
+                    for ext in exts:
+                        if path.endswith(ext):
+                            path_ext = ext
+                            break
+                    if path_ext:
+                        break
+                # If no extension was typed in the file name, we take the
+                # selected one in the list
+                if not path_ext:
+                    for fmt in formats:
+                        if fmt[0] == format_:
+                            path_ext = fmt[1][0]
+                            path += path_ext
+                            break
+                # Save the graph (pydot/Graphviz manages that for us)
+                self.graph.write(path, format=path_ext[1:])
 
     def save(self):
         """Save the user parameters."""
@@ -351,10 +406,12 @@ class GraphWorkArea(WorkArea):
             self.toolbar.setEnabled(True)
             self.image.setEnabled(True)
 
-    def _function_finished(self, model, id_, data):
+    def _function_finished(self, model, id_, graph):
         """Update the workarea with `data` when the function is finished."""
         if self.id_ == id_:
-            self.image.update_image(data[0])
+            self.graph = graph
+            img_png = self.graph.make_dot().create_png()
+            self.image.update_image(img_png)
             if self.image.is_large():
                 self.image.zoom_fit_best()
             self.toolbar.setEnabled(True)

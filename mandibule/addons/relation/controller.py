@@ -162,7 +162,7 @@ class RelationController(Controller):
             [str(model) for model in data['blacklist'].split()],
             [str(model) for model in data['attrs_whitelist'].split()],
             [str(model) for model in data['attrs_blacklist'].split()])
-        return graph.make_dot().create_png()
+        return graph
 
     def _process_result(self, id_, result):
         """Slot which emit the 'finished' signal to views."""

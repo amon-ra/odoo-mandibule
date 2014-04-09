@@ -159,7 +159,7 @@ class DependencyController(Controller):
             [str(model) for model in data['models'].split()],
             [str(model) for model in data['models_blacklist'].split()],
             data['restrict'])
-        return graph.make_dot().create_png()
+        return graph
 
     def _process_result(self, id_, result):
         """Slot which emit the 'finished' signal to views."""

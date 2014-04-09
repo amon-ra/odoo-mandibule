@@ -37,6 +37,7 @@ class BaseIcons(Icons):
             'server': QtGui.QIcon.fromTheme('network-server'),
             'function': QtGui.QIcon.fromTheme('tab-new'),
             'add': QtGui.QIcon.fromTheme('list-add'),
+            'export': QtGui.QIcon.fromTheme('document-export'),
             'save': QtGui.QIcon.fromTheme('document-save'),
             'undo': QtGui.QIcon.fromTheme('edit-undo'),
             'edit': QtGui.QIcon.fromTheme('document-properties'),
