@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mandibule\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-06 15:08+0200\n"
+"POT-Creation-Date: 2014-04-10 19:44+0200\n"
 "PO-Revision-Date: 2014-02-11 22:00+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -59,7 +59,7 @@ msgstr "Modify"
 
 #: ../mandibule/addons/relation/actions.py:86
 #: ../mandibule/addons/dependency/actions.py:86
-#: ../mandibule/widgets/graph.py:111 ../mandibule/widgets/graph.py:196
+#: ../mandibule/widgets/graph.py:109 ../mandibule/widgets/graph.py:200
 msgid "Execute"
 msgstr "Execute"
 
@@ -237,45 +237,62 @@ msgid "Restrict to models"
 msgstr "Restrict to models"
 
 #. Buttons
-#: ../mandibule/widgets/graph.py:102
+#: ../mandibule/widgets/graph.py:100 ../mandibule/widgets/graph.py:178
 msgid "Save"
 msgstr "Save"
 
-#: ../mandibule/widgets/graph.py:105
+#: ../mandibule/widgets/graph.py:103
 msgid "Undo"
 msgstr "Undo"
 
-#: ../mandibule/widgets/graph.py:108
+#: ../mandibule/widgets/graph.py:106
 msgid "Close"
 msgstr "Close"
 
-#: ../mandibule/widgets/graph.py:174
-msgid "Save function"
-msgstr "Save function"
+#: ../mandibule/widgets/graph.py:172 ../mandibule/widgets/graph.py:339
+msgid "Export"
+msgstr "Export"
 
-#: ../mandibule/widgets/graph.py:181
+#: ../mandibule/widgets/graph.py:185
 msgid "Undo modifications"
 msgstr "Undo modifications"
 
-#: ../mandibule/widgets/graph.py:188
+#: ../mandibule/widgets/graph.py:192
 msgid "Edit parameters"
 msgstr "Edit parameters"
 
-#: ../mandibule/widgets/graph.py:203
+#: ../mandibule/widgets/graph.py:207
 msgid "Zoom in"
 msgstr "Zoom in"
 
-#: ../mandibule/widgets/graph.py:211
+#: ../mandibule/widgets/graph.py:215
 msgid "Zoom out"
 msgstr "Zoom out"
 
-#: ../mandibule/widgets/graph.py:219
+#: ../mandibule/widgets/graph.py:223
 msgid "Original size"
 msgstr "Original size"
 
-#: ../mandibule/widgets/graph.py:227
+#: ../mandibule/widgets/graph.py:231
 msgid "Fit to window"
 msgstr "Fit to window"
+
+#. images
+#: ../mandibule/widgets/graph.py:321
+msgid "Image Windows BMP"
+msgstr "Image Windows BMP"
+
+#: ../mandibule/widgets/graph.py:322
+msgid "Image JPEG"
+msgstr "Image JPEG"
+
+#: ../mandibule/widgets/graph.py:324
+msgid "Image GIF"
+msgstr "Image GIF"
+
+#: ../mandibule/widgets/graph.py:325 ../mandibule/widgets/graph.py:334
+msgid "Image PNG"
+msgstr "Image PNG"
 
 #: ../mandibule/widgets/dialog.py:32
 msgid "Confirmation"

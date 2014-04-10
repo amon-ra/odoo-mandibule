@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mandibule\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-06 15:08+0200\n"
+"POT-Creation-Date: 2014-04-10 19:44+0200\n"
 "PO-Revision-Date: 2014-02-11 22:00+0100\n"
 "Last-Translator: fred <frolemageblanc@wanadoo.fr>\n"
 "Language-Team: French\n"
@@ -60,7 +60,7 @@ msgstr "Modifier"
 
 #: ../mandibule/addons/relation/actions.py:86
 #: ../mandibule/addons/dependency/actions.py:86
-#: ../mandibule/widgets/graph.py:111 ../mandibule/widgets/graph.py:196
+#: ../mandibule/widgets/graph.py:109 ../mandibule/widgets/graph.py:200
 msgid "Execute"
 msgstr "Exécuter"
 
@@ -242,45 +242,62 @@ msgid "Restrict to models"
 msgstr "Restreindre aux modèles"
 
 #. Buttons
-#: ../mandibule/widgets/graph.py:102
+#: ../mandibule/widgets/graph.py:100 ../mandibule/widgets/graph.py:178
 msgid "Save"
 msgstr "Enregistrer"
 
-#: ../mandibule/widgets/graph.py:105
+#: ../mandibule/widgets/graph.py:103
 msgid "Undo"
 msgstr "Annuler"
 
-#: ../mandibule/widgets/graph.py:108
+#: ../mandibule/widgets/graph.py:106
 msgid "Close"
 msgstr "Fermer"
 
-#: ../mandibule/widgets/graph.py:174
-msgid "Save function"
-msgstr "Enregistrer la fonction"
+#: ../mandibule/widgets/graph.py:172 ../mandibule/widgets/graph.py:339
+msgid "Export"
+msgstr "Exporter"
 
-#: ../mandibule/widgets/graph.py:181
+#: ../mandibule/widgets/graph.py:185
 msgid "Undo modifications"
 msgstr "Annuler les modifications"
 
-#: ../mandibule/widgets/graph.py:188
+#: ../mandibule/widgets/graph.py:192
 msgid "Edit parameters"
 msgstr "Modifier les parametres"
 
-#: ../mandibule/widgets/graph.py:203
+#: ../mandibule/widgets/graph.py:207
 msgid "Zoom in"
 msgstr "Zoom avant"
 
-#: ../mandibule/widgets/graph.py:211
+#: ../mandibule/widgets/graph.py:215
 msgid "Zoom out"
 msgstr "Zoom arrière"
 
-#: ../mandibule/widgets/graph.py:219
+#: ../mandibule/widgets/graph.py:223
 msgid "Original size"
 msgstr "Taille originale"
 
-#: ../mandibule/widgets/graph.py:227
+#: ../mandibule/widgets/graph.py:231
 msgid "Fit to window"
 msgstr "Ajuster"
+
+#. images
+#: ../mandibule/widgets/graph.py:321
+msgid "Image Windows BMP"
+msgstr "Image Windows BMP"
+
+#: ../mandibule/widgets/graph.py:322
+msgid "Image JPEG"
+msgstr "Image JPEG"
+
+#: ../mandibule/widgets/graph.py:324
+msgid "Image GIF"
+msgstr "Image GIF"
+
+#: ../mandibule/widgets/graph.py:325 ../mandibule/widgets/graph.py:334
+msgid "Image PNG"
+msgstr "Image PNG"
 
 #: ../mandibule/widgets/dialog.py:32
 msgid "Confirmation"
