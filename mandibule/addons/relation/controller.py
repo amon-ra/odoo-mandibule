@@ -57,6 +57,7 @@ class RelationController(Controller):
             'blacklist': '',
             'attrs_whitelist': '*',
             'maxdepth': 1,
+            'autocompletion': True,
         }
         data.update(default)
         return data

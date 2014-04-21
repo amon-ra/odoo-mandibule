@@ -24,7 +24,7 @@ from PySide import QtCore, QtGui
 from mandibule.reg import WorkArea, Controller, Icons
 from mandibule.utils.i18n import _
 from mandibule.widgets.graph import GraphFormLayout, GraphWorkArea
-from mandibule.widgets.fields import TextField, IntField
+from mandibule.widgets.fields import TextField, IntField, BoolField
 from mandibule.widgets.delegate import CheckBoxDelegate
 from mandibule.widgets.model import TableModel
 
@@ -121,6 +121,8 @@ class RelationFormLayout(GraphFormLayout):
             self.fields['name'].label, self.fields['name'].widget)
         self.fields['maxdepth'] = IntField(
             _(u"Level"), data.get('maxdepth', 1), range_=(0, 42))
+        self.fields['autocompletion'] = BoolField(
+            _("Autocompletion"), data.get('autocompletion', True))
         # Insert the table view with its buttons
         table_buttons = QtGui.QHBoxLayout()
         table_buttons.setContentsMargins(0, 0, 0, 0)
@@ -130,6 +132,10 @@ class RelationFormLayout(GraphFormLayout):
         label.setAlignment(QtCore.Qt.AlignCenter)
         table_buttons.addWidget(label)
         table_buttons.addWidget(self.fields['maxdepth'].widget)
+        label = QtGui.QLabel(self.fields['autocompletion'].label)
+        label.setAlignment(QtCore.Qt.AlignCenter)
+        table_buttons.addWidget(label)
+        table_buttons.addWidget(self.fields['autocompletion'].widget)
         self.addRow(table_buttons)
         self.addRow(self.table)
         # Insert data in fields and tables
@@ -142,6 +148,7 @@ class RelationFormLayout(GraphFormLayout):
             'server_id': self.workarea.server_id,
             'name': self.fields['name'].result,
             'maxdepth': self.fields['maxdepth'].result,
+            'autocompletion': self.fields['autocompletion'].result,
             'models': [],
             'whitelist': [],
             'blacklist': [],
@@ -178,6 +185,8 @@ class RelationFormLayout(GraphFormLayout):
 
         self.fields['name'].set_value(data.get('name', u""))
         self.fields['maxdepth'].set_value(data.get('maxdepth', 1))
+        self.fields['autocompletion'].set_value(
+            data.get('autocompletion', False))
         # Prepare data for the table
         table_data = {}
         line = {'root_ok': False, 'show_ok': True, 'attr_ok': True}
@@ -249,5 +258,22 @@ class RelationWorkArea(GraphWorkArea):
         GraphWorkArea.__init__(self, app, 'relation', server_id, id_, new)
         form = RelationFormLayout(self, id_)
         self.set_form(form)
+
+    def _function_finished(self, model, id_, data, graph):
+        """Overloaded to autocomplete the list of models."""
+        super(RelationWorkArea, self)._function_finished(
+            model, id_, data, graph)
+        if self.id_ == id_:
+            if data.get('autocompletion'):
+                changed = False
+                for model in graph._relations:
+                    if model not in data['whitelist'] \
+                            and model not in data['blacklist']:
+                        data['whitelist'] += u' ' + model
+                        changed = True
+                if changed:
+                    self.panel.layout().set_data(data)
+                    self.panel.layout().table.model().dataChanged.emit(0, 0)
+
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
