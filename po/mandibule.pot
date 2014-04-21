@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-10 19:44+0200\n"
+"POT-Creation-Date: 2014-04-21 11:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr ""
 msgid "Unsaved work"
 msgstr ""
 
-#: ../mandibule/addons/relation/controller.py:140
+#: ../mandibule/addons/relation/controller.py:141
 #: ../mandibule/addons/dependency/controllers.py:139
 #, python-format
 msgid "Are you sure you want to delete the function <strong>%s</strong>?"
@@ -59,7 +59,7 @@ msgstr ""
 
 #: ../mandibule/addons/relation/actions.py:86
 #: ../mandibule/addons/dependency/actions.py:86
-#: ../mandibule/widgets/graph.py:109 ../mandibule/widgets/graph.py:200
+#: ../mandibule/widgets/graph.py:110 ../mandibule/widgets/graph.py:201
 msgid "Execute"
 msgstr ""
 
@@ -107,6 +107,10 @@ msgstr ""
 
 #: ../mandibule/addons/relation/workarea.py:123
 msgid "Level"
+msgstr ""
+
+#: ../mandibule/addons/relation/workarea.py:125
+msgid "Autocompletion"
 msgstr ""
 
 #: ../mandibule/addons/base/actions/server.py:30
@@ -231,60 +235,60 @@ msgid "Restrict to models"
 msgstr ""
 
 #. Buttons
-#: ../mandibule/widgets/graph.py:100 ../mandibule/widgets/graph.py:178
+#: ../mandibule/widgets/graph.py:101 ../mandibule/widgets/graph.py:179
 msgid "Save"
 msgstr ""
 
-#: ../mandibule/widgets/graph.py:103
+#: ../mandibule/widgets/graph.py:104
 msgid "Undo"
 msgstr ""
 
-#: ../mandibule/widgets/graph.py:106
+#: ../mandibule/widgets/graph.py:107
 msgid "Close"
 msgstr ""
 
-#: ../mandibule/widgets/graph.py:172 ../mandibule/widgets/graph.py:339
+#: ../mandibule/widgets/graph.py:173 ../mandibule/widgets/graph.py:340
 msgid "Export"
 msgstr ""
 
-#: ../mandibule/widgets/graph.py:185
+#: ../mandibule/widgets/graph.py:186
 msgid "Undo modifications"
 msgstr ""
 
-#: ../mandibule/widgets/graph.py:192
+#: ../mandibule/widgets/graph.py:193
 msgid "Edit parameters"
 msgstr ""
 
-#: ../mandibule/widgets/graph.py:207
+#: ../mandibule/widgets/graph.py:208
 msgid "Zoom in"
 msgstr ""
 
-#: ../mandibule/widgets/graph.py:215
+#: ../mandibule/widgets/graph.py:216
 msgid "Zoom out"
 msgstr ""
 
-#: ../mandibule/widgets/graph.py:223
+#: ../mandibule/widgets/graph.py:224
 msgid "Original size"
 msgstr ""
 
-#: ../mandibule/widgets/graph.py:231
+#: ../mandibule/widgets/graph.py:232
 msgid "Fit to window"
 msgstr ""
 
 #. images
-#: ../mandibule/widgets/graph.py:321
+#: ../mandibule/widgets/graph.py:322
 msgid "Image Windows BMP"
 msgstr ""
 
-#: ../mandibule/widgets/graph.py:322
+#: ../mandibule/widgets/graph.py:323
 msgid "Image JPEG"
 msgstr ""
 
-#: ../mandibule/widgets/graph.py:324
+#: ../mandibule/widgets/graph.py:325
 msgid "Image GIF"
 msgstr ""
 
-#: ../mandibule/widgets/graph.py:325 ../mandibule/widgets/graph.py:334
+#: ../mandibule/widgets/graph.py:326 ../mandibule/widgets/graph.py:335
 msgid "Image PNG"
 msgstr ""
 
