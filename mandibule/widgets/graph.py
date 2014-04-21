@@ -28,13 +28,14 @@ from mandibule.widgets.zoomableimage import ZoomableImage
 
 class GraphWorker(QtCore.QObject, QtCore.QRunnable):
     """Working thread which has for result a graph/image."""
-    result_ready = QtCore.Signal(str, tuple)
-    exception_raised = QtCore.Signal(str, str)
+    result_ready = QtCore.Signal(str, dict, tuple)
+    exception_raised = QtCore.Signal(str, dict, str)
 
-    def __init__(self, id_, function):
+    def __init__(self, id_, data, function):
         QtCore.QObject.__init__(self)
         QtCore.QRunnable.__init__(self)
         self.id_ = id_
+        self._data = data
         self._function = function
 
     def run(self):
@@ -44,9 +45,9 @@ class GraphWorker(QtCore.QObject, QtCore.QRunnable):
             message = getattr(exc, 'message') or getattr(exc, 'strerror')
             if type(message) == str:
                 message = message.decode('utf-8')
-            self.exception_raised.emit(self.id_, message)
+            self.exception_raised.emit(self.id_, self._data, message)
         else:
-            self.result_ready.emit(self.id_, graph)
+            self.result_ready.emit(self.id_, self._data, graph)
 
 
 class GraphPanel(QtGui.QScrollArea):
@@ -394,19 +395,19 @@ class GraphWorkArea(WorkArea):
         self.unsaved = False
         self.data_restored.emit(self._model, self.id_, self.panel.get_data())
 
-    def _function_executed(self, model, id_):
+    def _function_executed(self, model, id_, data):
         """Update the workarea when the function is executed."""
         if self.id_ == id_:
             self.toolbar.setEnabled(False)
             self.image.setEnabled(False)
 
-    def _function_execute_error(self, model, id_):
+    def _function_execute_error(self, model, id_, data):
         """Set the workarea in a good state if an error occurred."""
         if self.id_ == id_:
             self.toolbar.setEnabled(True)
             self.image.setEnabled(True)
 
-    def _function_finished(self, model, id_, graph):
+    def _function_finished(self, model, id_, data, graph):
         """Update the workarea with `data` when the function is finished."""
         if self.id_ == id_:
             self.graph = graph

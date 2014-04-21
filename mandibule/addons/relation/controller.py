@@ -42,8 +42,8 @@ class RelationController(Controller):
     updated = Signal(str, str, dict)
     deleted = Signal(str, str)
     executed = Signal(str, str, dict)
-    execute_error = Signal(str, str)
-    finished = Signal(str, str, tuple)
+    execute_error = Signal(str, dict, str)
+    finished = Signal(str, str, dict, tuple)
 
     def default_get(self, default=None):
         """Return default data values."""
@@ -147,7 +147,7 @@ class RelationController(Controller):
         if not data:
             data = self.read(id_)
         self.executed.emit('relation', id_, data)
-        worker = GraphWorker(id_, lambda: self._execute(id_, data))
+        worker = GraphWorker(id_, data, lambda: self._execute(id_, data))
         worker.result_ready.connect(self._process_result)
         worker.exception_raised.connect(self._handle_exception)
         QThreadPool.globalInstance().start(worker)
@@ -164,13 +164,13 @@ class RelationController(Controller):
             [str(model) for model in data['attrs_blacklist'].split()])
         return graph
 
-    def _process_result(self, id_, result):
+    def _process_result(self, id_, data, result):
         """Slot which emit the 'finished' signal to views."""
-        self.finished.emit('relation', id_, result)
+        self.finished.emit('relation', id_, data, result)
 
-    def _handle_exception(self, id_, message):
+    def _handle_exception(self, id_, data, message):
         """Slot performed if the threaded method has raised an exception."""
-        self.execute_error.emit('relation', id_)
+        self.execute_error.emit('relation', id_, data)
         raise RuntimeError(message)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
